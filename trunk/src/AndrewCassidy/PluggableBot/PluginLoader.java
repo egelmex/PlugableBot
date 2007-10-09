@@ -23,9 +23,9 @@ public class PluginLoader extends ClassLoader {
     
     public Plugin loadPlugin(String name) throws Exception
     {
-        Class c = findLoadedClass(name);
+        Class c;/* = findLoadedClass(name);
         if (c == null)
-        {
+        {*/
             try
             {
                 c = findClass(name);
@@ -34,7 +34,7 @@ public class PluginLoader extends ClassLoader {
             {
                 throw new InstantiationException("Class file could not be loaded");
             }
-        }
+        //}
         return (Plugin)c.newInstance();
     }
     

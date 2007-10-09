@@ -22,7 +22,6 @@ public class PluggableBot extends PircBot {
     private static String nick = "Bob";
     private static String server = "irc.freenode.net";
     private static PluggableBot b = new PluggableBot();
-    private static PluginLoader l = new PluginLoader();
     private static ArrayList<String> channels = new ArrayList<String>();
     
     public static void main(String[] args)
@@ -84,7 +83,7 @@ public class PluggableBot extends PircBot {
     {
         try
         {
-            Plugin p = l.loadPlugin(name);
+            Plugin p = new PluginLoader().loadPlugin(name);
             loadedPlugins.put(name, p);
         }
         catch (Exception ex)
@@ -96,6 +95,9 @@ public class PluggableBot extends PircBot {
     private static void unloadPlugin(String name)
     {
         loadedPlugins.remove(name);
+        System.gc();
+        System.gc();
+        System.gc();
     }
     
     protected void onAction(String sender, String login, String hostname, String target, String action) 
