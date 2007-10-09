@@ -27,7 +27,6 @@ public class PluggableBot extends PircBot {
     
     public static void main(String[] args)
     {
-        b.setVerbose(true);
         try
         {
             loadSettings();
