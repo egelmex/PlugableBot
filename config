@@ -7,4 +7,6 @@ irc.freenode.net
 [channels]
 #markovbot
 
+[plugins]
+markovbot.MarkovPlugin
 

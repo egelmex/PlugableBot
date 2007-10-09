@@ -42,7 +42,7 @@ public class PluginLoader extends ClassLoader {
 
     private byte[] loadClassData(String name) {
         try {
-            FileInputStream s = new FileInputStream("plugins/" + name + ".class");
+            FileInputStream s = new FileInputStream("plugins/" + name.replace('.', '/') + ".class");
         
             byte[] b = new byte[(int)s.getChannel().size()];
             s.read(b);
