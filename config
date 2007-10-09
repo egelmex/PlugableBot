@@ -1,0 +1,10 @@
+[nick]
+MarkovBot
+
+[server]
+irc.freenode.net
+
+[channels]
+#markovbot
+
+
