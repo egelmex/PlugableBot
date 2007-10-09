@@ -27,6 +27,7 @@ public class PluggableBot extends PircBot {
     
     public static void main(String[] args)
     {
+        b.setVerbose(true);
         try
         {
             loadSettings();
@@ -92,6 +93,11 @@ public class PluggableBot extends PircBot {
         }
     }
     
+    private static void unloadPlugin(String name)
+    {
+        loadedPlugins.remove(name);
+    }
+    
     protected void onAction(String sender, String login, String hostname, String target, String action) 
     {
         for (Plugin p : loadedPlugins.values())
@@ -124,6 +130,15 @@ public class PluggableBot extends PircBot {
         for (Plugin p : loadedPlugins.values())
             p.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
     }
+    
+    protected void onPrivateMessage(String sender, String login, String hostname, String message)
+    {
+        if (message.startsWith("load"))
+            loadPlugin(message.substring(5));
+        else if (message.startsWith("unload"))
+            unloadPlugin(message.substring(7));        
+    }
+    
     
     public static String Nick()
     {

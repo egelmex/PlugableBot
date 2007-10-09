@@ -23,14 +23,17 @@ public class PluginLoader extends ClassLoader {
     
     public Plugin loadPlugin(String name) throws Exception
     {
-        Class c = null;
-        try
+        Class c = findLoadedClass(name);
+        if (c == null)
         {
-            c = findClass(name);
-        }
-        catch (Exception e)
-        {
-            throw new InstantiationException("Class file could not be loaded");
+            try
+            {
+                c = findClass(name);
+            }
+            catch (Exception e)
+            {
+                throw new InstantiationException("Class file could not be loaded");
+            }
         }
         return (Plugin)c.newInstance();
     }
