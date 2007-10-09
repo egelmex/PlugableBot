@@ -9,6 +9,8 @@
 
 package AndrewCassidy.PluggableBot;
 
+import java.util.*;
+import java.io.*;
 import org.jibble.pircbot.*;
 /**
  *
@@ -16,15 +18,23 @@ import org.jibble.pircbot.*;
  */
 public class PluggableBot extends PircBot {
     
+    private static HashMap<String, Plugin> loadedPlugins = new HashMap<String, Plugin>();
+    private static String nick = "Bob";
+    private static String server = "irc.freenode.net";
+    private static PluggableBot b = new PluggableBot();
+    
     public static void main(String[] args)
     {
         
     }
     
-    /** Creates a new instance of PluggableBot */
-    public PluggableBot() {
+    private static void loadSettings()
+    {
         
     }
     
-    
+    private static void LoadPlugin(String name)    
+    {
+        
+    }
 }
