@@ -1,11 +1,13 @@
 [nick]
-MarkovBot
+Bob
 
 [server]
-irc.freenode.net
+irc.cs.kent.ac.uk
 
 [channels]
-#markovbot
+#cs
+#perl
+#test
 
 [plugins]
 markovbot.MarkovPlugin
