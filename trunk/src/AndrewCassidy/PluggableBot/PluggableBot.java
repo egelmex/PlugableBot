@@ -138,7 +138,7 @@ public class PluggableBot extends PircBot {
                 if (loadedPlugins.containsKey(s[1]))
                     sendMessage(channel, loadedPlugins.get(s[1]).getHelp());
                 else
-                    sendMessage(channel, "could not find help for the specified plugin");
+                    sendMessage(channel, "Could not find help for the specified plugin");
             }
         }
         else
@@ -163,7 +163,12 @@ public class PluggableBot extends PircBot {
         if (message.startsWith("load"))
             loadPlugin(message.substring(5));
         else if (message.startsWith("unload"))
-            unloadPlugin(message.substring(7));        
+            unloadPlugin(message.substring(7));
+        else if (message.startsWith("reload"))
+        {
+            unloadPlugin(message.substring(7));
+            loadPlugin(message.substring(7));
+        }
     }
     
     
