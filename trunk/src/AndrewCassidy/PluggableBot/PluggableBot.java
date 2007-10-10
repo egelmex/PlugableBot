@@ -119,8 +119,33 @@ public class PluggableBot extends PircBot {
     }
     protected void onMessage(String channel, String sender, String login, String hostname, String message)
     {
-        for (Plugin p : loadedPlugins.values())
-            p.onMessage(channel, sender, login, hostname, message);    
+        if (message.startsWith("!help"))
+        {    
+            if (message.trim().split(" ").length == 1)
+            {
+                // loaded plugins
+                String m = "Plugins loaded: ";
+                for (String s : loadedPlugins.keySet())
+                    m += s + ", ";
+                
+                m = m.substring(0, m.length() - 2);
+                sendMessage(channel, m);
+            }
+            else
+            {
+                // try to find loaded plugin help
+                String[] s = message.trim().split(" ");
+                if (loadedPlugins.containsKey(s[1]))
+                    sendMessage(channel, loadedPlugins.get(s[1]).getHelp());
+                else
+                    sendMessage(channel, "could not find help for the specified plugin");
+            }
+        }
+        else
+        {
+            for (Plugin p : loadedPlugins.values())
+                p.onMessage(channel, sender, login, hostname, message);    
+        }
     }
     protected void onPart(String channel, String sender, String login, String hostname)
     {
