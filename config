@@ -1,0 +1,15 @@
+[server]
+irc.freenode.net
+
+[nick]
+MarkovBot
+
+[plugins]
+Kill
+Actions
+Pounce
+Hometime
+
+[channels]
+#markovbot
+#contextshift
