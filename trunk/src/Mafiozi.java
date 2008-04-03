@@ -1,6 +1,7 @@
 
 import AndrewCassidy.PluggableBot.Plugin;
 import AndrewCassidy.PluggableBot.PluggableBot;
+import org.jibble.pircbot.Colors;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -69,7 +70,7 @@ public class Mafiozi implements Plugin {
                 }
             }
         }
-        else if (channel.equals("mafiozi") && sender.equals("mafiozi") && message.contains("Current Players:"))
+        else if (channel.equals(PluggableBot.Nick()) && sender.equals("mafiozi") && message.contains("Current Players:"))
         {
             // get a random number
             String playerNumber = processPlayersList(message);
@@ -77,7 +78,7 @@ public class Mafiozi implements Plugin {
             // now choose a command
             String action = processActionList(message);
             
-            PluggableBot.Message(channel, action + " " + playerNumber);
+            PluggableBot.Message("mafiozi", action + " " + playerNumber);
         }
     }
 
@@ -90,11 +91,11 @@ public class Mafiozi implements Plugin {
     private String processPlayersList(String message)
     {
         int location = message.indexOf(PluggableBot.Nick());
-        int spaceLocation = message.substring(0, location-2).lastIndexOf(" ");
+        int spaceLocation = message.substring(0, location).lastIndexOf(Colors.BLUE);
         
-        String us = message.substring(spaceLocation+1, location).replaceAll("[^[0-9].", "");
+        String us = message.substring(spaceLocation, location).replaceAll("[^0-9.]", "");
         
-        String numberString = message.replaceAll("[^0-9.]", "").replaceAll(us, "");
+        String numberString = message.substring(0, message.indexOf("Players total")).replaceAll(Colors.BLUE, "").replaceAll(Colors.RED, "").replaceAll(Colors.DARK_GRAY, "").replaceAll(Colors.TEAL, "").replaceAll(Colors.NORMAL, "").replaceAll("[^0-9.]", "").replaceAll(us, "");
         numberList = numberString.replaceAll("[.]$", "").split("[.]");
         
         return numberList[r.nextInt(numberList.length)];
