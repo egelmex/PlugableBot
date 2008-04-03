@@ -88,7 +88,7 @@ public class Mafiozi implements Plugin {
         int spaceLocation = message.substring(0, dotLocation).lastIndexOf(" ");
         System.out.println("space location: " + spaceLocation);
         
-        String us = message.substring(spaceLocation, dotLocation - spaceLocation).replaceAll("[^0-9.]", "");
+        String us = message.substring(spaceLocation, dotLocation).replaceAll("[^0-9.]", "");
         
         String numberString = message.substring(0, message.indexOf("Players total")).replaceAll("[^0-9.]", "").replaceAll(us, "");
         numberList = numberString.replaceAll("[.]$", "").split("[.]");
