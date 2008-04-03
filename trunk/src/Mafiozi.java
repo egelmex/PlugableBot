@@ -18,7 +18,7 @@ public class Mafiozi implements Plugin {
 
     private Boolean inGame = false;
     private static Random r = new Random();
-    private String[] numberList;
+    private ArrayList<String> numberList;
     private ArrayList<String> actions;
     
     public void onAction(String sender, String login, String hostname, String target, String action) {
@@ -40,6 +40,7 @@ public class Mafiozi implements Plugin {
             {
                 PluggableBot.Message(channel, "!reg");
                 inGame = true;
+		PluggableBot.Message("mafiozi", "!ide BOB bobspassword");
             }
             else if (inGame && sender.equals("mafiozi"))
             {
@@ -65,7 +66,7 @@ public class Mafiozi implements Plugin {
                 else if (message.contains("who will be executed?"))
                 {
                     if (numberList == null) return;
-                    String number = numberList[r.nextInt(numberList.length)];
+                    String number = numberList.get(r.nextInt(numberList.size()));
                     PluggableBot.Message(channel, "!" + number);
                 }
             }
@@ -91,10 +92,18 @@ public class Mafiozi implements Plugin {
         String us = message.substring(spaceLocation, dotLocation).replaceAll("[^0-9.]", "");
         
         String numberString = message.substring(0, message.indexOf("Players total")).replaceAll("[^0-9.]", "").replaceAll(us, "");
-        numberList = numberString.replaceAll("[.]$", "").split("[.]");
+        String[] a = numberString.replaceAll("[.]$", "").split("[.]");
+	numberList = new ArrayList<String>();
+	for (String s : a)
+	{
+		if (!s.trim().equals(""))
+		{
+			numberList.add(s);
+		}	
+	}
         System.out.println(numberString);
         System.out.println(us);
-        return numberList[r.nextInt(numberList.length)];
+        return numberList.get(r.nextInt(numberList.size()));
     }
     
     private String processActionList(String message)
