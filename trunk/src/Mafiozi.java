@@ -60,7 +60,7 @@ public class Mafiozi implements Plugin {
                 }
                 else if (message.contains("Current Players:"))
                 {
-                    processPlayersList(message);
+                    processPlayersList(Colors.removeFormattingAndColors(message));
                 }
                 else if (message.contains("who will be executed?"))
                 {
@@ -73,10 +73,10 @@ public class Mafiozi implements Plugin {
         else if (channel.equals(PluggableBot.Nick()) && sender.equals("mafiozi") && message.contains("Current Players:"))
         {
             // get a random number
-            String playerNumber = processPlayersList(message);
+            String playerNumber = processPlayersList(Colors.removeFormattingAndColors(message));
             
             // now choose a command
-            String action = processActionList(message);
+            String action = processActionList(Colors.removeFormattingAndColors(message));
             
             PluggableBot.Message("mafiozi", action + " " + playerNumber);
         }
@@ -91,13 +91,15 @@ public class Mafiozi implements Plugin {
     private String processPlayersList(String message)
     {
         int location = message.indexOf(PluggableBot.Nick());
-        int spaceLocation = message.substring(0, location).lastIndexOf(Colors.BLUE);
+        int dotLocation = message.substring(0, location).lastIndexOf(".");
+        int spaceLocation = message.substring(0, dotLocation).lastIndexOf(" ");
         
-        String us = message.substring(spaceLocation, location).replaceAll("[^0-9.]", "");
+        String us = message.substring(spaceLocation, spaceLocation - dotLocation).replaceAll("[^0-9.]", "");
         
-        String numberString = message.substring(0, message.indexOf("Players total")).replaceAll(Colors.BLUE, "").replaceAll(Colors.RED, "").replaceAll(Colors.DARK_GRAY, "").replaceAll(Colors.TEAL, "").replaceAll(Colors.NORMAL, "").replaceAll("[^0-9.]", "").replaceAll(us, "");
+        String numberString = message.substring(0, message.indexOf("Players total")).replaceAll("[^0-9.]", "").replaceAll(us, "");
         numberList = numberString.replaceAll("[.]$", "").split("[.]");
-        
+        System.out.println(numberString);
+        System.out.println(us);
         return numberList[r.nextInt(numberList.length)];
     }
     
@@ -111,6 +113,7 @@ public class Mafiozi implements Plugin {
             {
                 if (s.startsWith("!") && s.indexOf(" ") < 0)
                     actions.add(s);
+                System.out.println(s);
             }
         }
         return actions.get(r.nextInt(actions.size()));
