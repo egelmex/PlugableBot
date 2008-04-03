@@ -55,5 +55,7 @@ public class Choose implements Plugin {
         return "This plugin will allow me to make a simple decision between a list of items. Use !choose <item 1> or <item 2>...";
     }
     
-    
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
 }

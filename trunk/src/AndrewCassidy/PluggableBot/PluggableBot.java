@@ -169,6 +169,11 @@ public class PluggableBot extends PircBot {
             unloadPlugin(message.substring(7));
             loadPlugin(message.substring(7));
         }
+        else
+        {
+             for (Plugin p : loadedPlugins.values())
+                p.onPrivateMessage(sender, login, hostname, message);           
+        }
     }
     
     

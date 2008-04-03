@@ -100,4 +100,7 @@ public class Kill implements Plugin {
             ex.printStackTrace();
         }
     }
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
 }

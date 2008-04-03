@@ -82,4 +82,7 @@ public class Pounce implements Plugin {
     public String getHelp() {
         return "This plugin makes me 'pounce' on new users that enter the channel, with a probablity of 1 in 3. to add a new pounce, use !addpounce followed by the message, using %NAME as a placeholder.";
     }
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
 }

@@ -85,5 +85,9 @@ public class Actions implements Plugin {
     {
         return "This plugin makes me retaliate to any action performed against me. Use !addaction followed by the action, using %NAME as a placeholder to add a new one.";
     }
+
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
     
 }

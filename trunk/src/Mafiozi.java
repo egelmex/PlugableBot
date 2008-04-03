@@ -70,16 +70,6 @@ public class Mafiozi implements Plugin {
                 }
             }
         }
-        else if (channel.equals(PluggableBot.Nick()) && sender.equals("mafiozi") && message.contains("Current Players:"))
-        {
-            // get a random number
-            String playerNumber = processPlayersList(Colors.removeFormattingAndColors(message));
-            
-            // now choose a command
-            String action = processActionList(Colors.removeFormattingAndColors(message));
-            
-            PluggableBot.Message("mafiozi", action + " " + playerNumber);
-        }
     }
 
     private void clear()
@@ -90,11 +80,15 @@ public class Mafiozi implements Plugin {
     
     private String processPlayersList(String message)
     {
+        System.out.println(message);
         int location = message.indexOf(PluggableBot.Nick());
+        System.out.println("location: " + location);
         int dotLocation = message.substring(0, location).lastIndexOf(".");
+        System.out.println("dot location: " + dotLocation);
         int spaceLocation = message.substring(0, dotLocation).lastIndexOf(" ");
+        System.out.println("space location: " + spaceLocation);
         
-        String us = message.substring(spaceLocation, spaceLocation - dotLocation).replaceAll("[^0-9.]", "");
+        String us = message.substring(spaceLocation, dotLocation - spaceLocation).replaceAll("[^0-9.]", "");
         
         String numberString = message.substring(0, message.indexOf("Players total")).replaceAll("[^0-9.]", "").replaceAll(us, "");
         numberList = numberString.replaceAll("[.]$", "").split("[.]");
@@ -130,5 +124,18 @@ public class Mafiozi implements Plugin {
     public String getHelp() {
         return "This plugin lets bob join in a game of Mafiozi. He's not very smart, though.";
     }
-
+    
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+        if (sender.equals("mafiozi") && message.contains("Current Players:"))
+        {
+            System.out.println("PM for required action");
+            // get a random number
+            String playerNumber = processPlayersList(Colors.removeFormattingAndColors(message));
+            
+            // now choose a command
+            String action = processActionList(Colors.removeFormattingAndColors(message));
+            
+            PluggableBot.Message("mafiozi", action + " " + playerNumber);
+        }
+    }
 }

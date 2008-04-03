@@ -46,4 +46,7 @@ public class Dns implements Plugin {
     public String getHelp() {
         return "This plugin lets me resolve hostnames the their ip addresses. Type !dns <hostname> to use.";
     }
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
 }

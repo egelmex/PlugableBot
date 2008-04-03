@@ -54,5 +54,7 @@ public class Markov implements Plugin {
     public String getHelp() {
         return "The Markov plugin is a simple implementation of Markov chains. This plugin allows me to 'Learn' from what is said in the channel and be able to peice together sentences.";
     }
-    
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
 }

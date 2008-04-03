@@ -175,5 +175,7 @@ public class Hometime implements Plugin {
     public String getHelp() {
         return "Call !hometime and i will tell you how long until the next home time. To set your hometime, use !sethometime HH:MM";
     }
-    
+    public void onPrivateMessage(String sender, String login, String hostname, String message) {
+       
+    }
 }
