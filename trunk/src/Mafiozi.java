@@ -44,7 +44,7 @@ public class Mafiozi implements Plugin {
             }
             else if (inGame && sender.equals("mafiozi"))
             {
-                if (message.contains("The End!"))
+                if (message.contains("The End!") || message.contains("Cast:"))
                 {
                     clear();
                 }
