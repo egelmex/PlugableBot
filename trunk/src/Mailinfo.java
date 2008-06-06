@@ -28,6 +28,7 @@ public class Mailinfo implements Plugin {
     }
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
+        PluggableBot.Message(channel, sender + ": " + login);
         if (message.startsWith("!mailinfo") && hostname.equals("raptor.kent.ac.uk"))
         {
             try
