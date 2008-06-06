@@ -28,11 +28,11 @@ public class Mailinfo implements Plugin {
     }
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
-        if (message.startsWith("!mailinfo") && login.endsWith("@raptor.kent.ac.uk"))
+        if (message.startsWith("!mailinfo") && hostname.equals("raptor.kent.ac.uk"))
         {
             try
             {
-              Process exec = Runtime.getRuntime().exec(COMMAND + " " + login.replace("@raptor.kent.ac.uk", ""));
+              Process exec = Runtime.getRuntime().exec(COMMAND + " " + login);
               BufferedReader br = new BufferedReader(new InputStreamReader(exec.getInputStream()));
               // headers
               br.readLine();
