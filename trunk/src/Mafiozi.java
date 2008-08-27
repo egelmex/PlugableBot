@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class Mafiozi implements Plugin {
 
-    private Boolean inGame = false;
+    private Boolean inGame = false, voted = false;
     private static Random r = new Random();
     private ArrayList<String> numberList;
     private ArrayList<String> actions;
@@ -58,17 +58,20 @@ public class Mafiozi implements Plugin {
                         PluggableBot.Message(channel, "!yes");
                     else
                         PluggableBot.Message(channel, "!no");
+
+		    voted = false;
                 }
                 else if (message.contains("Current Players:"))
                 {
                     processPlayersList(Colors.removeFormattingAndColors(message));
                 }
-                else if (message.contains("who will be executed?"))
+                else if (message.contains("Who is accused?") && !voted)
                 {
                     if (numberList == null) return;
                     String number = numberList.get(r.nextInt(numberList.size()));
                     PluggableBot.Message(channel, "!" + number);
-                }
+                    voted = true;
+                }                
             }
         }
     }
@@ -77,6 +80,7 @@ public class Mafiozi implements Plugin {
     {
         inGame = false;
         actions = null;
+        voted = false;
     }
     
     private String processPlayersList(String message)

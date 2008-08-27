@@ -29,11 +29,15 @@ public class Mailinfo implements Plugin {
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
         //PluggableBot.Message(channel, sender + ": " + hostname);
-        if (message.startsWith("!mailinfo") && hostname.equals("raptor.ukc.ac.uk"))
+        if (message.startsWith("!mailinfo"))
         {
+	    String user = login;
+	    String tmp = message.substring(9).trim();
+	    if (tmp.length() > 0)
+	    	user = tmp;
             try
             {
-              Process exec = Runtime.getRuntime().exec(COMMAND + " " + login);
+              Process exec = Runtime.getRuntime().exec(COMMAND + " " + user);
               BufferedReader br = new BufferedReader(new InputStreamReader(exec.getInputStream()));
               // headers
               br.readLine();
