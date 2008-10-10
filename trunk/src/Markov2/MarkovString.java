@@ -60,12 +60,16 @@ public class MarkovString extends TimerTask {
         MarkovNode current = nodes.get("[");
         while (!current.getWord().equals("]"))
         {
-            current = current.GetRandomNode();
-            if (current == null)
+            System.out.println(current.getWord());
+            
+            MarkovNode newNode = current.GetRandomNode();
+            if (newNode == null)
             {
-                //current.AddChild(nodes.get("]"));
-                current = nodes.get("]");
+                current.AddChild(nodes.get("]"));
+                newNode = nodes.get("]");
             }
+            current = newNode;
+            
             sb.append(current.getWord());
             sb.append(" ");
         }
@@ -87,6 +91,8 @@ public class MarkovString extends TimerTask {
         String lastWord = null;
         for (String word : words)
         {
+            System.out.println(word);
+            
             if (word.trim().equals("")) continue;
             MarkovNode n, parent;
             if (!nodes.containsKey(word))
@@ -128,6 +134,7 @@ public class MarkovString extends TimerTask {
     {
         try {
             t.cancel();
+            database.commit();
             database.close();
         } finally {
             super.finalize();
