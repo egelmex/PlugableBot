@@ -92,6 +92,7 @@ public class MarkovString extends TimerTask {
             if (!nodes.containsKey(word))
             {
                 n = new MarkovNode(word);
+                database.set(n);
                 nodes.put(word, n);
             }
             else

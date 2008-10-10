@@ -84,6 +84,6 @@ public class MarkovNode implements Comparable<MarkovNode> {
     
     private int log2(int x)
     {
-        return (int) Math.round(Math.log(x)/Math.log(2));
+        return (int) Math.ceil(Math.log(x)/Math.log(2));
     }
 }
