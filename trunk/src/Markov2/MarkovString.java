@@ -29,8 +29,12 @@ public class MarkovString extends TimerTask {
         ObjectSet<HashMap<String, MarkovNode>> set = database.get(nodes);
         if(set.size() == 0)
         {
-            nodes.put("[", new MarkovNode("["));
+            MarkovNode tmp = new MarkovNode("[");
+            nodes.put("[", tmp);
+            database.set(tmp);
+            tmp = new MarkovNode("]");
             nodes.put("]", new MarkovNode("]"));
+            database.set(tmp);
             database.set(nodes);
         }
         else
@@ -87,6 +91,8 @@ public class MarkovString extends TimerTask {
                 sb.append(Character.toLowerCase(c));
         }
 
+        System.out.println(sentence);
+        
         String[] words = sb.toString().split(" ");
         String lastWord = null;
         for (String word : words)
@@ -110,6 +116,8 @@ public class MarkovString extends TimerTask {
                 parent = nodes.get(lastWord);
 
             parent.AddChild(n);
+            database.set(parent.getChildren());
+            database.set(parent.getOccuranceTable());
             database.set(parent);
             lastWord = word;
         }
@@ -117,6 +125,8 @@ public class MarkovString extends TimerTask {
         {
             MarkovNode last = nodes.get(lastWord);
             last.AddChild(nodes.get("]"));
+            database.set(last.getChildren());
+            database.set(last.getOccuranceTable());
             database.set(last);
         }
         
