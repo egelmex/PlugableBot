@@ -1,6 +1,6 @@
 import AndrewCassidy.PluggableBot.PluggableBot;
 import AndrewCassidy.PluggableBot.Plugin;
-import markov.MarkovString;
+import Markov2.MarkovString;
 import java.io.*;
 /*
  * Markov.java
@@ -31,7 +31,7 @@ public class Markov implements Plugin {
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
         if (message.startsWith("!bobstats"))
         {
-            File f = new File("Markov");
+            File f = new File("Markov2");
             double size = Math.round((((double)f.length() / (double)1024) / (double)1024)*10)/10;
             PluggableBot.Message(channel, "My dictionary currently holds " + m.getWordCount() + " words and " + m.getConnectionCount() + " word associations. My dictionary file is " + size + " MB");
         }
