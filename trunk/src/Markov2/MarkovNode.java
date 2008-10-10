@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Markov2;
+ 
 
 import java.util.ArrayList;
 import java.util.HashMap;

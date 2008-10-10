@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Markov2;
+ 
 
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
@@ -30,7 +30,7 @@ public class MarkovString extends TimerTask {
         if(set.size() == 0)
         {
             nodes.put("[", new MarkovNode("["));
-            nodes.put("[", new MarkovNode("]"));
+            nodes.put("]", new MarkovNode("]"));
             database.set(nodes);
         }
         else
