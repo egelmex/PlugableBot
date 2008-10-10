@@ -63,7 +63,7 @@ public class MarkovString extends TimerTask {
             current = current.GetRandomNode();
             if (current == null)
             {
-                current.AddChild(nodes.get("]"));
+                //current.AddChild(nodes.get("]"));
                 current = nodes.get("]");
             }
             sb.append(current.getWord());
