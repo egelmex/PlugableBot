@@ -28,6 +28,7 @@ public class MarkovString extends TimerTask {
     {
         nodes = new HashMap<String, MarkovNode>();
         database = Db4o.openFile("Markov2");
+        Db4o.configure().activationDepth(5);
         ObjectSet<HashMap<String, MarkovNode>> set = database.get(nodes);
         if(set.size() == 0)
         {
