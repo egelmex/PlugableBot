@@ -102,11 +102,18 @@ public class MarkovString extends TimerTask {
             else
                 parent = nodes.get(lastWord);
 
+            parent.AddChild(n);
             database.set(parent);
-            database.set(nodes);
-                
             lastWord = word;
         }
+        if (lastWord != null)
+        {
+            MarkovNode last = nodes.get(lastWord);
+            last.AddChild(nodes.get("]"));
+            database.set(last);
+        }
+        
+        database.set(nodes);
     }
     
     public void run()
