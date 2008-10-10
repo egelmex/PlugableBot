@@ -38,6 +38,7 @@ public class PluginLoader extends ClassLoader {
         return (Plugin)c.newInstance();
     }
     
+    @Override
     protected Class findClass(String name) throws ClassNotFoundException {
         byte[] b = loadClassData(name);
         if (b == null)
