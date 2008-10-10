@@ -100,23 +100,27 @@ public class PluggableBot extends PircBot {
         System.gc();
     }
     
+    @Override
     protected void onAction(String sender, String login, String hostname, String target, String action) 
     {
         for (Plugin p : loadedPlugins.values())
             p.onAction(sender, login, hostname, target, action);
     }
     
+    @Override
     protected void onJoin(String channel, String sender, String login, String hostname)
     {
         for (Plugin p : loadedPlugins.values())
             p.onJoin(channel, sender, login, hostname);
     }
     
+    @Override
     protected void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
     {
         for (Plugin p : loadedPlugins.values())
             p.onKick(channel, kickerNick, kickerLogin, kickerHostname, recipientNick, reason);
     }
+    @Override
     protected void onMessage(String channel, String sender, String login, String hostname, String message)
     {
         if (message.startsWith("!help"))
@@ -147,17 +151,20 @@ public class PluggableBot extends PircBot {
                 p.onMessage(channel, sender, login, hostname, message);    
         }
     }
+    @Override
     protected void onPart(String channel, String sender, String login, String hostname)
     {
         for (Plugin p : loadedPlugins.values())
             p.onPart(channel, sender, login, hostname);
     }
+    @Override
     protected void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
     {
         for (Plugin p : loadedPlugins.values())
             p.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
     }
     
+    @Override
     protected void onPrivateMessage(String sender, String login, String hostname, String message)
     {
         if (message.startsWith("load"))
