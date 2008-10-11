@@ -10,6 +10,7 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import java.util.TimerTask;
 //import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Timer;
 
 /**
@@ -20,6 +21,7 @@ public class MarkovString extends TimerTask {
     
     private Timer t = new Timer();
     private ObjectContainer database;
+    private LinkedList<MarkovNode> updated = new LinkedList<MarkovNode>();
 
     public MarkovString()
     {
@@ -118,9 +120,10 @@ public class MarkovString extends TimerTask {
             }
 
             parent.AddChild(n);
-            database.set(parent.getChildren());
-            database.set(parent.getOccuranceTable());
-            database.set(parent);
+            updated.add(parent);
+//            database.set(parent.getChildren());
+//            database.set(parent.getOccuranceTable());
+//            database.set(parent);
 
             lastWord = word;
         }
@@ -129,9 +132,10 @@ public class MarkovString extends TimerTask {
         {
             MarkovNode last = getNode(lastWord);
             last.AddChild(getNode("]"));
-            database.set(last.getChildren());
-            database.set(last.getOccuranceTable());
-            database.set(last);
+            updated.add(last);
+//            database.set(last.getChildren());
+//            database.set(last.getOccuranceTable());
+//            database.set(last);
         }
         
         //database.commit();
@@ -149,7 +153,16 @@ public class MarkovString extends TimerTask {
     public void run()
     {
         if (database != null)
+        {
+            for (MarkovNode n : updated)
+            {
+                database.set(n);
+//                database.set(n.get);
+//                database.set(occurances);
+            }
+            updated.clear();
             database.commit();
+        }
     }
     
     @Override
