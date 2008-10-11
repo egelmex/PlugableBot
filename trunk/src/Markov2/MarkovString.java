@@ -36,7 +36,6 @@ public class MarkovString /*extends TimerTask*/ {
             tmp = new MarkovNode("]");
             nodes.put("]", new MarkovNode("]"));
             database.set(tmp);
-            database.set(nodes);
             database.commit();
         }
         else
@@ -142,7 +141,6 @@ public class MarkovString /*extends TimerTask*/ {
             database.set(last);
         }
         
-        database.set(nodes);
         database.commit();
     }
     
