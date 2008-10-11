@@ -30,8 +30,8 @@ public class MarkovString /*extends TimerTask*/ {
         {
             MarkovNode tmp = new MarkovNode("[");
             database.set(tmp);
-            tmp = new MarkovNode("]");
-            database.set(tmp);
+            MarkovNode tmp2 = new MarkovNode("]");
+            database.set(tmp2);
             database.commit();
         }
     }
