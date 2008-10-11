@@ -5,11 +5,7 @@ irc.freenode.net
 MarkovBot
 
 [plugins]
-Kill
-Actions
-Pounce
-Hometime
+Markov
 
 [channels]
 #markovbot
-#contextshift

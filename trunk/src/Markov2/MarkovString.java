@@ -10,7 +10,7 @@ package Markov2;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
-import java.util.TimerTask;
+//import java.util.TimerTask;
 import java.util.HashMap;
 import java.util.Timer;
 
@@ -18,7 +18,7 @@ import java.util.Timer;
  *
  * @author Andrew
  */
-public class MarkovString extends TimerTask {
+public class MarkovString /*extends TimerTask*/ {
     
     private Timer t = new Timer();
     private ObjectContainer database;
@@ -39,13 +39,14 @@ public class MarkovString extends TimerTask {
             nodes.put("]", new MarkovNode("]"));
             database.set(tmp);
             database.set(nodes);
+            database.commit();
         }
         else
         {
             nodes = set.get(0);
         }
         
-        t.schedule(this, 0, 300000);
+//        t.schedule(this, 0, 300000);
     }
     
     public int getWordCount()
@@ -111,19 +112,28 @@ public class MarkovString extends TimerTask {
                 nodes.put(word, n);
             }
             else
+            {
                 n = nodes.get(word);
+            }
 
             if (lastWord == null)
+            {
                 parent = nodes.get("[");
+            }
+            
             else
+            {
                 parent = nodes.get(lastWord);
+            }
 
             parent.AddChild(n);
             database.set(parent.getChildren());
             database.set(parent.getOccuranceTable());
             database.set(parent);
+
             lastWord = word;
         }
+
         if (lastWord != null)
         {
             MarkovNode last = nodes.get(lastWord);
@@ -134,13 +144,14 @@ public class MarkovString extends TimerTask {
         }
         
         database.set(nodes);
+        database.commit();
     }
     
-    public void run()
-    {
-        if (database != null)
-            database.commit();
-    }
+//    public void run()
+//    {
+//        if (database != null)
+//            database.commit();
+//    }
     
     @Override
     protected void finalize() throws Throwable

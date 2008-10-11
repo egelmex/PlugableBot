@@ -137,7 +137,9 @@ public class MarkovString extends TimerTask {
                 if (lastWord == null)
                     parent = nodes.get("[");
                 else
+                {
                     parent = nodes.get(lastWord);
+                }
 
                 
                 if (parent.AddChild(n));
