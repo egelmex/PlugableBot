@@ -40,9 +40,17 @@ public class MarkovNode implements Comparable<MarkovNode> {
     
     /** Creates a new instance of MarkovNode */
     public MarkovNode(String word) {
+        this(word, false);
+    }
+    
+    public MarkovNode(String word, boolean search)
+    {
         this.word = word;
-        children = new ArrayList<MarkovNode>();
-        occurances = new HashMap<MarkovNode, Integer>();
+        if (!search)
+        {
+            children = new ArrayList<MarkovNode>();
+            occurances = new HashMap<MarkovNode, Integer>();            
+        }
     }
     
     public boolean AddChild(MarkovNode n)

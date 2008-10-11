@@ -25,7 +25,7 @@ public class MarkovString /*extends TimerTask*/ {
     {
         Db4o.configure().activationDepth(10);
         database = Db4o.openFile("Markov2");
-        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null));
+        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null, true));
         if(set.size() == 0)
         {
             MarkovNode tmp = new MarkovNode("[");
@@ -38,13 +38,13 @@ public class MarkovString /*extends TimerTask*/ {
     
     public int getWordCount()
     {
-        return database.get(new MarkovNode(null)).size();
+        return database.get(new MarkovNode(null, true)).size();
     }
     
     public int getConnectionCount()
     {
         int ret = 0;
-        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null));
+        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null, true));
         for (MarkovNode n : set)
             ret += n.getConnectionCount();
         return ret;
@@ -137,7 +137,7 @@ public class MarkovString /*extends TimerTask*/ {
     
     private MarkovNode getNode(String word)
     {
-        ObjectSet<MarkovNode> query = database.get(new MarkovNode(word));
+        ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
         if (query.size() == 0)
             return null;
         else
