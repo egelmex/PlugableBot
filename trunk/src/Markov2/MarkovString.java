@@ -125,7 +125,8 @@ public class MarkovString extends TimerTask {
 
             // add to the parent node
             parent.AddChild(n);
-            updated.add(parent);
+            if (updated.contains(parent))
+                updated.add(parent);
             
             // move to the next node
             parent = n;
@@ -136,7 +137,8 @@ public class MarkovString extends TimerTask {
         {
             // add the end marker at the end
             parent.AddChild(getNode("]"));
-            updated.add(parent);
+            if (updated.contains(parent))
+                updated.add(parent);
         }
     }
     
