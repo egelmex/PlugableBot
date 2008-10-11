@@ -5,14 +5,12 @@ package Markov2;
  * and open the template in the editor.
  */
 
- 
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 //import java.util.TimerTask;
 import java.util.HashMap;
-import java.util.Timer;
+//import java.util.Timer;
 
 /**
  *
@@ -20,7 +18,7 @@ import java.util.Timer;
  */
 public class MarkovString /*extends TimerTask*/ {
     
-    private Timer t = new Timer();
+    //private Timer t = new Timer();
     private ObjectContainer database;
     private HashMap<String, MarkovNode> nodes;
 
@@ -29,7 +27,7 @@ public class MarkovString /*extends TimerTask*/ {
         nodes = new HashMap<String, MarkovNode>();
         Db4o.configure().activationDepth(10);
         database = Db4o.openFile("Markov2");
-        ObjectSet<HashMap<String, MarkovNode>> set = database.get(nodes);
+        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null));
         if(set.size() == 0)
         {
             MarkovNode tmp = new MarkovNode("[");
@@ -43,7 +41,8 @@ public class MarkovString /*extends TimerTask*/ {
         }
         else
         {
-            nodes = set.get(0);
+            for (MarkovNode node : set)
+                nodes.put(node.getWord(), node);
         }
         
 //        t.schedule(this, 0, 300000);
@@ -157,7 +156,7 @@ public class MarkovString /*extends TimerTask*/ {
     protected void finalize() throws Throwable
     {
         try {
-            t.cancel();
+//            t.cancel();
             database.commit();
             database.close();
         } finally {
