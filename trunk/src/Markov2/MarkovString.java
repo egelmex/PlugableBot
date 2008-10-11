@@ -10,6 +10,7 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import java.util.TimerTask;
 import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.Timer;
 
 /**
@@ -24,6 +25,8 @@ public class MarkovString extends TimerTask {
     private ObjectContainer database;
     // a list of updated nodes that need saving
     private LinkedList<MarkovNode> updated = new LinkedList<MarkovNode>();
+    // a list of cahced nodes for fact lookup
+    private HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
 
     public MarkovString()
     {
@@ -41,6 +44,9 @@ public class MarkovString extends TimerTask {
             MarkovNode tmp2 = new MarkovNode("]");
             database.set(tmp2);
             database.commit();
+            
+            cache.put("[", tmp);
+            cache.put("]", tmp2);
         }
         // schedule the saves for 5 minute intervals
         t.scheduleAtFixedRate(this, 0, 300000);
@@ -116,6 +122,7 @@ public class MarkovString extends TimerTask {
             {
                 // if we dont have it, add it
                 n = new MarkovNode(word);
+                cache.put(word, n);
                 database.set(n);
             }
             else
@@ -144,11 +151,22 @@ public class MarkovString extends TimerTask {
     
     private MarkovNode getNode(String word)
     {
-        ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
-        if (query.size() == 0)
-            return null;
+        if (cache.containsKey(word))
+        {
+            return cache.get(word);
+        }
         else
-            return query.get(0);
+        {
+            ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
+            if (query.size() == 0)
+                return null;
+            else
+            {
+                MarkovNode n = query.get(0);
+                cache.put(n.getWord(), n);
+                return n;
+            }
+        }
     }
     
     public void run()
