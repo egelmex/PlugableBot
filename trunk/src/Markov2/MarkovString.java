@@ -9,7 +9,7 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 //import java.util.TimerTask;
-import java.util.HashMap;
+//import java.util.HashMap;
 //import java.util.Timer;
 
 /**
@@ -20,42 +20,32 @@ public class MarkovString /*extends TimerTask*/ {
     
     //private Timer t = new Timer();
     private ObjectContainer database;
-    private HashMap<String, MarkovNode> nodes;
 
     public MarkovString()
     {
-        nodes = new HashMap<String, MarkovNode>();
         Db4o.configure().activationDepth(10);
         database = Db4o.openFile("Markov2");
         ObjectSet<MarkovNode> set = database.get(new MarkovNode(null));
         if(set.size() == 0)
         {
             MarkovNode tmp = new MarkovNode("[");
-            nodes.put("[", tmp);
             database.set(tmp);
             tmp = new MarkovNode("]");
-            nodes.put("]", new MarkovNode("]"));
             database.set(tmp);
             database.commit();
         }
-        else
-        {
-            for (MarkovNode node : set)
-                nodes.put(node.getWord(), node);
-        }
-        
-//        t.schedule(this, 0, 300000);
     }
     
     public int getWordCount()
     {
-        return nodes.size() - 2;
+        return database.get(new MarkovNode(null)).size();
     }
     
     public int getConnectionCount()
     {
         int ret = 0;
-        for (MarkovNode n : nodes.values())
+        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null));
+        for (MarkovNode n : set)
             ret += n.getConnectionCount();
         return ret;
     }
@@ -63,7 +53,7 @@ public class MarkovString /*extends TimerTask*/ {
     public String Generate()
     {
         StringBuffer sb = new StringBuffer();
-        MarkovNode current = nodes.get("[");
+        MarkovNode current = getNode("[");
         while (!current.getWord().equals("]"))
         {
             System.out.println(current.getWord());
@@ -71,8 +61,9 @@ public class MarkovString /*extends TimerTask*/ {
             MarkovNode newNode = current.GetRandomNode();
             if (newNode == null)
             {
-                current.AddChild(nodes.get("]"));
-                newNode = nodes.get("]");
+                MarkovNode end = getNode("]");
+                current.AddChild(end);
+                newNode = end;
             }
             current = newNode;
             
@@ -103,25 +94,25 @@ public class MarkovString /*extends TimerTask*/ {
             
             if (word.trim().equals("")) continue;
             MarkovNode n, parent;
-            if (!nodes.containsKey(word))
+            MarkovNode query = getNode(word);
+            if (query == null)
             {
                 n = new MarkovNode(word);
                 database.set(n);
-                nodes.put(word, n);
             }
             else
             {
-                n = nodes.get(word);
+                n = query;
             }
 
             if (lastWord == null)
             {
-                parent = nodes.get("[");
+                parent = getNode("[");
             }
             
             else
             {
-                parent = nodes.get(lastWord);
+                parent = getNode(lastWord);
             }
 
             parent.AddChild(n);
@@ -134,14 +125,23 @@ public class MarkovString /*extends TimerTask*/ {
 
         if (lastWord != null)
         {
-            MarkovNode last = nodes.get(lastWord);
-            last.AddChild(nodes.get("]"));
+            MarkovNode last = getNode(lastWord);
+            last.AddChild(getNode("]"));
             database.set(last.getChildren());
             database.set(last.getOccuranceTable());
             database.set(last);
         }
         
         database.commit();
+    }
+    
+    private MarkovNode getNode(String word)
+    {
+        ObjectSet<MarkovNode> query = database.get(new MarkovNode(word));
+        if (query.size() == 0)
+            return null;
+        else
+            return query.get(0);
     }
     
 //    public void run()
