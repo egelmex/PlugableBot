@@ -8,17 +8,17 @@ package Markov2;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
-//import java.util.TimerTask;
+import java.util.TimerTask;
 //import java.util.HashMap;
-//import java.util.Timer;
+import java.util.Timer;
 
 /**
  *
  * @author Andrew
  */
-public class MarkovString /*extends TimerTask*/ {
+public class MarkovString extends TimerTask {
     
-    //private Timer t = new Timer();
+    private Timer t = new Timer();
     private ObjectContainer database;
 
     public MarkovString()
@@ -34,6 +34,8 @@ public class MarkovString /*extends TimerTask*/ {
             database.set(tmp2);
             database.commit();
         }
+        
+        t.scheduleAtFixedRate(this, 0, 300000);
     }
     
     public int getWordCount()
@@ -132,7 +134,7 @@ public class MarkovString /*extends TimerTask*/ {
             database.set(last);
         }
         
-        database.commit();
+        //database.commit();
     }
     
     private MarkovNode getNode(String word)
@@ -144,17 +146,17 @@ public class MarkovString /*extends TimerTask*/ {
             return query.get(0);
     }
     
-//    public void run()
-//    {
-//        if (database != null)
-//            database.commit();
-//    }
+    public void run()
+    {
+        if (database != null)
+            database.commit();
+    }
     
     @Override
     protected void finalize() throws Throwable
     {
         try {
-//            t.cancel();
+            t.cancel();
             database.commit();
             database.close();
         } finally {
