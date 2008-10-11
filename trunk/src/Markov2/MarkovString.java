@@ -9,7 +9,7 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import java.util.TimerTask;
-import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.Timer;
 
 /**
@@ -18,7 +18,6 @@ import java.util.Timer;
  */
 public class MarkovString extends TimerTask {
     
-    private HashMap<String, MarkovNode> nodes;
     private Timer t = new Timer();
     private ObjectContainer database;
 
@@ -26,22 +25,14 @@ public class MarkovString extends TimerTask {
     {
         Db4o.configure().activationDepth(10);
         database = Db4o.openFile("Markov2");
-        nodes = new HashMap<String, MarkovNode>();
         ObjectSet<MarkovNode> set = database.get(new MarkovNode(null, true));
         if(set.size() == 0)
         {
             MarkovNode tmp = new MarkovNode("[");
             database.set(tmp);
-            nodes.put("[", tmp);
             MarkovNode tmp2 = new MarkovNode("]");
-            nodes.put("]", tmp2);
             database.set(tmp2);
             database.commit();
-        }
-        else
-        {
-            for (MarkovNode n : set)
-                nodes.put(n.getWord(), n);
         }
         
         t.scheduleAtFixedRate(this, 0, 300000);
@@ -55,8 +46,8 @@ public class MarkovString extends TimerTask {
     public int getConnectionCount()
     {
         int ret = 0;
-        //ObjectSet<MarkovNode> set = database.get(new MarkovNode(null, true));
-        for (MarkovNode n : nodes.values())
+        ObjectSet<MarkovNode> set = database.get(new MarkovNode(null, true));
+        for (MarkovNode n : set)
             ret += n.getConnectionCount();
         return ret;
     }
@@ -109,7 +100,6 @@ public class MarkovString extends TimerTask {
             if (query == null)
             {
                 n = new MarkovNode(word);
-                nodes.put(word, n);
                 database.set(n);
             }
             else
@@ -149,14 +139,11 @@ public class MarkovString extends TimerTask {
     
     private MarkovNode getNode(String word)
     {
-//        ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
-//        if (query.size() == 0)
-//            return null;
-//        else
-//            return query.get(0);
-        if (nodes.containsKey(word))
-            return nodes.get(word);
-        else return null;
+        ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
+        if (query.size() == 0)
+            return null;
+        else
+            return query.get(0);
     }
     
     public void run()
