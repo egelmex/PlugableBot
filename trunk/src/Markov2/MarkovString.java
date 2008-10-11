@@ -9,7 +9,6 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import java.util.TimerTask;
-//import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
 
@@ -19,15 +18,22 @@ import java.util.Timer;
  */
 public class MarkovString extends TimerTask {
     
+    // needed to save the changes to the graph without causing a performance hit
     private Timer t = new Timer();
+    // the database file
     private ObjectContainer database;
+    // a list of updated nodes that need saving
     private LinkedList<MarkovNode> updated = new LinkedList<MarkovNode>();
 
     public MarkovString()
     {
+        // this is probably overkill
         Db4o.configure().activationDepth(10);
+        // open the database file
         database = Db4o.openFile("Markov2");
+        // get a list of all nodes
         ObjectSet<MarkovNode> set = database.get(new MarkovNode(null, true));
+        // if we dont have any, we have an empty database and need to start learning
         if(set.size() == 0)
         {
             MarkovNode tmp = new MarkovNode("[");
@@ -36,7 +42,7 @@ public class MarkovString extends TimerTask {
             database.set(tmp2);
             database.commit();
         }
-        
+        // schedule the saves for 5 minute intervals
         t.scheduleAtFixedRate(this, 0, 300000);
     }
     
@@ -57,29 +63,37 @@ public class MarkovString extends TimerTask {
     public String Generate()
     {
         StringBuffer sb = new StringBuffer();
+        // get the beginning node
         MarkovNode current = getNode("[");
+        // loop through until we hit the end
         while (!current.getWord().equals("]"))
         {
-            System.out.println(current.getWord());
-            
+            // get a random next node
             MarkovNode newNode = current.GetRandomNode();
+            // if its null we need to add a new join to the end
             if (newNode == null)
             {
                 MarkovNode end = getNode("]");
                 current.AddChild(end);
+                if (!updated.contains(current))
+                    updated.add(current);
                 newNode = end;
             }
             current = newNode;
             
+            // append the word at the new nodes
             sb.append(current.getWord());
+            // append a space
             sb.append(" ");
         }
+        // return the whole string
         return sb.toString().replace("]", " ").trim();
     }
     
     public void Learn(String sentence)
     {
         StringBuffer sb = new StringBuffer();
+        // remove anything we dont really understand
         for (char c :  sentence.toCharArray())
         {
             if (Character.isWhitespace(c))
@@ -87,20 +101,20 @@ public class MarkovString extends TimerTask {
             else if (Character.isLetterOrDigit(c))
                 sb.append(Character.toLowerCase(c));
         }
-
-        System.out.println(sentence);
-        
+        // split into a list of words
         String[] words = sb.toString().split(" ");
-        String lastWord = null;
+        // always need to know what the last word was
+        MarkovNode parent = getNode("[");
         for (String word : words)
         {
-            System.out.println(word);
-            
+            // if the word is blank, ignore it
             if (word.trim().equals("")) continue;
-            MarkovNode n, parent;
+            // get the word from the database if we already have it
+            MarkovNode n;
             MarkovNode query = getNode(word);
             if (query == null)
             {
+                // if we dont have it, add it
                 n = new MarkovNode(word);
                 database.set(n);
             }
@@ -109,36 +123,21 @@ public class MarkovString extends TimerTask {
                 n = query;
             }
 
-            if (lastWord == null)
-            {
-                parent = getNode("[");
-            }
-            
-            else
-            {
-                parent = getNode(lastWord);
-            }
-
+            // add to the parent node
             parent.AddChild(n);
             updated.add(parent);
-//            database.set(parent.getChildren());
-//            database.set(parent.getOccuranceTable());
-//            database.set(parent);
-
-            lastWord = word;
+            
+            // move to the next node
+            parent = n;
         }
 
-        if (lastWord != null)
+        // not sure why this'd ever be null ...
+        if (parent != null)
         {
-            MarkovNode last = getNode(lastWord);
-            last.AddChild(getNode("]"));
-            updated.add(last);
-//            database.set(last.getChildren());
-//            database.set(last.getOccuranceTable());
-//            database.set(last);
+            // add the end marker at the end
+            parent.AddChild(getNode("]"));
+            updated.add(parent);
         }
-        
-        //database.commit();
     }
     
     private MarkovNode getNode(String word)
@@ -152,13 +151,11 @@ public class MarkovString extends TimerTask {
     
     public void run()
     {
-        if (database != null)
+        if (database != null && updated.size() > 0)
         {
             for (MarkovNode n : updated)
             {
                 database.set(n);
-//                database.set(n.get);
-//                database.set(occurances);
             }
             updated.clear();
             database.commit();
@@ -170,7 +167,7 @@ public class MarkovString extends TimerTask {
     {
         try {
             t.cancel();
-            database.commit();
+            run();            
             database.close();
         } finally {
             super.finalize();
