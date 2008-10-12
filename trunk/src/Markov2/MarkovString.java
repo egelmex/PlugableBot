@@ -31,7 +31,7 @@ public class MarkovString extends TimerTask {
     public MarkovString()
     {
         // this is probably overkill
-        Db4o.configure().activationDepth(10);
+        Db4o.configure().objectClass(MarkovNode.class).cascadeOnActivate(true);
         // set up indexing
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // open the database file
