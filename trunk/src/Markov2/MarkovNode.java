@@ -96,4 +96,25 @@ public class MarkovNode implements Comparable<MarkovNode> {
     {
         return (int) Math.ceil(Math.log(x)/Math.log(2));
     }
+    
+    @Override
+    public int hashCode()
+    {
+        return word.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MarkovNode other = (MarkovNode) obj;
+        if (this.word != other.word && (this.word == null || !this.word.equals(other.word))) {
+            return false;
+        }
+        return true;
+    }
 }
