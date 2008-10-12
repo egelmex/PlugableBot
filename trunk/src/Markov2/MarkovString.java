@@ -177,6 +177,8 @@ public class MarkovString extends TimerTask {
         {
             for (MarkovNode n : updated)
             {
+                database.set(n.getChildren());
+                database.set(n.getOccuranceTable());
                 database.set(n);
             }
             updated.clear();
