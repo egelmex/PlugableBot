@@ -48,9 +48,10 @@ public class MarkovString extends TimerTask {
             
             cache.put("[", tmp);
             cache.put("]", tmp2);
+            run();
         }
         // schedule the saves for 5 minute intervals
-        t.schedule(this, 0, 60000);
+        //t.schedule(this, 0, 60000);
     }
     
     public int getWordCount()
@@ -148,6 +149,7 @@ public class MarkovString extends TimerTask {
             if (updated.contains(parent))
                 updated.add(parent);
         }
+        run();
     }
     
     private MarkovNode getNode(String word)
