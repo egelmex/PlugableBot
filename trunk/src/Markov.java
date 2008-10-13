@@ -32,7 +32,7 @@ public class Markov implements Plugin {
         if (message.startsWith("!bobstats"))
         {
             File f = new File("Markov2");
-            double size = Math.round((((double)f.length() / (double)1024) / (double)1024)*10)/10f;
+            double size = Math.round((((double)f.length() / (double)1024) / (double)1024)*10f)/10;
             PluggableBot.Message(channel, "My dictionary currently holds " + m.getWordCount() + " words and " + m.getConnectionCount() + " word associations. My dictionary file is " + size + " MB");
         }
         else
