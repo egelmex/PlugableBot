@@ -28,7 +28,7 @@ public class MarkovNode implements Comparable<MarkovNode> {
     private String word;
     private ArrayList4<MarkovNode> children;
     private ArrayMap4<MarkovNode, Integer> occurances;
-    private static Random r = new Random();
+    private transient static Random r = new Random();
     
     public List<MarkovNode> getChildren()
     {
