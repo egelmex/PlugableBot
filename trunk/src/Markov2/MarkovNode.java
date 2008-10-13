@@ -7,10 +7,12 @@ package Markov2;
 
  
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Random;
+
+import com.db4o.collections.ArrayList4;
+import com.db4o.collections.ArrayMap4;
 
 /**
  *
@@ -24,8 +26,8 @@ public class MarkovNode implements Comparable<MarkovNode> {
     }
     
     private String word;
-    private List<MarkovNode> children;
-    private HashMap<MarkovNode, Integer> occurances;
+    private ArrayList4<MarkovNode> children;
+    private ArrayMap4<MarkovNode, Integer> occurances;
     private static Random r = new Random();
     
     public List<MarkovNode> getChildren()
@@ -33,7 +35,7 @@ public class MarkovNode implements Comparable<MarkovNode> {
         return children;
     }
     
-    public HashMap<MarkovNode, Integer> getOccuranceTable()
+    public Map<MarkovNode, Integer> getOccuranceTable()
     {
         return occurances;    
     }
@@ -48,8 +50,8 @@ public class MarkovNode implements Comparable<MarkovNode> {
         this.word = word;
         if (!search)
         {
-            children = new ArrayList<MarkovNode>();
-            occurances = new HashMap<MarkovNode, Integer>();            
+            children = new ArrayList4<MarkovNode>();
+            occurances = new ArrayMap4<MarkovNode, Integer>();            
         }
     }
     
