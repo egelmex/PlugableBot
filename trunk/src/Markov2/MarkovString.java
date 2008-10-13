@@ -25,13 +25,15 @@ public class MarkovString extends TimerTask {
     private ObjectContainer database;
     // a list of updated nodes that need saving
     private LinkedList<MarkovNode> updated = new LinkedList<MarkovNode>();
-    // a list of cahced nodes for fact lookup
+    // a list of cahced nodes for fast lookup
     private HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
 
     public MarkovString()
     {
         // set up indexing
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
+        // set it up to update the lists properly
+        Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
         // open the database file
         database = Db4o.openFile("Markov2");
         // get a list of all nodes
@@ -39,19 +41,10 @@ public class MarkovString extends TimerTask {
         // if we dont have any, we have an empty database and need to start learning
         if(set.size() == 0)
         {
-            MarkovNode tmp = new MarkovNode("[");
-            //database.set(tmp);
-            MarkovNode tmp2 = new MarkovNode("]");
-            //database.set(tmp2);
-            
-            updated.add(tmp);
-            updated.add(tmp2);
-            
-            cache.put("[", tmp);
-            cache.put("]", tmp2);
-            //run();
+            database.set(new MarkovNode("["));
+            database.set(new MarkovNode("]"));
         }
-        // schedule the saves for 5 minute intervals
+        // schedule the saves for 1 minute intervals
         t.schedule(this, 0, 60000);
     }
     
@@ -125,8 +118,8 @@ public class MarkovString extends TimerTask {
             {
                 // if we dont have it, add it
                 n = new MarkovNode(word);
+                updated.add(n);
                 cache.put(word, n);
-                database.set(n);
             }
             else
             {
@@ -135,7 +128,7 @@ public class MarkovString extends TimerTask {
 
             // add to the parent node
             parent.AddChild(n);
-            if (updated.contains(parent))
+            if (!updated.contains(parent))
                 updated.add(parent);
             
             // move to the next node
@@ -143,14 +136,13 @@ public class MarkovString extends TimerTask {
         }
 
         // not sure why this'd ever be null ...
-        if (parent != null)
+        if (parent == null)
         {
             // add the end marker at the end
             parent.AddChild(getNode("]"));
-            if (updated.contains(parent))
+            if (!updated.contains(parent))
                 updated.add(parent);
         }
-        //run();
     }
     
     private MarkovNode getNode(String word)
@@ -180,13 +172,12 @@ public class MarkovString extends TimerTask {
             for (MarkovNode n : updated)
             {
                 database.set(n);
-                database.set(n.getChildren());
-                database.set(n.getOccuranceTable());
             }
             updated.clear();
             database.commit();
         }
     }
+    
     
     @Override
     protected void finalize() throws Throwable

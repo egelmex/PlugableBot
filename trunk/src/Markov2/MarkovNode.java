@@ -7,7 +7,9 @@ package Markov2;
 
  
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +29,7 @@ public class MarkovNode implements Comparable<MarkovNode> {
     
     private String word;
     private ArrayList4<MarkovNode> children;
-    private ArrayMap4<MarkovNode, Integer> occurances;
+    private ArrayMap4<String, Integer> occurances;
     private transient static Random r = new Random();
     
     public List<MarkovNode> getChildren()
@@ -35,7 +37,7 @@ public class MarkovNode implements Comparable<MarkovNode> {
         return children;
     }
     
-    public Map<MarkovNode, Integer> getOccuranceTable()
+    public Map<String, Integer> getOccuranceTable()
     {
         return occurances;    
     }
@@ -51,24 +53,24 @@ public class MarkovNode implements Comparable<MarkovNode> {
         if (!search)
         {
             children = new ArrayList4<MarkovNode>();
-            occurances = new ArrayMap4<MarkovNode, Integer>();            
+            occurances = new ArrayMap4<String, Integer>();            
         }
     }
     
     public boolean AddChild(MarkovNode n)
     {
-        if (!occurances.containsKey(n))
+        if (!occurances.containsKey(n.word))
         {
-            occurances.put(n, 1);
+            occurances.put(n.word, 1);
             children.add(n);
         }
         else
         {
-            int old = occurances.get(n);
+            int old = occurances.get(n.word);
             int newW = old + 1;
             
             // update the occarances
-            occurances.put(n, newW);
+            occurances.put(n.word, newW);
             
             if (log2(newW) > log2(old))
             {
@@ -97,26 +99,5 @@ public class MarkovNode implements Comparable<MarkovNode> {
     private int log2(int x)
     {
         return (int) Math.ceil(Math.log(x)/Math.log(2));
-    }
-    
-    @Override
-    public int hashCode()
-    {
-        return word.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final MarkovNode other = (MarkovNode) obj;
-        if (this.word != other.word && (this.word == null || !this.word.equals(other.word))) {
-            return false;
-        }
-        return true;
     }
 }
