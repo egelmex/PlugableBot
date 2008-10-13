@@ -40,18 +40,19 @@ public class MarkovString extends TimerTask {
         if(set.size() == 0)
         {
             MarkovNode tmp = new MarkovNode("[");
-            database.set(tmp);
+            //database.set(tmp);
             MarkovNode tmp2 = new MarkovNode("]");
-            database.set(tmp2);
+            //database.set(tmp2);
+            
             updated.add(tmp);
             updated.add(tmp2);
             
             cache.put("[", tmp);
             cache.put("]", tmp2);
-            run();
+            //run();
         }
         // schedule the saves for 5 minute intervals
-        //t.schedule(this, 0, 60000);
+        t.schedule(this, 0, 60000);
     }
     
     public int getWordCount()
@@ -149,7 +150,7 @@ public class MarkovString extends TimerTask {
             if (updated.contains(parent))
                 updated.add(parent);
         }
-        run();
+        //run();
     }
     
     private MarkovNode getNode(String word)
@@ -177,8 +178,11 @@ public class MarkovString extends TimerTask {
         if (database != null && updated.size() > 0)
         {
             for (MarkovNode n : updated)
+            {
                 database.set(n);
-
+                database.set(n.getChildren());
+                database.set(n.getOccuranceTable());
+            }
             updated.clear();
             database.commit();
         }
