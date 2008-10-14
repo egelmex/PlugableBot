@@ -2,6 +2,8 @@
 <target name="build">
 	<mkdir dir="output" />
 	<mkdir dir="output/plugins" />
+	<mkdir dir="output/lib" />
+	
 	<ant dir="MainBot/trunk" target="jar"/>
 	<copy file="MainBot/trunk/jar/PluggableBot.jar" todir="output" />
 
@@ -28,7 +30,11 @@
 
 	<ant dir="Mailinfo/trunk" target="jar" />
 	<copy file="Mailinfo/trunk/jar/Mailinfo.jar" todir="output/plugins" />
-
+	
+	<ant dir="Pounce/trunk" target="jar" />
+	<copy file="Pounce/trunk/jar/Pounce.jar" todir="output/plugins" />
+	
+	<copy file="lib/*" todir="output/lib" />
 </target>
 
 </project>
