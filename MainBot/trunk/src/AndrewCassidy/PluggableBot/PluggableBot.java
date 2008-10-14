@@ -194,6 +194,14 @@ public class PluggableBot extends PircBot {
             unloadPlugin(message.substring(7));
             loadPlugin(message.substring(7));
         }
+        else if (message.startsWith("join"))
+        {
+            b.joinChannel(message.substring(5));
+        }
+        else if (message.startsWith("part"))
+        {
+             b.partChannel(message.substring(5));
+        }
         else
         {
              for (Plugin p : loadedPlugins.values())
