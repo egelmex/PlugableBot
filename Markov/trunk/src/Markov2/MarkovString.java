@@ -8,10 +8,13 @@ package Markov2;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+
 import java.util.TimerTask;
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Timer;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -27,7 +30,12 @@ public class MarkovString extends TimerTask {
     private LinkedList<MarkovNode> updated = new LinkedList<MarkovNode>();
     // a list of cahced nodes for fast lookup
     private HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
+    
+    //private static final String REGEX = "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
+    private static final String REGEX ="((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)|[a-z]+([-;|][a-z]+)*";
 
+    private static final int MAX_SENTANCE_LENGTH = 30;
+    
     public MarkovString()
     {
         // set up indexing
@@ -35,7 +43,7 @@ public class MarkovString extends TimerTask {
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
         // open the database file
-        database = Db4o.openFile("Markov2");
+        database = Db4o.openFile("Markov2.db40");
         // get a list of all nodes
         ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
         // if we dont have any, we have an empty database and need to start learning
@@ -68,8 +76,7 @@ public class MarkovString extends TimerTask {
         // get the beginning node
         MarkovNode current = getNode("[");
         // loop through until we hit the end
-        while (!current.getWord().equals("]"))
-        {
+        for (int i = 0; i < MAX_SENTANCE_LENGTH && !current.getWord().equals("]"); i++) {
             // get a random next node
             MarkovNode newNode = current.GetRandomNode();
             // if its null we need to add a new join to the end
@@ -92,27 +99,28 @@ public class MarkovString extends TimerTask {
         return sb.toString().replace("]", " ").trim();
     }
     
+    private ArrayList<String> split(String sentence) {
+        ArrayList<String> strings = new ArrayList<String>();
+        Pattern p = Pattern.compile(REGEX);
+        java.util.regex.Matcher m = p.matcher(sentence);
+        String f = null;
+        while (m.find()) {
+            strings.add(m.group());
+        }
+        return strings;
+    }
+    
     public void Learn(String sentence)
     {
-        StringBuffer sb = new StringBuffer();
-        // remove anything we dont really understand
-        for (char c :  sentence.toCharArray())
-        {
-            if (Character.isWhitespace(c))
-                sb.append(" ");
-            else if (Character.isLetterOrDigit(c))
-                sb.append(Character.toLowerCase(c));
-        }
-        // split into a list of words
-        String[] words = sb.toString().split(" ");
-        // always need to know what the last word was
-        MarkovNode parent = getNode("[");
+        MarkovNode n,parent;
+        parent = getNode("[");                
+        ArrayList<String> words = split(sentence.toLowerCase());
         for (String word : words)
         {
             // if the word is blank, ignore it
             if (word.trim().equals("")) continue;
             // get the word from the database if we already have it
-            MarkovNode n;
+
             MarkovNode query = getNode(word);
             if (query == null)
             {
@@ -177,11 +185,11 @@ public class MarkovString extends TimerTask {
             database.commit();
         }
     }
-    
+
     public void cleanup()
     {
         t.cancel();
-        run();
-        database.close();      
+        run();            
+        database.close();
     }
 }
