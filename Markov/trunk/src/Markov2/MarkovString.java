@@ -183,6 +183,7 @@ public class MarkovString extends TimerTask {
     protected void finalize() throws Throwable
     {
         try {
+            System.out.println("FINALIZING BIATCH!!");
             t.cancel();
             run();            
             database.close();

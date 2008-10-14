@@ -12,6 +12,8 @@ package AndrewCassidy.PluggableBot;
 import java.util.*;
 import java.io.*;
 import java.net.URL;
+import java.net.URL;
+import java.net.URL;
 import java.net.URLClassLoader;
 import org.jibble.pircbot.*;
 /**
@@ -25,14 +27,12 @@ public class PluggableBot extends PircBot {
     private static String server = "irc.freenode.net";
     private static PluggableBot b = new PluggableBot();
     private static ArrayList<String> channels = new ArrayList<String>();
-    private static URL[] urls;
     
     public static void main(String[] args)
     {
         b.setVerbose(true);
         try
         {
-            urls = new URL[] { new URL("file://Z:/My Files/Bob/MainBot/plugins/Mailinfo.jar") };
             loadSettings();
         }
         catch (Exception e)
@@ -87,9 +87,19 @@ public class PluggableBot extends PircBot {
     {
         try
         {
+            ArrayList<URL> paths = new ArrayList<URL>();
             File f = new File("plugins/" + name + ".jar");
-            System.out.println(f.toURI().toURL().toString());
-            Plugin p = (Plugin)(new URLClassLoader(new URL[] { f.toURI().toURL() }).loadClass(name).newInstance());
+            paths.add(f.toURI().toURL());
+            
+            File f2 = new File("plugins/lib");
+            for (File ff : f2.listFiles())
+            {
+                paths.add(ff.toURI().toURL());
+            }
+            URL[] urls = new URL[paths.size()];
+            paths.toArray(urls);
+            URLClassLoader newLoader = new URLClassLoader(urls);
+            Plugin p = (Plugin)newLoader.loadClass(name).newInstance();
             loadedPlugins.put(name, p);
             return p;
         }
