@@ -91,11 +91,10 @@ public class PluggableBot extends PircBot {
             File f = new File("plugins/" + name + ".jar");
             paths.add(f.toURI().toURL());
             
-            File f2 = new File("plugins/lib");
+            File f2 = new File("lib");
             for (File ff : f2.listFiles())
-            {
                 paths.add(ff.toURI().toURL());
-            }
+
             URL[] urls = new URL[paths.size()];
             paths.toArray(urls);
             URLClassLoader newLoader = new URLClassLoader(urls);
