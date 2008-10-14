@@ -11,6 +11,8 @@ package AndrewCassidy.PluggableBot;
 
 import java.util.*;
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 import org.jibble.pircbot.*;
 /**
  *
@@ -23,12 +25,14 @@ public class PluggableBot extends PircBot {
     private static String server = "irc.freenode.net";
     private static PluggableBot b = new PluggableBot();
     private static ArrayList<String> channels = new ArrayList<String>();
+    private static URL[] urls;
     
     public static void main(String[] args)
     {
         b.setVerbose(true);
         try
         {
+            urls = new URL[] { new URL("file://Z:/My Files/Bob/MainBot/plugins/Mailinfo.jar") };
             loadSettings();
         }
         catch (Exception e)
@@ -79,17 +83,22 @@ public class PluggableBot extends PircBot {
         }
     }
     
-    private static void loadPlugin(String name)    
+    public static Plugin loadPlugin(String name)    
     {
         try
         {
-            Plugin p = new PluginLoader().loadPlugin(name);
+            File f = new File("plugins/" + name + ".jar");
+            System.out.println(f.toURI().toURL().toString());
+            Plugin p = (Plugin)(new URLClassLoader(new URL[] { f.toURI().toURL() }).loadClass(name).newInstance());
             loadedPlugins.put(name, p);
+            return p;
         }
         catch (Exception ex)
         {
             System.err.println("Failed to load plugin: "+ex.getMessage());
+            ex.printStackTrace();
         }
+        return null;
     }
     
     private static void unloadPlugin(String name)
