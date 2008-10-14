@@ -21,5 +21,6 @@ public interface Plugin {
     void onPart(String channel, String sender, String login, String hostname);
     void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason);
     void onPrivateMessage(String sender, String login, String hostname, String message);
+    void unload();
     String getHelp();
 }

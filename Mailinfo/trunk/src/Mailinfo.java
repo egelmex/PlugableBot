@@ -69,4 +69,5 @@ public class Mailinfo implements Plugin {
         return "Type !mailinfo <login> to get email info for the specified login";
     }
 
+    public void unload() {}
 }

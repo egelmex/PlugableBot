@@ -150,5 +150,7 @@ public class Mafiozi implements Plugin {
             
             PluggableBot.Message("mafiozi", action + " " + playerNumber);
         }
+    
     }
+    public void unload() {}
 }

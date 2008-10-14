@@ -178,17 +178,10 @@ public class MarkovString extends TimerTask {
         }
     }
     
-    
-    @Override
-    protected void finalize() throws Throwable
+    public void cleanup()
     {
-        try {
-            System.out.println("FINALIZING BIATCH!!");
-            t.cancel();
-            run();            
-            database.close();
-        } finally {
-            super.finalize();
-        }
+        t.cancel();
+        run();
+        database.close();      
     }
 }

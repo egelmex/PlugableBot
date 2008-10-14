@@ -57,4 +57,9 @@ public class Markov implements Plugin {
     public void onPrivateMessage(String sender, String login, String hostname, String message) {
        
     }
+    
+    public void unload()
+    {
+        m.cleanup();
+    }
 }

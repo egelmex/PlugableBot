@@ -11,6 +11,8 @@ package AndrewCassidy.PluggableBot;
 
 import java.util.*;
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 import org.jibble.pircbot.*;
 /**
  *
@@ -79,21 +81,37 @@ public class PluggableBot extends PircBot {
         }
     }
     
-    private static void loadPlugin(String name)    
+    public static Plugin loadPlugin(String name)    
     {
         try
         {
-            Plugin p = new PluginLoader().loadPlugin(name);
+            ArrayList<URL> paths = new ArrayList<URL>();
+            File f = new File("plugins/" + name + ".jar");
+            paths.add(f.toURI().toURL());
+            
+            File f2 = new File("plugins/lib");
+            for (File ff : f2.listFiles())
+            {
+                paths.add(ff.toURI().toURL());
+            }
+            URL[] urls = new URL[paths.size()];
+            paths.toArray(urls);
+            URLClassLoader newLoader = new URLClassLoader(urls);
+            Plugin p = (Plugin)newLoader.loadClass(name).newInstance();
             loadedPlugins.put(name, p);
+            return p;
         }
         catch (Exception ex)
         {
             System.err.println("Failed to load plugin: "+ex.getMessage());
+            ex.printStackTrace();
         }
+        return null;
     }
     
     private static void unloadPlugin(String name)
     {
+        loadedPlugins.get(name).unload();
         loadedPlugins.remove(name);
         System.gc();
         System.gc();
