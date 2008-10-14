@@ -34,6 +34,8 @@ public class MarkovString extends TimerTask {
     //private static final String REGEX = "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
     private static final String REGEX ="((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)|[a-z]+((-|')[a-z]+)*";
 
+    private static final int MAX_SENTANCE_LENGTH = 30;
+    
     public MarkovString()
     {
         // set up indexing
@@ -74,8 +76,7 @@ public class MarkovString extends TimerTask {
         // get the beginning node
         MarkovNode current = getNode("[");
         // loop through until we hit the end
-        while (!current.getWord().equals("]"))
-        {
+        for (int i = 0; i < 30 && !current.getWord().equals("]"); i++) {
             // get a random next node
             MarkovNode newNode = current.GetRandomNode();
             // if its null we need to add a new join to the end
