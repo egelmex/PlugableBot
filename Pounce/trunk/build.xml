@@ -1,6 +1,6 @@
 <project name="Pounce" basedir="." default="build">
 
-<property name="module.name" value="Mailinfo"/>
+<property name="module.name" value="Pounce"/>
 
 <target name="build" depends="setup">
 	<javac srcdir="src" destdir="build">
