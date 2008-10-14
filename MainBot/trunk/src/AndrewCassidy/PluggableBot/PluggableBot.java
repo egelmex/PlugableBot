@@ -25,9 +25,11 @@ public class PluggableBot extends PircBot {
     private static String server = "irc.freenode.net";
     private static PluggableBot b = new PluggableBot();
     private static ArrayList<String> channels = new ArrayList<String>();
-    
+       
     public static void main(String[] args)
     {
+        // add the shutdown hook for cleaning up
+        Runtime.getRuntime().addShutdownHook(new Thread() { public void run() { cleanup(); } });
         b.setVerbose(true);
         try
         {
@@ -222,5 +224,11 @@ public class PluggableBot extends PircBot {
     public static void Message(String target, String action) 
     {
         b.sendMessage(target, action);
+    }
+    
+    private static void cleanup() {
+        System.out.println("Shutting down...");
+        for (Plugin p : loadedPlugins.values())
+            p.unload();
     }
 }
