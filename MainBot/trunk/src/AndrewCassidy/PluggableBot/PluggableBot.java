@@ -209,7 +209,6 @@ public class PluggableBot extends PircBot {
         }
     }
     
-    
     public static String Nick()
     {
         return b.getNick();
