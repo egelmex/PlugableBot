@@ -34,7 +34,8 @@
 	<ant dir="Pounce/trunk" target="jar" />
 	<copy file="Pounce/trunk/jar/Pounce.jar" todir="output/plugins" />
 	
-	<copy file="lib/*" todir="output/lib" />
+	<copy file="lib/pircbot.jar" todir="output/lib" />
+	<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
 </target>
 
 </project>
