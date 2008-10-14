@@ -1,0 +1,34 @@
+<project name="PluggableBot" basedir="." default="build">
+
+<property name="module.name" value="PluggableBot"/>
+
+<target name="build" depends="setup">
+	<javac srcdir="src" destdir="build">
+		<classpath>
+			<pathelement location="../../lib/pircbot.jar" /> 
+		</classpath>
+	</javac>
+</target>
+
+<target name="setup">
+	<mkdir dir="build" />
+	<mkdir dir="jar" />
+</target>
+
+<target name="jar" depends="build">
+	<jar destfile="jar/${module.name}.jar" basedir="build" >
+		<manifest>
+	    		<attribute name="Built-By" value="${user.name}"/>
+	    		<attribute name="Main-Class" value="AndrewCassidy.PluggableBot.PluggableBot" />
+			<attribute name="Class-Path" value="lib/pircbot.jar" />
+	  	</manifest>
+
+	</jar>
+</target>
+
+<target name="clean">
+	<deltree dir="build" />
+	<deltree dir="jar" />
+</target>
+
+</project>

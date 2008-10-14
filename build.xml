@@ -1,0 +1,34 @@
+<project>
+<target name="build">
+	<mkdir dir="output" />
+	<mkdir dir="output/plugins" />
+	<ant dir="MainBot/trunk" target="jar"/>
+	<copy file="MainBot/trunk/jar/PluggableBot.jar" todir="output" />
+
+	<ant dir="Markov/trunk" target="jar" />
+	<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />
+
+	<ant dir="Actions/trunk" target="jar" />
+	<copy file="Actions/trunk/jar/Actions.jar" todir="output/plugins" />
+
+	<ant dir="Choose/trunk" target="jar" />
+	<copy file="Choose/trunk/jar/Choose.jar" todir="output/plugins" />
+
+	<ant dir="Dns/trunk" target="jar" />
+	<copy file="Dns/trunk/jar/Dns.jar" todir="output/plugins" />
+
+	<ant dir="Hometime/trunk" target="jar" />
+	<copy file="Hometime/trunk/jar/Hometime.jar" todir="output/plugins" />
+
+	<ant dir="Kill/trunk" target="jar" />
+	<copy file="Kill/trunk/jar/Kill.jar" todir="output/plugins" />
+
+	<ant dir="Mafiozi/trunk" target="jar" />
+	<copy file="Mafiozi/trunk/jar/Mafiozi.jar" todir="output/plugins" />
+
+	<ant dir="Mailinfo/trunk" target="jar" />
+	<copy file="Mailinfo/trunk/jar/Mailinfo.jar" todir="output/plugins" />
+
+</target>
+
+</project>
