@@ -44,6 +44,8 @@ public class MarkovString extends TimerTask {
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
+        // and activate the lists far enough
+        Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(3);
         // open the database file
         database = Db4o.openFile("Markov2.db40");
         // get a list of all nodes
