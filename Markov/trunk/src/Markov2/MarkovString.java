@@ -38,6 +38,8 @@ public class MarkovString extends TimerTask {
     
     public MarkovString()
     {
+        // remove the shutdown hook as we have our own in the main bot
+        Db4o.configure().automaticShutDown(false);
         // set up indexing
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // set it up to update the lists properly
