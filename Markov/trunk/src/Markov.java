@@ -1,7 +1,4 @@
-import java.io.File;
-
-import org.pluggableBot.IgnoreLib;
-
+import AndrewCassidy.PluggableBot.IgnoreLib;
 import AndrewCassidy.PluggableBot.PluggableBot;
 import AndrewCassidy.PluggableBot.Plugin;
 import Markov2.MarkovString;

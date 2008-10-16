@@ -199,23 +199,37 @@ public class MarkovString extends TimerTask {
         }
     }
     
+    public void save()
+    {
+        save(updated);
+    }
+    
+    public void save(LinkedList<MarkovNode> listToSave)
+    {
+        for (MarkovNode n : listToSave)
+        {
+            database.set(n);
+        }
+        database.commit();
+    }
+    
     public synchronized void  run()
     {
         if (database != null && updated.size() > 0)
         {
-            for (MarkovNode n : updated)
-            {
-                database.set(n);
-            }
+            final LinkedList<MarkovNode> copy = (LinkedList<MarkovNode>) updated.clone();
             updated.clear();
-            database.commit();
+            new Thread() { public void run() {
+                    save(copy);
+                }
+            }.start();
         }
     }
 
     public void cleanup()
     {
         t.cancel();
-        run();            
+        save();
         database.close();
     }
 }

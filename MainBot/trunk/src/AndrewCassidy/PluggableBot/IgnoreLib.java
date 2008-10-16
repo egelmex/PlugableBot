@@ -1,4 +1,7 @@
-package org.pluggableBot;
+package AndrewCassidy.PluggableBot;
+/**
+ * @author mex
+ */
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
