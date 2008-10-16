@@ -41,6 +41,7 @@ public class MarkovString extends TimerTask {
     {
         public SaveThread(LinkedList<MarkovNode> list)
         {
+            super(saveGroup, "Save Thread");
             this.list = list;
         }
         private LinkedList<MarkovNode> list;
@@ -50,6 +51,8 @@ public class MarkovString extends TimerTask {
             save(list);
         }
     }
+    
+    private ThreadGroup saveGroup = new ThreadGroup("Save Threads");
     
     public MarkovString()
     {
@@ -229,8 +232,8 @@ public class MarkovString extends TimerTask {
     
     public void  run()
     {
-        System.out.println("Active save threads:" + SaveThread.activeCount());
-        if (database != null && updated.size() > 0 && SaveThread.activeCount() == 0)
+        System.out.println("Active save threads:" + saveGroup.activeCount());
+        if (database != null && updated.size() > 0 && saveGroup.activeCount() == 0)
         {
             SaveThread savethread = new SaveThread((LinkedList<MarkovNode>) updated.clone());
             updated.clear();
@@ -241,7 +244,7 @@ public class MarkovString extends TimerTask {
     public void cleanup() throws InterruptedException 
     {
         t.cancel();
-        //while (SaveThread.activeCount() > 0) { Thread.sleep(1000); }
+        //while (saveGroup.activeCount() > 0) { Thread.sleep(1000); }
         save();
         database.close();
     }
