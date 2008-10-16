@@ -244,7 +244,7 @@ public class MarkovString extends TimerTask {
     public void cleanup() throws InterruptedException 
     {
         t.cancel();
-        //while (saveGroup.activeCount() > 0) { Thread.sleep(1000); }
+        while (saveGroup.activeCount() > 0) { Thread.sleep(1000); }
         save();
         database.close();
     }
