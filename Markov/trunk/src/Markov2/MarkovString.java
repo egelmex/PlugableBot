@@ -41,6 +41,7 @@ public class MarkovString extends TimerTask {
         // remove the shutdown hook as we have our own in the main bot
         Db4o.configure().automaticShutDown(false);
         // set up indexing
+        Db4o.configure().objectClass(MarkovNode.class).indexed(true);
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
@@ -60,17 +61,29 @@ public class MarkovString extends TimerTask {
         t.schedule(this, 0, 60000);
     }
     
+    @Deprecated
     public int getWordCount()
     {
         return database.get(MarkovNode.class).size();
     }
     
+    @Deprecated
     public int getConnectionCount()
     {
         int ret = 0;
         ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
         for (MarkovNode n : set)
             ret += n.getConnectionCount();
+        return ret;
+    }
+    
+    public int[] getStats()
+    {
+        int ret[] = new int[2];
+        ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
+        ret[0] = set.size();
+        for (MarkovNode n : set)
+            ret[1] += n.getConnectionCount();
         return ret;
     }
     
@@ -114,7 +127,7 @@ public class MarkovString extends TimerTask {
         return strings;
     }
     
-    public void Learn(String sentence)
+    public synchronized void Learn(String sentence)
     {
         MarkovNode n,parent;
         parent = getNode("[");                
@@ -177,7 +190,7 @@ public class MarkovString extends TimerTask {
         }
     }
     
-    public void run()
+    public synchronized void  run()
     {
         if (database != null && updated.size() > 0)
         {
