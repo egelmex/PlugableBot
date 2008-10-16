@@ -229,6 +229,7 @@ public class MarkovString extends TimerTask {
     
     public void  run()
     {
+        System.out.println("Active save threads:" + SaveThread.activeCount());
         if (database != null && updated.size() > 0 && SaveThread.activeCount() == 0)
         {
             SaveThread savethread = new SaveThread((LinkedList<MarkovNode>) updated.clone());
