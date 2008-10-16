@@ -47,7 +47,7 @@ public class MarkovString extends TimerTask {
         // and activate the lists far enough
         Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(3);
         // open the database file
-        database = Db4o.openFile("Markov2.db40");
+        database = Db4o.openFile("Markov2.db4o");
         // get a list of all nodes
         ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
         // if we dont have any, we have an empty database and need to start learning
