@@ -57,6 +57,11 @@ public class MarkovString extends TimerTask {
             database.set(new MarkovNode("["));
             database.set(new MarkovNode("]"));
         }
+        else
+        {
+            for (MarkovNode n : set)
+                cache.put(n.getWord(), n);
+        }
         // schedule the saves for 1 minute intervals
         t.schedule(this, 0, 60000);
     }
@@ -80,9 +85,14 @@ public class MarkovString extends TimerTask {
     public int[] getStats()
     {
         int ret[] = new int[2];
-        ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
-        ret[0] = set.size();
-        for (MarkovNode n : set)
+        
+//        ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
+//        ret[0] = set.size();
+//        for (MarkovNode n : set)
+//            ret[1] += n.getConnectionCount();
+        
+        ret[0] = cache.size();
+        for (MarkovNode n : cache.values())
             ret[1] += n.getConnectionCount();
         return ret;
     }
