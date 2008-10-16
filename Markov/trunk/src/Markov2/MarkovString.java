@@ -36,6 +36,20 @@ public class MarkovString extends TimerTask {
     private Pattern p = Pattern.compile(REGEX);
     
     private static final int MAX_SENTANCE_LENGTH = 30;
+            
+    private class SaveThread extends Thread
+    {
+        public SaveThread(LinkedList<MarkovNode> list)
+        {
+            this.list = list;
+        }
+        private LinkedList<MarkovNode> list;
+        @Override
+        public void run() {
+        System.out.println("Saving to database on another thread " + this.getId());
+            save(list);
+        }
+    }
     
     public MarkovString()
     {
@@ -82,7 +96,7 @@ public class MarkovString extends TimerTask {
         return ret;
     }
     
-    public int[] getStats()
+    public synchronized int[] getStats()
     {
         int ret[] = new int[2];
         
@@ -215,21 +229,18 @@ public class MarkovString extends TimerTask {
     
     public synchronized void  run()
     {
-        if (database != null && updated.size() > 0)
+        if (database != null && updated.size() > 0 && SaveThread.activeCount() == 0)
         {
-            final LinkedList<MarkovNode> copy = (LinkedList<MarkovNode>) updated.clone();
+            SaveThread savethread = new SaveThread((LinkedList<MarkovNode>) updated.clone());
             updated.clear();
-            new Thread() { public void run() {
-                System.out.println("Saving to database on another thread " + this.getId());
-                    save(copy);
-                }
-            }.start();
+            savethread.start();
         }
     }
 
-    public void cleanup()
+    public void cleanup() throws InterruptedException 
     {
         t.cancel();
+        while (SaveThread.activeCount() > 0) { Thread.sleep(1000); }
         save();
         database.close();
     }
