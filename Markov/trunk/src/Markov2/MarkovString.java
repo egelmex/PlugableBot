@@ -220,6 +220,7 @@ public class MarkovString extends TimerTask {
             final LinkedList<MarkovNode> copy = (LinkedList<MarkovNode>) updated.clone();
             updated.clear();
             new Thread() { public void run() {
+                System.out.println("Saving to database on another thread " + this.getId());
                     save(copy);
                 }
             }.start();
