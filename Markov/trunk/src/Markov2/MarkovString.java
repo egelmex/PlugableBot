@@ -33,7 +33,8 @@ public class MarkovString extends TimerTask {
     
     //private static final String REGEX = "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
     private static final String REGEX ="((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)|([a-z]+([-;|'][a-zA-Z]+)*)";
-
+    private Pattern p = Pattern.compile(REGEX);
+    
     private static final int MAX_SENTANCE_LENGTH = 30;
     
     public MarkovString()
@@ -127,7 +128,6 @@ public class MarkovString extends TimerTask {
     
     private ArrayList<String> split(String sentence) {
         ArrayList<String> strings = new ArrayList<String>();
-        Pattern p = Pattern.compile(REGEX);
         java.util.regex.Matcher m = p.matcher(sentence);
         String f = null;
         while (m.find()) {
