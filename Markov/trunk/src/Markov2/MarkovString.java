@@ -32,7 +32,7 @@ public class MarkovString extends TimerTask {
     private HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
     
     //private static final String REGEX = "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
-    private static final String REGEX ="((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)|[a-z]+([-;|'][a-z]+)*";
+    private static final String REGEX ="((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)|([a-z]+([-;|'][a-zA-Z]+)*)";
 
     private static final int MAX_SENTANCE_LENGTH = 30;
     
@@ -41,7 +41,6 @@ public class MarkovString extends TimerTask {
         // remove the shutdown hook as we have our own in the main bot
         Db4o.configure().automaticShutDown(false);
         // set up indexing
-        Db4o.configure().objectClass(MarkovNode.class).indexed(false);
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
