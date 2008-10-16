@@ -23,8 +23,10 @@ public class PluggableBot extends PircBot {
     private static HashMap<String, Plugin> loadedPlugins = new HashMap<String, Plugin>();
     private static String nick = "Bob";
     private static String server = "irc.freenode.net";
+    private static String password = "P@ssw0rd";
     private static PluggableBot b = new PluggableBot();
     private static ArrayList<String> channels = new ArrayList<String>();
+    private static String admin = "";
        
     public static void main(String[] args)
     {
@@ -79,6 +81,8 @@ public class PluggableBot extends PircBot {
                     channels.add(line);
                 else if (context.equals("plugins"))
                     loadPlugin(line);
+                else if (context.equals("password"))
+                    password = line;
             }
         }
     }
@@ -181,33 +185,62 @@ public class PluggableBot extends PircBot {
     {
         for (Plugin p : loadedPlugins.values())
             p.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+        
+        if (sourceNick.equals(admin))
+            admin = "";
     }
     
     @Override
     protected void onPrivateMessage(String sender, String login, String hostname, String message)
     {
-        if (message.startsWith("load"))
+        
+        if (message.startsWith("identify"))
+        {
+             if (message.substring(9).equals(password))
+             {
+                 admin = nick;
+                 b.sendMessage(sender, "identified");
+             }
+        }
+        else if (message.startsWith("load") && admin.equals(nick))
+        {
             loadPlugin(message.substring(5));
-        else if (message.startsWith("unload"))
+            b.sendMessage(sender, "loaded");
+        }
+        else if (message.startsWith("unload") && admin.equals(nick))
+        {
             unloadPlugin(message.substring(7));
-        else if (message.startsWith("reload"))
+            b.sendMessage(sender, "unloaded");
+        }
+        else if (message.startsWith("reload") && admin.equals(nick))
         {
             unloadPlugin(message.substring(7));
             loadPlugin(message.substring(7));
+            b.sendMessage(sender, "reloaded");
         }
-        else if (message.startsWith("join"))
+        else if (message.startsWith("join") && admin.equals(nick))
         {
             b.joinChannel(message.substring(5));
+            b.sendMessage(sender, "joined");
         }
-        else if (message.startsWith("part"))
+        else if (message.startsWith("part") && admin.equals(nick))
         {
              b.partChannel(message.substring(5));
+             b.sendMessage(sender, "left");
         }
+
         else
         {
              for (Plugin p : loadedPlugins.values())
                 p.onPrivateMessage(sender, login, hostname, message);           
         }
+    }
+    
+    @Override
+    protected void onNickChange(String oldNick, String login,  String hostname, String newNick)
+    {
+        if (oldNick.equals(admin))
+            admin = newNick;
     }
     
     public static String Nick()
