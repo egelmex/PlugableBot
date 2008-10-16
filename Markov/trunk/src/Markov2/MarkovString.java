@@ -150,7 +150,7 @@ public class MarkovString extends TimerTask {
         return strings;
     }
     
-    public synchronized void Learn(String sentence)
+    public void Learn(String sentence)
     {
         MarkovNode n,parent;
         parent = getNode("[");                
@@ -227,7 +227,7 @@ public class MarkovString extends TimerTask {
         database.commit();
     }
     
-    public synchronized void  run()
+    public void  run()
     {
         if (database != null && updated.size() > 0 && SaveThread.activeCount() == 0)
         {
