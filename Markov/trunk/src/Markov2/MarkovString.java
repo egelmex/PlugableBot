@@ -40,11 +40,11 @@ public class MarkovString extends TimerTask {
 			// with -:|' i.e. hello
 			// hello-world
 			// hello-cruel-world
-			+ "|" + "( |^)((:\\))|(:\\()|(\\(:)|(\\):)|(:p))( |$)" // Smilies
+			+ "|" + "((:\\))|(:\\()|(\\(:)|(\\):)|(:p))"; // Smilies
 			// :), :(,
 			// ):, (:,
 			// :p
-			+ "|" + "!!!|!|?"; // bob learn him some punctuation
+			//+ "|" + "!!!|!|?"; // bob learn him some punctuation
 	private Pattern p = Pattern.compile(REGEX);
 
 	private static final int MAX_SENTANCE_LENGTH = 30;
@@ -243,10 +243,11 @@ public class MarkovString extends TimerTask {
 		}
 	}
 
-	public void cleanup() throws InterruptedException {
+	public void cleanup()  {
 		t.cancel();
 		while (saveGroup.activeCount() > 0) {
-			Thread.sleep(1000);
+			try {Thread.sleep(1000);}
+			catch (InterruptedException ex) {}
 		}
 		save();
 		database.close();
