@@ -161,44 +161,42 @@ public class MarkovString extends TimerTask {
 		return strings;
 	}
 
-	public void Learn(String sentence) {
-		synchronized (updated) {
-			MarkovNode n, parent;
-			parent = getNode("[");
-			ArrayList<String> words = split(sentence.toLowerCase());
-			for (String word : words) {
-				// if the word is blank, ignore it
-				if (word.trim().equals(""))
-					continue;
-				// get the word from the database if we already have it
+	public synchronized void Learn(String sentence) {
+            MarkovNode n, parent;
+            parent = getNode("[");
+            ArrayList<String> words = split(sentence.toLowerCase());
+            for (String word : words) {
+                    // if the word is blank, ignore it
+                    if (word.trim().equals(""))
+                            continue;
+                    // get the word from the database if we already have it
 
-				MarkovNode query = getNode(word);
-				if (query == null) {
-					// if we dont have it, add it
-					n = new MarkovNode(word);
-					updated.add(n);
-					cache.put(word, n);
-				} else {
-					n = query;
-				}
+                    MarkovNode query = getNode(word);
+                    if (query == null) {
+                            // if we dont have it, add it
+                            n = new MarkovNode(word);
+                            updated.add(n);
+                            cache.put(word, n);
+                    } else {
+                            n = query;
+                    }
 
-				// add to the parent node
-				parent.AddChild(n);
-				if (!updated.contains(parent))
-					updated.add(parent);
+                    // add to the parent node
+                    parent.AddChild(n);
+                    if (!updated.contains(parent))
+                            updated.add(parent);
 
-				// move to the next node
-				parent = n;
-			}
+                    // move to the next node
+                    parent = n;
+            }
 
-			// not sure why this'd ever be null ...
-			if (parent != null) {
-				// add the end marker at the end
-				parent.AddChild(getNode("]"));
-				if (!updated.contains(parent))
-					updated.add(parent);
-			}
-		}
+            // not sure why this'd ever be null ...
+            if (parent != null) {
+                    // add the end marker at the end
+                    parent.AddChild(getNode("]"));
+                    if (!updated.contains(parent))
+                            updated.add(parent);
+            }
 	}
 
 	private MarkovNode getNode(String word) {
@@ -217,12 +215,17 @@ public class MarkovString extends TimerTask {
 		}
 	}
 
+        public synchronized void rotate()
+        {
+            saving.clear();
+            LinkedList<MarkovNode> tmp = saving;
+            saving = updated;
+            updated = tmp;
+        }
+        
 	public void save() {
-		synchronized (updated) {
-			saving = updated;
-			updated = new LinkedList<MarkovNode>();
-		}
-		save(updated);
+		rotate();
+		save(saving);
 	}
 
 	public void save(LinkedList<MarkovNode> listToSave) {
@@ -236,9 +239,7 @@ public class MarkovString extends TimerTask {
 		System.out.println("Active save threads:" + saveGroup.activeCount());
 		if (database != null && updated.size() > 0
 				&& saveGroup.activeCount() == 0) {
-			SaveThread savethread = new SaveThread(
-					(LinkedList<MarkovNode>) updated.clone());
-			// updated.clear();
+			SaveThread savethread = new SaveThread(updated);
 			savethread.start();
 		}
 	}
