@@ -151,7 +151,8 @@ public class MarkovString extends TimerTask {
 		return sb.toString().replace("]", " ").trim();
 	}
 
-	private ArrayList<String> split(String sentence) {
+	private ArrayList<String> split(String sentence)
+        {
 		ArrayList<String> strings = new ArrayList<String>();
 		java.util.regex.Matcher m = p.matcher(sentence);
 		String f = null;
@@ -161,7 +162,8 @@ public class MarkovString extends TimerTask {
 		return strings;
 	}
 
-	public synchronized void Learn(String sentence) {
+	public synchronized void Learn(String sentence)
+        {
             MarkovNode n, parent;
             parent = getNode("[");
             ArrayList<String> words = split(sentence.toLowerCase());
