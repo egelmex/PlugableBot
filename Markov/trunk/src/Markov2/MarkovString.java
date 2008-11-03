@@ -137,7 +137,6 @@ public class MarkovString extends TimerTask {
 	}
 
 	public void Learn(String sentence) {
-		synchronized (updated) {
 			MarkovNode n, parent;
 			parent = getNode("[");
 			ArrayList<String> words = split(sentence.toLowerCase());
@@ -152,7 +151,9 @@ public class MarkovString extends TimerTask {
 					// if we dont have it, add it
 					n = new MarkovNode(word);
 
-					updated.add(n);
+					synchronized (updated) {
+						updated.add(n);
+					}
 					synchronized (cache) {
 						cache.put(word, n);
 					}
@@ -172,9 +173,10 @@ public class MarkovString extends TimerTask {
 			if (parent != null) {
 				// add the end marker at the end
 				parent.AddChild(getNode("]"));
-				updated.add(parent);
+				synchronized (updated) {
+					updated.add(parent);
+				}
 			}
-		}
 	}
 
 	private MarkovNode getNode(String word) {
