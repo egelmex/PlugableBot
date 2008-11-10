@@ -5,16 +5,16 @@ package Markov2;
  * and open the template in the editor.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Pattern;
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+
+import java.util.TimerTask;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -22,32 +22,40 @@ import com.db4o.ObjectSet;
  */
 public class MarkovString extends TimerTask {
 
-	private Timer saveTimer = new Timer(); //commits changes to the DB at intervals
-	
-	private ObjectContainer database; // the database file
-	
+	// needed to save the changes to the graph without causing a performance hit
+	private Timer t = new Timer();
+	// the database file
+	private ObjectContainer database;
 	// a list of updated nodes that need saving
-	private volatile HashSet<MarkovNode> updated = new HashSet<MarkovNode>();
-	//private volatile LinkedList<MarkovNode> updated = new LinkedList<MarkovNode>();
-	
-	// a list of cached nodes for fast lookup
-	private volatile HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
+	private HashSet<MarkovNode> updated = new HashSet<MarkovNode>();
+	private HashSet<MarkovNode> saving = null;
+	// a list of cahced nodes for fast lookup
+	private HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
 
-	private static final String REGEX = "((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)"// urls
-			+ "|" + "([a-z0-9]+([-:|'][a-z0-9]+)*)" // word optionaly seperated// with -:|' i.e. hello hello-world hello-cruel-world
-			+ "|" + "((:\\))|(:\\()|(\\(:)|(\\):)|(:p))"; // Smilies :), :(, ):, (:, :p
+	// private static final String REGEX =
+	// "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
+	private static final String REGEX = "((ht|f)tp(s?)\\:\\/\\/|~/|/)?([\\w]+:\\w+@)?([a-zA-Z]{1}([\\w\\-]+\\.)+([\\w]{2,5}))(:[\\d]{1,5})?((/?\\w+/)+|/?)(\\w+\\.[\\w]{3,4})?((\\?\\w+=\\w+)?(&\\w+=\\w+)*)"
+			// urls
+			+ "|" + "([a-z0-9]+([-:|'][a-z0-9]+)*)" // word optionaly seperated
+			// with -:|' i.e. hello
+			// hello-world
+			// hello-cruel-world
+			+ "|" + "((:\\))|(:\\()|(\\(:)|(\\):)|(:p))"; // Smilies
+			// :), :(,
+			// ):, (:,
+			// :p
 			//+ "|" + "!!!|!|?"; // bob learn him some punctuation
 	private Pattern p = Pattern.compile(REGEX);
 
 	private static final int MAX_SENTANCE_LENGTH = 30;
 
 	private class SaveThread extends Thread {
-		private HashSet<MarkovNode> list;
-		
 		public SaveThread(HashSet<MarkovNode> list) {
 			super(saveGroup, "Save Thread");
 			this.list = list;
 		}
+
+		private HashSet<MarkovNode> list;
 
 		@Override
 		public void run() {
@@ -64,7 +72,7 @@ public class MarkovString extends TimerTask {
 		Db4o.configure().automaticShutDown(false);
 		// set up indexing
 		Db4o.configure().objectClass(MarkovNode.class).objectField("word")
-				.indexed(true);
+				.indexed(false);
 		// set it up to update the lists properly
 		Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
 		// and activate the lists far enough
@@ -83,18 +91,36 @@ public class MarkovString extends TimerTask {
 			for (MarkovNode n : set)
 				cache.put(n.getWord(), n);
 		}
-		// schedule the saves for 1 minute intervals
-		saveTimer.schedule(this, 0, 60000);
+		// schedule the saves for 5 minute intervals
+		t.schedule(this, 0, 300000);
+	}
+
+	@Deprecated
+	public int getWordCount() {
+		return database.get(MarkovNode.class).size();
+	}
+
+	@Deprecated
+	public int getConnectionCount() {
+		int ret = 0;
+		ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
+		for (MarkovNode n : set)
+			ret += n.getConnectionCount();
+		return ret;
 	}
 
 	public int[] getStats() {
-		synchronized (cache) {
-			int ret[] = new int[2];
-			ret[0] = cache.size();
-			for (MarkovNode n : cache.values())
-				ret[1] += n.getConnectionCount();
-			return ret;
-		}
+		int ret[] = new int[2];
+
+		// ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
+		// ret[0] = set.size();
+		// for (MarkovNode n : set)
+		// ret[1] += n.getConnectionCount();
+
+		ret[0] = cache.size();
+		for (MarkovNode n : cache.values())
+			ret[1] += n.getConnectionCount();
+		return ret;
 	}
 
 	public String Generate() {
@@ -110,9 +136,8 @@ public class MarkovString extends TimerTask {
 			if (newNode == null) {
 				MarkovNode end = getNode("]");
 				current.AddChild(end);
-				synchronized (updated) {
+				if (!updated.contains(current))
 					updated.add(current);
-				}
 				newNode = end;
 			}
 			current = newNode;
@@ -126,10 +151,10 @@ public class MarkovString extends TimerTask {
 		return sb.toString().replace("]", " ").trim();
 	}
 
-	private ArrayList<String> split(String sentence)
-        {
+	private ArrayList<String> split(String sentence) {
 		ArrayList<String> strings = new ArrayList<String>();
 		java.util.regex.Matcher m = p.matcher(sentence);
+		String f = null;
 		while (m.find()) {
 			strings.add(m.group());
 		}
@@ -137,46 +162,41 @@ public class MarkovString extends TimerTask {
 	}
 
 	public void Learn(String sentence) {
-			MarkovNode n, parent;
-			parent = getNode("[");
-			ArrayList<String> words = split(sentence.toLowerCase());
-			for (String word : words) {
-				// if the word is blank, ignore it
-				if (word.trim().equals(""))
-					continue;
-				// get the word from the database if we already have it
+            MarkovNode n, parent;
+            parent = getNode("[");
+            ArrayList<String> words = split(sentence.toLowerCase());
+            for (String word : words) {
+                    // if the word is blank, ignore it
+                    if (word.trim().equals(""))
+                            continue;
+                    // get the word from the database if we already have it
 
-				MarkovNode query = getNode(word);
-				if (query == null) {
-					// if we dont have it, add it
-					n = new MarkovNode(word);
+                    MarkovNode query = getNode(word);
+                    if (query == null) {
+                            // if we dont have it, add it
+                            n = new MarkovNode(word);
+                                updated.add(n);
+                            cache.put(word, n);
+                    } else {
+                            n = query;
+                    }
 
-					synchronized (updated) {
-						updated.add(n);
-					}
-					synchronized (cache) {
-						cache.put(word, n);
-					}
-				} else {
-					n = query;
-				}
+                    // add to the parent node
+                    parent.AddChild(n);
+                        //if (!updated.contains(parent))
+                            updated.add(parent);
 
-				// add to the parent node
-				parent.AddChild(n);
-				updated.add(parent);
+                    // move to the next node
+                    parent = n;
+            }
 
-				// move to the next node
-				parent = n;
-			}
-
-			// not sure why this'd ever be null ...
-			if (parent != null) {
-				// add the end marker at the end
-				parent.AddChild(getNode("]"));
-				synchronized (updated) {
-					updated.add(parent);
-				}
-			}
+            // not sure why this'd ever be null ...
+            if (parent != null) {
+                    // add the end marker at the end
+                    parent.AddChild(getNode("]"));
+                        //if (!updated.contains(parent))
+                            updated.add(parent);
+            }
 	}
 
 	private MarkovNode getNode(String word) {
@@ -195,6 +215,16 @@ public class MarkovString extends TimerTask {
 		}
 	}
 
+        public void rotate()
+        {
+                saving = updated;
+                updated = new HashSet<MarkovNode>();
+        }
+        
+	//public void save() {
+	//	save(saving);
+	//}
+
 	public void save(HashSet<MarkovNode> listToSave) {
 		for (MarkovNode n : listToSave) {
 			database.set(n);
@@ -206,25 +236,19 @@ public class MarkovString extends TimerTask {
 		System.out.println("Active save threads:" + saveGroup.activeCount());
 		if (database != null && updated.size() > 0
 				&& saveGroup.activeCount() == 0) {
-			SaveThread savethread = null;
-			synchronized (updated) {
-				savethread = new SaveThread(updated);
-				savethread.start();
-				updated = new HashSet<MarkovNode>();
-			}
-			
+                        rotate();
+			SaveThread savethread = new SaveThread(saving);
+			savethread.start();
 		}
 	}
 
 	public void cleanup()  {
-		saveTimer.cancel();
+		t.cancel();
 		while (saveGroup.activeCount() > 0) {
 			try {Thread.sleep(1000);}
 			catch (InterruptedException ex) {}
 		}
-		synchronized (updated) {
-			save(updated);
-		}
+		save(updated);
 		database.close();
 	}
 }

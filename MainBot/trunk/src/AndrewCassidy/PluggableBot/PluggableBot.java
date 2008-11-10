@@ -43,18 +43,7 @@ public class PluggableBot extends PircBot {
             System.exit(0);
         }
         
-        try
-        {
-            b.setName(nick);
-            b.connect(server);
-            for (String s : channels)
-                b.joinChannel(s);
-        }
-        catch (Exception e)
-        {
-            System.err.println("Could not connect to server: "+e.getMessage());
-            System.exit(0);
-        }
+        b.connect();
     }
     
     private static void loadSettings() throws Exception
@@ -135,6 +124,28 @@ public class PluggableBot extends PircBot {
     {
         for (Plugin p : loadedPlugins.values())
             p.onJoin(channel, sender, login, hostname);
+    }
+    
+    private void connect()
+    {
+        try
+        {
+            b.setName(nick);
+            b.connect(server);
+            for (String s : channels)
+                b.joinChannel(s);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Could not connect to server: "+e.getMessage());
+            System.exit(0);
+        }        
+    }
+    
+    @Override
+    protected void onDisconnect()
+    {
+        connect();
     }
     
     @Override
