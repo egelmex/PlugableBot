@@ -66,7 +66,7 @@ public class MarkovDatabase extends Thread
         if (!cache.containsKey(node.getWord()))
                 cache.put(node.getWord(), node);
 
-        if (!busy)
+        if (!busy && this.getState() == State.WAITING)
             this.notify();
     }
 
@@ -133,7 +133,7 @@ public class MarkovDatabase extends Thread
         while(!shuttingDown)
         {
             try {
-                wait();
+                this.wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
