@@ -67,7 +67,10 @@ public class MarkovDatabase extends Thread
                 cache.put(node.getWord(), node);
 
         if (!busy && this.getState() == State.WAITING)
+        {
+            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Notifying");
             this.notify();
+        }
     }
 
     public int[] getStats()
@@ -86,7 +89,8 @@ public class MarkovDatabase extends Thread
         if (!busy)
         {
             shuttingDown = true;
-            this.notify();
+            if (this.getState() == State.WAITING)
+                this.notify();
         }
     }
 
@@ -133,10 +137,13 @@ public class MarkovDatabase extends Thread
         while(!shuttingDown)
         {
             try {
-                this.wait();
+                Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Waiting");
+		System.out.println(this.getState().toString());
+                wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
+            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Committing");
             commit();
         }
     }
