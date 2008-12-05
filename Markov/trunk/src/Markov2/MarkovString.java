@@ -5,32 +5,19 @@ package Markov2;
  * and open the template in the editor.
  */
 
-import com.db4o.Db4o;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
 
-import java.util.TimerTask;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Timer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
  * 
  * @author Andrew
  */
-public class MarkovString extends TimerTask {
-
-	// needed to save the changes to the graph without causing a performance hit
-	private Timer t = new Timer();
+public class MarkovString {
 	// the database file
-	private ObjectContainer database;
-	// a list of updated nodes that need saving
-	private HashSet<MarkovNode> updated = new HashSet<MarkovNode>();
-	private HashSet<MarkovNode> saving = null;
-	// a list of cahced nodes for fast lookup
-	private HashMap<String, MarkovNode> cache = new HashMap<String, MarkovNode>();
+	private MarkovDatabase database = new MarkovDatabase();
 
 	// private static final String REGEX =
 	// "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
@@ -49,84 +36,18 @@ public class MarkovString extends TimerTask {
 
 	private static final int MAX_SENTANCE_LENGTH = 30;
 
-	private class SaveThread extends Thread {
-		public SaveThread(HashSet<MarkovNode> list) {
-			super(saveGroup, "Save Thread");
-			this.list = list;
-		}
-
-		private HashSet<MarkovNode> list;
-
-		@Override
-		public void run() {
-			System.out.println("Saving to database on another thread "
-					+ this.getId());
-			save(list);
-		}
-	}
-
-	private ThreadGroup saveGroup = new ThreadGroup("Save Threads");
-
 	public MarkovString() {
-		// remove the shutdown hook as we have our own in the main bot
-		Db4o.configure().automaticShutDown(false);
-		// set up indexing
-		Db4o.configure().objectClass(MarkovNode.class).objectField("word")
-				.indexed(false);
-		// set it up to update the lists properly
-		Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
-		// and activate the lists far enough
-		Db4o.configure().objectClass(MarkovNode.class)
-				.minimumActivationDepth(3);
-		// open the database file
-		database = Db4o.openFile("Markov2.db4o");
-		// get a list of all nodes
-		ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
-		// if we dont have any, we have an empty database and need to start
-		// learning
-		if (set.size() == 0) {
-			database.set(new MarkovNode("["));
-			database.set(new MarkovNode("]"));
-		} else {
-			for (MarkovNode n : set)
-				cache.put(n.getWord(), n);
-		}
-		// schedule the saves for 5 minute intervals
-		t.schedule(this, 0, 300000);
-	}
-
-	@Deprecated
-	public int getWordCount() {
-		return database.get(MarkovNode.class).size();
-	}
-
-	@Deprecated
-	public int getConnectionCount() {
-		int ret = 0;
-		ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
-		for (MarkovNode n : set)
-			ret += n.getConnectionCount();
-		return ret;
+		database.start();
 	}
 
 	public int[] getStats() {
-		int ret[] = new int[2];
-
-		// ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
-		// ret[0] = set.size();
-		// for (MarkovNode n : set)
-		// ret[1] += n.getConnectionCount();
-
-		ret[0] = cache.size();
-		for (MarkovNode n : cache.values())
-			ret[1] += n.getConnectionCount();
-		return ret;
+		return database.getStats();
 	}
 
 	public String Generate() {
 		StringBuffer sb = new StringBuffer();
 		// get the beginning node
-		MarkovNode current = getNode("[");
+		MarkovNode current = database.getNode("[");
 		// loop through until we hit the end
 		for (int i = 0; i < MAX_SENTANCE_LENGTH
 				&& !current.getWord().equals("]"); i++) {
@@ -134,10 +55,9 @@ public class MarkovString extends TimerTask {
 			MarkovNode newNode = current.GetRandomNode();
 			// if its null we need to add a new join to the end
 			if (newNode == null) {
-				MarkovNode end = getNode("]");
+				MarkovNode end = database.getNode("]");
 				current.AddChild(end);
-				if (!updated.contains(current))
-					updated.add(current);
+				database.queue(current);
 				newNode = end;
 			}
 			current = newNode;
@@ -163,7 +83,7 @@ public class MarkovString extends TimerTask {
 
 	public void Learn(String sentence) {
             MarkovNode n, parent;
-            parent = getNode("[");
+            parent = database.getNode("[");
             ArrayList<String> words = split(sentence.toLowerCase());
             for (String word : words) {
                     // if the word is blank, ignore it
@@ -171,20 +91,18 @@ public class MarkovString extends TimerTask {
                             continue;
                     // get the word from the database if we already have it
 
-                    MarkovNode query = getNode(word);
+                    MarkovNode query = database.getNode(word);
                     if (query == null) {
                             // if we dont have it, add it
                             n = new MarkovNode(word);
-                                updated.add(n);
-                            cache.put(word, n);
+                            database.queue(n);
                     } else {
                             n = query;
                     }
 
                     // add to the parent node
                     parent.AddChild(n);
-                        //if (!updated.contains(parent))
-                            updated.add(parent);
+                    database.queue(n);
 
                     // move to the next node
                     parent = n;
@@ -193,62 +111,17 @@ public class MarkovString extends TimerTask {
             // not sure why this'd ever be null ...
             if (parent != null) {
                     // add the end marker at the end
-                    parent.AddChild(getNode("]"));
-                        //if (!updated.contains(parent))
-                            updated.add(parent);
+                    parent.AddChild(database.getNode("]"));
+                    database.queue(parent);
             }
 	}
 
-	private MarkovNode getNode(String word) {
-		if (cache.containsKey(word)) {
-			return cache.get(word);
-		} else {
-			ObjectSet<MarkovNode> query = database.get(new MarkovNode(word,
-					true));
-			if (query.size() == 0)
-				return null;
-			else {
-				MarkovNode n = query.get(0);
-				cache.put(n.getWord(), n);
-				return n;
-			}
-		}
-	}
-
-        public void rotate()
-        {
-                saving = updated;
-                updated = new HashSet<MarkovNode>();
-        }
-        
-	//public void save() {
-	//	save(saving);
-	//}
-
-	public void save(HashSet<MarkovNode> listToSave) {
-		for (MarkovNode n : listToSave) {
-			database.set(n);
-		}
-		database.commit();
-	}
-
-	public void run() {
-		System.out.println("Active save threads:" + saveGroup.activeCount());
-		if (database != null && updated.size() > 0
-				&& saveGroup.activeCount() == 0) {
-                        rotate();
-			SaveThread savethread = new SaveThread(saving);
-			savethread.start();
-		}
-	}
-
 	public void cleanup()  {
-		t.cancel();
-		while (saveGroup.activeCount() > 0) {
-			try {Thread.sleep(1000);}
-			catch (InterruptedException ex) {}
-		}
-		save(updated);
-		database.close();
+        try {
+            database.shutdown();
+            database.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
+        }
 	}
 }
