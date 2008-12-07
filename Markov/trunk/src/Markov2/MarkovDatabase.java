@@ -89,13 +89,10 @@ public class MarkovDatabase extends Thread
 
     void shutdown()
     {
-        if (!busy)
+        shuttingDown = true;
+        synchronized (this)
         {
-            shuttingDown = true;
-            synchronized (this)
-            {
-                this.notify();
-            }
+            this.notify();
         }
     }
 
@@ -105,9 +102,7 @@ public class MarkovDatabase extends Thread
         busy = true;
         while ((current = queue.poll()) != null)
         {
-            //current = queue.poll();
-            //if (current != null)
-                database.set(current);
+            database.set(current);
         }
         database.commit();
         busy = false;
@@ -161,5 +156,6 @@ public class MarkovDatabase extends Thread
             Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Committing");
             commit();
         }
+        database.close();
     }
 }
