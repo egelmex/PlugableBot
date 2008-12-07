@@ -101,12 +101,12 @@ public class MarkovDatabase extends Thread
 
     private void commit()
     {
-        MarkovNode current;
+        MarkovNode current = null;
         busy = true;
-        while (queue.size() > 0)
+        while ((current = queue.poll()) != null)
         {
-            current = queue.poll();
-            if (current != null)
+            //current = queue.poll();
+            //if (current != null)
                 database.set(current);
         }
         database.commit();
