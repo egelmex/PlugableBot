@@ -81,7 +81,13 @@ public class MarkovString {
 		return strings;
 	}
 
-	public void Learn(String sentence) {
+        public void Learn(final String sentence)
+        {
+            Thread learnthread = new Thread() {@Override public void run() {ThreadLearn(sentence); } };
+            learnthread.start();
+        }
+        
+	public void ThreadLearn(String sentence) {        
             MarkovNode n, parent;
             parent = database.getNode("[");
             ArrayList<String> words = split(sentence.toLowerCase());
