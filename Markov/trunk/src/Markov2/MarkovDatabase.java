@@ -42,6 +42,7 @@ public class MarkovDatabase extends Thread
     public void populate()
     {
         busy = true;
+        Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading data");
         // get a list of all nodes
         ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
         // if we dont have any, we have an empty database and need to start
@@ -58,14 +59,22 @@ public class MarkovDatabase extends Thread
                 cache.put(n.getWord(), n);
             }
         }
+        Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading done");
         busy = false;
     }
 
     public void queue(MarkovNode node)
     {
+        Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Queueing");
         queue.add(node);
+        
         if (!cache.containsKey(node.getWord()))
-                cache.put(node.getWord(), node);
+        {
+            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Updating cache");
+            cache.put(node.getWord(), node);
+        }
+
+        Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Done");
 
         if (!busy)
         {

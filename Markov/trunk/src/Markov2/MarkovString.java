@@ -45,6 +45,7 @@ public class MarkovString {
 	}
 
 	public String Generate() {
+        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating");
 		StringBuffer sb = new StringBuffer();
 		// get the beginning node
 		MarkovNode current = database.getNode("[");
@@ -68,6 +69,7 @@ public class MarkovString {
 			sb.append(" ");
 		}
 		// return the whole string
+        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating End");
 		return sb.toString().replace("]", " ").trim();
 	}
 
@@ -88,6 +90,7 @@ public class MarkovString {
         }
         
 	public void ThreadLearn(String sentence) {        
+        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning Start");
             MarkovNode n, parent;
             parent = database.getNode("[");
             ArrayList<String> words = split(sentence.toLowerCase());
@@ -108,7 +111,7 @@ public class MarkovString {
 
                     // add to the parent node
                     parent.AddChild(n);
-                    database.queue(n);
+                    database.queue(parent);
 
                     // move to the next node
                     parent = n;
@@ -120,6 +123,7 @@ public class MarkovString {
                     parent.AddChild(database.getNode("]"));
                     database.queue(parent);
             }
+            Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning End");
 	}
 
 	public void cleanup()  {

@@ -145,7 +145,11 @@ public class PluggableBot extends PircBot {
     @Override
     protected void onDisconnect()
     {
-        connect();
+        while (!b.isConnected())
+        {
+            java.lang.Thread.sleep(60000);
+            connect();
+        }
     }
     
     @Override
