@@ -13,6 +13,8 @@ import java.util.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jibble.pircbot.*;
 /**
  *
@@ -147,7 +149,11 @@ public class PluggableBot extends PircBot {
     {
         while (!b.isConnected())
         {
-            java.lang.Thread.sleep(60000);
+            try {
+                java.lang.Thread.sleep(60000);
+            } catch (InterruptedException ex) {
+                
+            }
             connect();
         }
     }
