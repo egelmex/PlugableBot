@@ -6,6 +6,8 @@
 	<javac srcdir="src" destdir="build">
 		<classpath>
 			<pathelement location="../../lib/pircbot.jar" /> 
+			<pathelement location="../../lib/db4o-6.4.54.11278-java5.jar" /> 
+
 			<pathelement location="../../MainBot/trunk/jar/PluggableBot.jar" />
 		</classpath>
 	</javac>
