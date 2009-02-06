@@ -122,14 +122,15 @@ public class MarkovDatabase implements Runnable {
         if (cache.containsKey(word)) {
             return cache.get(word);
         } else {
-            ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
-            if (query.size() == 0) {
-                return null;
-            } else {
-                MarkovNode n = query.get(0);
-                cache.put(word, n);
-                return n;
-            }
+            return null;
+//            ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
+//            if (query.size() == 0) {
+//                return null;
+//            } else {
+//                MarkovNode n = query.get(0);
+//                cache.put(word, n);
+//                return n;
+//            }
         }
     }
 
