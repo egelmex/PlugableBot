@@ -153,7 +153,7 @@ public class MarkovDatabase implements Runnable {
             database.commit();
             Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Committing Complete");
         }
-        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Markov Learn Thread Finished");
+        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Markov Database Thread Finished");
         database.close();
     }
 }

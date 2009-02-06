@@ -68,7 +68,6 @@ public class MarkovString implements Runnable {
                 // if we dont have it, add it
                 n = new MarkovNode(word);
                 try {
-
                     saveQueue.put(n);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
