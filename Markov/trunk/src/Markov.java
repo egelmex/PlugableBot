@@ -35,7 +35,6 @@ public class Markov implements Plugin {
     private IgnoreLib ignoreLearn = new IgnoreLib(this, "learn");
 
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3));
-    private Thread dbThread, learnThread;
 
     public Markov() {
         Logger.getLogger(Markov.class.getName()).log(Level.INFO, "Marokv Loaded, staring threads.");

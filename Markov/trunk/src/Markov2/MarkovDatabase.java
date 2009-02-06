@@ -4,6 +4,7 @@
  */
 package Markov2;
 
+import com.db4o.defragment.Defragment;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
@@ -27,14 +28,22 @@ public class MarkovDatabase implements Runnable {
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
 
     public MarkovDatabase(LinkedBlockingQueue<MarkovNode> saveQueue) {
+//        try {
+//            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Defragging Database");
+//            Defragment.defrag("Markov2.db4o");
+//            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Defrag Complete");
+//        } catch (IOException ex) {
+//            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
         this.saveQueue = saveQueue;
         Db4o.configure().automaticShutDown(false);
         // set up indexing
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(false);
         // set it up to update the lists properly
-        Db4o.configure().objectClass(MarkovNode.class).updateDepth(3);
+        Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
         // and activate the lists far enough
-        Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(3);
+        Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(2);
         database = Db4o.openFile("Markov2.db4o");
         populate();
     }
