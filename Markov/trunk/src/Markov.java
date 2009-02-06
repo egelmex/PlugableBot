@@ -30,10 +30,8 @@ public class Markov implements Plugin {
     private static final LinkedBlockingQueue<MarkovNode> saveQueue = new LinkedBlockingQueue<MarkovNode>();
     private static final MarkovDatabase db = new MarkovDatabase(saveQueue);
     private static final MarkovString m = new MarkovString(learnQueue, saveQueue, db);
-
     private IgnoreLib ignore = new IgnoreLib(this, "ignore");
     private IgnoreLib ignoreLearn = new IgnoreLib(this, "learn");
-
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3));
 
     public Markov() {
@@ -104,12 +102,14 @@ public class Markov implements Plugin {
     public void unload() {
         try {
             m.shutdown();
-            if (learnQueue.peek() == null)
+            if (learnQueue.peek() == null) {
                 learnQueue.put("");
+            }
 
             db.shutdown();
-            if (saveQueue.peek() == null)
+            if (saveQueue.peek() == null) {
                 saveQueue.put(new MarkovNode("", true));
+            }
 
             executor.shutdown();
         } catch (InterruptedException ex) {

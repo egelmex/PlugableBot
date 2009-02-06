@@ -23,7 +23,6 @@ public class MarkovDatabase implements Runnable {
     private boolean shuttingDown = false;
     private LinkedBlockingQueue<MarkovNode> saveQueue;
     private static final int MAX_SENTANCE_LENGTH = 30;
-
     private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
 
@@ -48,28 +47,23 @@ public class MarkovDatabase implements Runnable {
         populate();
     }
 
-    public void populate()
-    {
+    public void populate() {
         //busy = true;
         Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading data");
         // get a list of all nodes
         ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
         // if we dont have any, we have an empty database and need to start
         // learning
-        if (set.size() == 0)
-        {
-                database.set(new MarkovNode("["));
-                database.set(new MarkovNode("]"));
-        }
-        else
-        {
-            for (MarkovNode n : set)
-            {
+        if (set.size() == 0) {
+            database.set(new MarkovNode("["));
+            database.set(new MarkovNode("]"));
+        } else {
+            for (MarkovNode n : set) {
                 cache.put(n.getWord(), n);
             }
         }
         Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading done");
-        //busy = false;
+    //busy = false;
     }
 
     public String Generate() {
@@ -103,14 +97,18 @@ public class MarkovDatabase implements Runnable {
         return sb.toString().replace("]", " ").trim();
     }
 
+    public void newNode(MarkovNode n)
+    {
+        cache.put(n.getWord(), n);
+    }
+
     public int[] getStats() {
         int ret[] = {0, 0};
         ret[0] = cache.size();
         //ObjectSet<MarkovNode> query = database.get(new MarkovNode(null, false));
         //ret[0] = query.size();
         //for (MarkovNode n : query) {
-        for (MarkovNode n : cache.values())
-        {
+        for (MarkovNode n : cache.values()) {
             ret[1] += n.getConnectionCount();
         }
         return ret;
@@ -121,8 +119,7 @@ public class MarkovDatabase implements Runnable {
     }
 
     public MarkovNode getNode(String word) {
-        if (cache.containsKey(word))
-        {
+        if (cache.containsKey(word)) {
             return cache.get(word);
         } else {
             ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
@@ -142,13 +139,13 @@ public class MarkovDatabase implements Runnable {
             do {
                 try {
                     MarkovNode n = saveQueue.take();
-                    if (!n.getWord().equals(("")))
+                    if (!n.getWord().equals((""))) {
                         database.set(n);
+                    }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            while (saveQueue.peek() != null);
+            } while (saveQueue.peek() != null);
             Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Committing");
             database.commit();
             Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Committing Complete");
