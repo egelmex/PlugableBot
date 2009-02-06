@@ -114,6 +114,8 @@ public class MarkovString implements Runnable {
                 String s = learnQueue.take();
                 if (!s.equals("")) {
                     Learn(s);
+                    if (isShuttingDown)
+                            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Learn Items Left: " + learnQueue.size());
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);

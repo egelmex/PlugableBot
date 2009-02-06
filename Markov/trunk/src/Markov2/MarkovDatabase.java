@@ -141,6 +141,8 @@ public class MarkovDatabase implements Runnable {
                     MarkovNode n = saveQueue.take();
                     if (!n.getWord().equals((""))) {
                         database.set(n);
+                        if (shuttingDown)
+                            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Save Items Left: " + saveQueue.size());
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
