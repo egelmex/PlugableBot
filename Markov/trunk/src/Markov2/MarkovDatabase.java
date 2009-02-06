@@ -39,7 +39,7 @@ public class MarkovDatabase implements Runnable {
         this.saveQueue = saveQueue;
         Db4o.configure().automaticShutDown(false);
         // set up indexing
-        Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(false);
+        Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
         // and activate the lists far enough
