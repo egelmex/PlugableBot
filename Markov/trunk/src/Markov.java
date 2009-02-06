@@ -101,6 +101,8 @@ public class Markov implements Plugin {
 
     public void unload() {
         try {
+            executor.shutdown();
+
             m.shutdown();
             if (learnQueue.peek() == null) {
                 learnQueue.put("");
@@ -111,7 +113,8 @@ public class Markov implements Plugin {
                 saveQueue.put(new MarkovNode("", true));
             }
 
-            executor.shutdown();
+            executor.awaitTermination(10, TimeUnit.MINUTES);
+            
         } catch (InterruptedException ex) {
             Logger.getLogger(Markov.class.getName()).log(Level.SEVERE, null, ex);
         }
