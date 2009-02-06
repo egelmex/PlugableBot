@@ -21,6 +21,7 @@ public class MarkovDatabase implements Runnable
     private ObjectContainer database;
     private boolean shuttingDown = false;
     private LinkedBlockingQueue<MarkovNode> saveQueue;
+    private static final int MAX_SENTANCE_LENGTH = 30;
 
 //    private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
@@ -84,15 +85,49 @@ public class MarkovDatabase implements Runnable
 //        }
 //    }
 
+    public String Generate()
+    {
+        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating");
+        StringBuffer sb = new StringBuffer();
+        // get the beginning node
+        MarkovNode current = getNode("[");
+	// loop through until we hit the end
+	for (int i = 0; i < MAX_SENTANCE_LENGTH	&& !current.getWord().equals("]"); i++)
+        {
+            // get a random next node
+            MarkovNode newNode = current.GetRandomNode();
+            // if its null we need to add a new join to the end
+            if (newNode == null)
+            {
+		MarkovNode end = getNode("]");
+		current.AddChild(end);
+                try {
+                    saveQueue.put(current);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+		newNode = end;
+            }
+            current = newNode;
+            // append the word at the new nodes
+            sb.append(current.getWord());
+            // append a space
+            sb.append(" ");
+	}
+	// return the whole string
+        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating End");
+	return sb.toString().replace("]", " ").trim();
+    }
+    
     public int[] getStats()
     {
-		int ret[] = {0, 0};
+	int ret[] = {0, 0};
         ObjectSet<MarkovNode> query = database.get(new MarkovNode(null, false));
         ret[0] = query.size();
         for (MarkovNode n : query)
             ret[1] += n.getConnectionCount();
 		return ret;
-	}
+    }
 
     void shutdown()
     {
