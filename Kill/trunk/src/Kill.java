@@ -59,7 +59,7 @@ public class Kill implements Plugin {
 		String killString = def;
 		List<String> listOfUserKills = getKillList(sender).getKills();
 		if (listOfUserKills.size() > 0) {
-			String killList = listOfUserKills.get(rng
+			def = listOfUserKills.get(rng
 					.nextInt(listOfUserKills.size()));
 		}
 		String target = message.substring(6).trim();
