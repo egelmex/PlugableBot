@@ -10,14 +10,19 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 
  * @author Andrew
  */
-public class MarkovString {
-	// the database file
-	private MarkovDatabase database = new MarkovDatabase();
+public class MarkovString implements Runnable {
+
+    private LinkedBlockingQueue<String> learnQueue;
+    private LinkedBlockingQueue<MarkovNode> saveQueue;
+
+    private MarkovDatabase db;
+    private boolean isShuttingDown = false;
 
 	// private static final String REGEX =
 	// "[a-z][a-z]*\\.[a-z][a-z]*(\\.[a-z][a-z]*)*|[a-z]+((-|')[a-z]+)*";
@@ -36,42 +41,42 @@ public class MarkovString {
 
 	private static final int MAX_SENTANCE_LENGTH = 30;
 
-	public MarkovString() {
-		database.start();
+	public MarkovString(LinkedBlockingQueue<String> learnQueue, 
+            LinkedBlockingQueue<MarkovNode> saveQueue,
+            MarkovDatabase db) {
+		this.learnQueue = learnQueue;
+        this.saveQueue = saveQueue;
+        this.db = db;
 	}
 
-	public int[] getStats() {
-		return database.getStats();
-	}
-
-	public String Generate() {
-        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating");
-		StringBuffer sb = new StringBuffer();
-		// get the beginning node
-		MarkovNode current = database.getNode("[");
-		// loop through until we hit the end
-		for (int i = 0; i < MAX_SENTANCE_LENGTH
-				&& !current.getWord().equals("]"); i++) {
-			// get a random next node
-			MarkovNode newNode = current.GetRandomNode();
-			// if its null we need to add a new join to the end
-			if (newNode == null) {
-				MarkovNode end = database.getNode("]");
-				current.AddChild(end);
-				database.queue(current);
-				newNode = end;
-			}
-			current = newNode;
-
-			// append the word at the new nodes
-			sb.append(current.getWord());
-			// append a space
-			sb.append(" ");
-		}
-		// return the whole string
-        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating End");
-		return sb.toString().replace("]", " ").trim();
-	}
+//	public String Generate() {
+//        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating");
+//		StringBuffer sb = new StringBuffer();
+//		// get the beginning node
+//		MarkovNode current = database.getNode("[");
+//		// loop through until we hit the end
+//		for (int i = 0; i < MAX_SENTANCE_LENGTH
+//				&& !current.getWord().equals("]"); i++) {
+//			// get a random next node
+//			MarkovNode newNode = current.GetRandomNode();
+//			// if its null we need to add a new join to the end
+//			if (newNode == null) {
+//				MarkovNode end = database.getNode("]");
+//				current.AddChild(end);
+//				database.queue(current);
+//				newNode = end;
+//			}
+//			current = newNode;
+//
+//			// append the word at the new nodes
+//			sb.append(current.getWord());
+//			// append a space
+//			sb.append(" ");
+//		}
+//		// return the whole string
+//        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating End");
+//		return sb.toString().replace("]", " ").trim();
+//	}
 
 	private ArrayList<String> split(String sentence) {
 		ArrayList<String> strings = new ArrayList<String>();
@@ -82,56 +87,57 @@ public class MarkovString {
 		}
 		return strings;
 	}
+       
+	public void Learn(String sentence) {        
+//        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning Start");
+//            MarkovNode n, parent;
+//            //parent = database.getNode("[");
+//            ArrayList<String> words = split(sentence.toLowerCase());
+//            for (String word : words) {
+//                    // if the word is blank, ignore it
+//                    if (word.trim().equals(""))
+//                            continue;
+//                    // get the word from the database if we already have it
+//
+//                    //MarkovNode query = database.getNode(word);
+//                    //if (query == null) {
+//                            // if we dont have it, add it
+//                            n = new MarkovNode(word);
+//                            //database.queue(n);
+//                    //} else {
+//                            //n = query;
+//                    //}
+//
+//                    // add to the parent node
+////                    parent.AddChild(n);
+////                    database.queue(parent);
+//
+//                    // move to the next node
+//                    parent = n;
+//            }
+//
+//            // not sure why this'd ever be null ...
+//            if (parent != null) {
+//                    // add the end marker at the end
+//                    parent.AddChild(database.getNode("]"));
+//                    database.queue(parent);
+//            }
+//            Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning End");
+	}
 
-        public void Learn(final String sentence)
+    public void shutdown()
+    {
+        isShuttingDown = true;
+    }
+
+    public void run() {
+        while (!isShuttingDown || learnQueue.peek() != null)
         {
-            Thread learnthread = new Thread() {@Override public void run() {ThreadLearn(sentence); } };
-            learnthread.start();
-        }
-        
-	public void ThreadLearn(String sentence) {        
-        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning Start");
-            MarkovNode n, parent;
-            parent = database.getNode("[");
-            ArrayList<String> words = split(sentence.toLowerCase());
-            for (String word : words) {
-                    // if the word is blank, ignore it
-                    if (word.trim().equals(""))
-                            continue;
-                    // get the word from the database if we already have it
-
-                    MarkovNode query = database.getNode(word);
-                    if (query == null) {
-                            // if we dont have it, add it
-                            n = new MarkovNode(word);
-                            database.queue(n);
-                    } else {
-                            n = query;
-                    }
-
-                    // add to the parent node
-                    parent.AddChild(n);
-                    database.queue(parent);
-
-                    // move to the next node
-                    parent = n;
+            try {
+                Learn(learnQueue.take());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            // not sure why this'd ever be null ...
-            if (parent != null) {
-                    // add the end marker at the end
-                    parent.AddChild(database.getNode("]"));
-                    database.queue(parent);
-            }
-            Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning End");
-	}
-
-	public void cleanup()  {
-        try {
-            database.shutdown();
-            database.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
         }
-	}
+    }
 }

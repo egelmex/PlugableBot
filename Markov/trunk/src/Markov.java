@@ -1,8 +1,11 @@
 import AndrewCassidy.PluggableBot.IgnoreLib;
 import AndrewCassidy.PluggableBot.PluggableBot;
 import AndrewCassidy.PluggableBot.Plugin;
-import Markov2.MarkovString;
+import Markov2.*;
+
+import java.util.concurrent.LinkedBlockingQueue;
 import java.io.*;
+
 /*
  * Markov.java
  *
@@ -18,7 +21,13 @@ import java.io.*;
  */
 public class Markov implements Plugin {
 
-	private MarkovString m = new MarkovString();
+
+    private static final LinkedBlockingQueue<String> learnQueue = new LinkedBlockingQueue<String>();
+    private static final LinkedBlockingQueue<MarkovNode> saveQueue = new LinkedBlockingQueue<MarkovNode>();
+
+    private static final MarkovDatabase db = new MarkovDatabase(saveQueue);
+	private static final MarkovString m = new MarkovString(learnQueue, saveQueue, db);
+
 	private IgnoreLib ignore = new IgnoreLib(this, "ignore");
 	private IgnoreLib ignoreLearn = new IgnoreLib(this, "learn");
 
