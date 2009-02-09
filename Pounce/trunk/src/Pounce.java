@@ -49,6 +49,7 @@ public class Pounce implements Plugin {
     }
 
     public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
+        PluggableBot.Message(channel, "haha " +recipientNick + " was a dick anyway.");
     }
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
