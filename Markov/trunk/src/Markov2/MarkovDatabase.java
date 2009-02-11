@@ -38,7 +38,7 @@ public class MarkovDatabase implements Runnable {
         this.saveQueue = saveQueue;
         Db4o.configure().automaticShutDown(false);
         // set up indexing
-        Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
+        Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(false);
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
         // and activate the lists far enough
@@ -55,8 +55,12 @@ public class MarkovDatabase implements Runnable {
         // if we dont have any, we have an empty database and need to start
         // learning
         if (set.size() == 0) {
-            database.set(new MarkovNode("["));
-            database.set(new MarkovNode("]"));
+            MarkovNode start = new MarkovNode("[");
+            MarkovNode end = new MarkovNode("]");
+            database.set(start);
+            database.set(end);
+            cache.put("[", start);
+            cache.put("]", end);
         } else {
             for (MarkovNode n : set) {
                 cache.put(n.getWord(), n);
