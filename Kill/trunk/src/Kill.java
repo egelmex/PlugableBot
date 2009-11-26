@@ -66,7 +66,7 @@ public class Kill implements Plugin {
 		if (target.toLowerCase().equals(PluggableBot.Nick().toLowerCase()))
 			target = sender;
 		PluggableBot
-				.Action(channel, killString.replaceAll("%NAME", target));
+				.Action(channel, def.replaceAll("%NAME", target));
 	}
 	
 	private void addKill(String sender, String message) {
