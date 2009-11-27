@@ -1,16 +1,20 @@
 
-import AndrewCassidy.PluggableBot.IgnoreLib;
-import AndrewCassidy.PluggableBot.PluggableBot;
-import AndrewCassidy.PluggableBot.Plugin;
-import Markov2.*;
-
-import java.util.concurrent.LinkedBlockingQueue;
-import java.io.*;
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import AndrewCassidy.PluggableBot.IgnoreLib;
+import AndrewCassidy.PluggableBot.PluggableBot;
+import AndrewCassidy.PluggableBot.Plugin;
+import Markov2.MarkovDatabase;
+import Markov2.MarkovNode;
+import Markov2.MarkovString;
 
 /*
  * Markov.java
@@ -34,10 +38,27 @@ public class Markov implements Plugin {
     private IgnoreLib ignoreLearn = new IgnoreLib(this, "learn");
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3));
 
+    
+    private Timer timer;
+    private Integer  spamCount = 0;
+    private int maxSpamPerMin = 10; //0==unmimited spam
+    
     public Markov() {
         Logger.getLogger(Markov.class.getName()).log(Level.INFO, "Marokv Loaded, staring threads.");
         executor.execute(db);
         executor.execute(m);
+        TimerTask spamControl = new TimerTask() {
+			@Override
+			public void run() {
+				synchronized (spamCount) {
+					if (spamCount > 0) {
+						spamCount--;
+					}
+				}
+				
+			}
+		};
+		(timer = new Timer(true)).schedule(spamControl, 1000, 1000);
     }
 
     public void onAction(String sender, String login, String hostname,
@@ -66,12 +87,22 @@ public class Markov implements Plugin {
                 }
                 if (message.toLowerCase().indexOf(
                         PluggableBot.Nick().toLowerCase()) > -1) {
-                    PluggableBot.Message(channel, db.Generate());
+                	
+                	synchronized (spamCount) {
+						if (spamCount < maxSpamPerMin || maxSpamPerMin == 0) {
+							spamCount++;
+							PluggableBot.Message(channel, db.Generate());
+						}
+					}
+                    
                 }
             }
         }
     }
+    
 
+    
+    
     public void onPart(String channel, String sender, String login,
             String hostname) {
     }
@@ -101,6 +132,9 @@ public class Markov implements Plugin {
 
     public void unload() {
         try {
+        	
+        	timer.cancel();
+        	
             executor.shutdown();
 
             m.shutdown();
