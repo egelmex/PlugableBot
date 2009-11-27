@@ -52,7 +52,9 @@ public class Markov implements Plugin {
 			public void run() {
 				synchronized (spamCount) {
 					if (spamCount > 0) {
+						Logger.getLogger(Markov.class.getName()).log(Level.INFO, "spamCount == " + spamCount);
 						spamCount--;
+						
 					}
 				}
 				
@@ -91,6 +93,7 @@ public class Markov implements Plugin {
                 	synchronized (spamCount) {
 						if (spamCount < maxSpamPerMin || maxSpamPerMin == 0) {
 							spamCount++;
+							Logger.getLogger(Markov.class.getName()).log(Level.INFO, "spamCount == " + spamCount);
 							PluggableBot.Message(channel, db.Generate());
 						}
 					}
