@@ -88,4 +88,11 @@ public class Pounce implements Plugin {
     }
     
     public void unload() {}
+    
+	@Override
+	public void onAdminMessage(String sender, String login, String hostname,
+			String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

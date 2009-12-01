@@ -57,6 +57,7 @@ public class Actions implements Plugin {
         {
             String s = message.substring(11);
             attacks.add(s);
+            boolean ok = true;
             
             try
             {
@@ -70,7 +71,13 @@ public class Actions implements Plugin {
             }
             catch (Exception e)
             {
-                
+                ok=false;
+            }
+            if (ok) {
+            	PluggableBot.Message(channel, sender + ": I will remeber that!");
+            } else {
+            	PluggableBot.Message(channel, sender + ": Whoops I am being forgetful today!" );
+            	attacks.remove(s);
             }
         }
     }
@@ -91,4 +98,11 @@ public class Actions implements Plugin {
     }
 
     public void unload() {}
+
+	@Override
+	public void onAdminMessage(String sender, String login, String hostname,
+			String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

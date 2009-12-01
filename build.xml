@@ -1,4 +1,4 @@
-<project>
+<project default="build">
 <target name="build">
 	<mkdir dir="output" />
 	<mkdir dir="output/plugins" />

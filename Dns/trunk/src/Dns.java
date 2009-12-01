@@ -22,6 +22,13 @@ public class Dns implements Plugin {
 
     public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
     }
+    
+    @Override
+	public void onAdminMessage(String sender, String login, String hostname,
+			String message) {
+		// TODO Auto-generated method stub
+		
+	}
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
         if (message.toLowerCase().startsWith("!dns"))
