@@ -42,7 +42,7 @@ public class Actions implements Plugin {
         if (action.toLowerCase().indexOf(PluggableBot.Nick().toLowerCase()) > -1)
         {
             String a = attacks.get(r.nextInt(attacks.size()));
-            PluggableBot.Action(target, a.replaceAll("SENDER", sender).replaceAll("%NAME", sender));
+            PluggableBot.Action(target, a.replaceAll("%SENDER", sender).replaceAll("%NAME", sender));
         }
     }
 
@@ -63,8 +63,9 @@ public class Actions implements Plugin {
             {
                 FileWriter fw = new FileWriter("Action");
                 BufferedWriter bw = new BufferedWriter(fw);
-                
-                bw.write(s + "\n");
+                for(String si : attacks){
+                	bw.write(si + "\n");
+                }
                 bw.flush();
                 bw.close();
                 fw.close();
@@ -90,7 +91,7 @@ public class Actions implements Plugin {
     
     public String getHelp()
     {
-        return "This plugin makes me retaliate to any action performed against me. Use !addaction followed by the action, using %NAME as a placeholder to add a new one.";
+        return "This plugin makes me retaliate to any action performed against me. Use !addaction followed by the action, using %NAME and %SENDER as placeholders to add a new one.";
     }
 
     public void onPrivateMessage(String sender, String login, String hostname, String message) {
