@@ -103,7 +103,6 @@ public class Actions implements Plugin {
 	@Override
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
-		// TODO Auto-generated method stub
 		
 	}
 }

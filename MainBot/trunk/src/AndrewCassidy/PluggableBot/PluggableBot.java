@@ -163,6 +163,7 @@ public class PluggableBot extends PircBot {
 			if (message.trim().split(" ").length == 1) {
 				// loaded plugins
 				String m = "Plugins loaded: ";
+			
 				for (String s : loadedPlugins.keySet())
 					m += s + ", ";
 
@@ -171,11 +172,19 @@ public class PluggableBot extends PircBot {
 			} else {
 				// try to find loaded plugin help
 				String[] s = message.trim().split(" ");
-				if (loadedPlugins.containsKey(s[1]))
-					sendMessage(channel, loadedPlugins.get(s[1]).getHelp());
-				else
+				
+				boolean flag = false;
+				for (String string : loadedPlugins.keySet()) {
+					if (string.toLowerCase() == s[1].toLowerCase()) {
+						sendMessage(channel, loadedPlugins.get(s[1]).getHelp());
+						flag = true;
+					}
+				}
+				if (!flag) {
 					sendMessage(channel,
-							"Could not find help for the specified plugin");
+					"Could not find help for the specified plugin");
+				}
+				
 			}
 		} else {
 			for (Plugin p : loadedPlugins.values())
