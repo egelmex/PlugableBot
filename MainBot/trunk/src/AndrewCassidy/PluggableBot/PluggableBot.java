@@ -175,7 +175,7 @@ public class PluggableBot extends PircBot {
 				
 				boolean flag = false;
 				for (String string : loadedPlugins.keySet()) {
-					if (string.toLowerCase() == s[1].toLowerCase()) {
+					if (string.toLowerCase().equals(s[1].toLowerCase())) {
 						sendMessage(channel, loadedPlugins.get(s[1]).getHelp());
 						flag = true;
 					}
