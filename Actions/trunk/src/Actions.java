@@ -90,6 +90,9 @@ public class Actions implements Plugin {
         if (message.startsWith("!addaction")  && adminEnabled)
         {
             String s = message.substring(11);
+            if (attacks.contains(s)) {
+            	PluggableBot.Message(channel, sender + ": Stop feeding me the same junk!");
+            } else {
             attacks.add(s);
             boolean ok = saveActions();
             if (ok) {
@@ -98,6 +101,8 @@ public class Actions implements Plugin {
             	PluggableBot.Message(channel, sender + ": Whoops I am being forgetful today!" );
             	attacks.remove(s);
             }
+            }
+            
         } else if (message.toLowerCase().startsWith("!listactions") && adminEnabled) {
         	pool.execute(new Runny(sender, attacks));
         }
@@ -150,10 +155,15 @@ public class Actions implements Plugin {
 			String message) {
 		if (message.toLowerCase().startsWith("!actionenableadmin")) {
 			this.adminEnabled = true;
+			PluggableBot.Message(sender, "Action Admin Enabled");
 		} else if (message.toLowerCase().startsWith("!actiondisableadmin")){
 			this.adminEnabled = true;
+			PluggableBot.Message(sender, "Action Admin Re-enabled");
 		} else if (message.toLowerCase().startsWith("!actionreload")){
 			reloadActions();
+			PluggableBot.Message(sender, "Tried to reload Actions");
+		} else if (message.toLowerCase().trim().equals("!help Actions")) {
+			PluggableBot.Message(sender, "Actions Admin Help: !actionenableadmin, !actiondisableadmin, !actionreload");
 		}
 		
 		
