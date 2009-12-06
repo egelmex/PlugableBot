@@ -9,10 +9,13 @@
 import AndrewCassidy.PluggableBot.PluggableBot;
 import AndrewCassidy.PluggableBot.Plugin;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.io.*;
 /**
  *
- * @author andee
+ * @author andee, Mex
  */
 public class Actions implements Plugin {
     
@@ -20,6 +23,7 @@ public class Actions implements Plugin {
     private Random r = new Random();
     private boolean adminEnabled = false;
     
+    private ThreadPoolExecutor pool = new ThreadPoolExecutor(3,5,60,TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(10));
     
     public Actions()
     {
@@ -95,11 +99,28 @@ public class Actions implements Plugin {
             	attacks.remove(s);
             }
         } else if (message.toLowerCase().startsWith("!listactions") && adminEnabled) {
+        	pool.execute(new Runny(sender, attacks));
+        }
+    }
+    
+    public class Runny implements Runnable {
+    	String sender;
+    	List<String> actions;
+    	
+    	public Runny(String sender, ArrayList<String> actions) {
+    		this.sender = sender;
+    		this.actions = (List<String>) actions.clone();
+    	}
+    	
+		@Override
+		public void run() {
         	PluggableBot.Message(sender, "My retorts are:");
-        	for (String s : attacks) {
+        	for (String s : actions) {
         		PluggableBot.Message(sender, s);
         	}
-        }
+			
+		}
+    	
     }
 
     public void onPart(String channel, String sender, String login, String hostname) {
