@@ -41,6 +41,8 @@ public class Pounce implements Plugin {
 
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
+		if (sender.equals(PluggableBot.Nick())) return;
+		
 		if (r.nextInt(probability) == 1) {
 			PluggableBot
 					.Message(channel, pounces.get(r.nextInt(pounces.size()))
