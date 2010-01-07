@@ -120,4 +120,11 @@ public class TitleReader implements Plugin {
 		t.onMessage(null, null, null, null, "hello google.com fish");
 
 	}
+
+	@Override
+	public void onAdminMessage(String sender, String login, String hostname,
+			String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }
