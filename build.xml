@@ -43,7 +43,9 @@
 	<copy file="lib/httpcore-4.0.1.jar" todir="output/lib" />
 	<copy file=".lib/httpmime-4.0.1.jar" todir="output/lib" /> 
 	<copy file="lib/apache-mime4j-0.6.jar" todir="output/lib" /> 
-	<copy file="lib/commons-codec-1.3.jar" todir="output/lib" /> 
+	<copy file="lib/commons-codec-1.3.jar" todir="output/lib" />  
+	<copy file="lib/commons-logging-1.1.1.jar" todir="output/lib" />  
+	
 </target>
 
 </project>
