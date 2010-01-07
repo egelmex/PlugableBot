@@ -9,6 +9,9 @@
 
 	<ant dir="Markov/trunk" target="jar" />
 	<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />
+	
+	<ant dir="TitleReader/trunk" target="jar" />
+	<copy file="TitleReader/trunk/jar/TitleReader.jar" todir="output/plugins" />
 
 	<ant dir="Actions/trunk" target="jar" />
 	<copy file="Actions/trunk/jar/Actions.jar" todir="output/plugins" />
