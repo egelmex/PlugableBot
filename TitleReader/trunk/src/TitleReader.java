@@ -53,91 +53,101 @@ public class TitleReader implements Plugin {
 	}
 
 	@Override
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		// separete input by spaces ( URLs don't have spaces )
-		String[] parts = message.split("\\s");
+	public void onMessage(final String channel, final String sender, final String login,
+			final String hostname, final String message) {
+		
+		
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				// separete input by spaces ( URLs don't have spaces )
+				String[] parts = message.split("\\s");
 
-		URLConnection connection = null;
-		// Attempt to convert each item into an URL.
-		for (String item : parts)
-			try {
-				URL url = new URL(item);
-				System.out.println("'" + url.getProtocol() + "'");
+				URLConnection connection = null;
+				// Attempt to convert each item into an URL.
+				for (String item : parts)
+					try {
+						URL url = new URL(item);
+						System.out.println("'" + url.getProtocol() + "'");
 
-				if (url.getProtocol().equals("http")
-						|| url.getProtocol().equals("http")) {
-					connection = url.openConnection();
+						if (url.getProtocol().equals("http")
+								|| url.getProtocol().equals("http")) {
+							connection = url.openConnection();
 
-					if (connection.getContentType().startsWith("text/html")) {
-						System.out.println(connection.getContentType());
+							if (connection.getContentType().startsWith("text/html")) {
+								System.out.println(connection.getContentType());
 
-						BufferedReader in = new BufferedReader(
-								new InputStreamReader(url.openStream()));
+								BufferedReader in = new BufferedReader(
+										new InputStreamReader(url.openStream()));
 
-						String inputLine;
-						StringBuilder sb = new StringBuilder();
+								String inputLine;
+								StringBuilder sb = new StringBuilder();
 
-						while ((inputLine = in.readLine()) != null)
-							sb.append(inputLine);
+								while ((inputLine = in.readLine()) != null)
+									sb.append(inputLine);
 
-						DefaultHttpClient httpclient = new DefaultHttpClient();
-						HttpPost post = new HttpPost("http://snipr.com/site/getsnip");
-					    
-						
-						/*
-						 * $postfield =  'sniplink='  . $sniplink  . '&' .
-              'snipnick='  . $snipnick  . '&' .
-              'snipuser='  . $snipuser  . '&' .
-              'snipapi='   . $snipapi   . '&' .
-              'sniptitle=' . $sniptitle . '&' .
-              'snipowner=' . $snipowner . '&' .
-              'snipformat='. $snipformat. '&' .
-              'snippk='    . $snippk   
-						 * 
-						 * 
-						 */
-							List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-				        nvps.add(new BasicNameValuePair("sniplink", url.toString()));
-				        nvps.add(new BasicNameValuePair("snipuser", "mex"));
-				        nvps.add(new BasicNameValuePair("snipapi", "b23ff81382e8ff92307f4c56951f2815"));
-				        nvps.add(new BasicNameValuePair("snipnick", ""));
-				        nvps.add(new BasicNameValuePair("sniptitle", ""));
-				        nvps.add(new BasicNameValuePair("snipowner", ""));
-				        nvps.add(new BasicNameValuePair("snipformat", "simple"));
-				        nvps.add(new BasicNameValuePair("snippk", ""));
-				        
-				        post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-						
-				        HttpResponse response = httpclient.execute(post);
-				        HttpEntity entity = response.getEntity();
-				        
-				        
-						BufferedReader in2 = new BufferedReader(
-								new InputStreamReader(entity.getContent()));
+								DefaultHttpClient httpclient = new DefaultHttpClient();
+								HttpPost post = new HttpPost("http://snipr.com/site/getsnip");
+							    
+								
+								/*
+								 * $postfield =  'sniplink='  . $sniplink  . '&' .
+		              'snipnick='  . $snipnick  . '&' .
+		              'snipuser='  . $snipuser  . '&' .
+		              'snipapi='   . $snipapi   . '&' .
+		              'sniptitle=' . $sniptitle . '&' .
+		              'snipowner=' . $snipowner . '&' .
+		              'snipformat='. $snipformat. '&' .
+		              'snippk='    . $snippk   
+								 * 
+								 * 
+								 */
+									List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+						        nvps.add(new BasicNameValuePair("sniplink", url.toString()));
+						        nvps.add(new BasicNameValuePair("snipuser", "mex"));
+						        nvps.add(new BasicNameValuePair("snipapi", "b23ff81382e8ff92307f4c56951f2815"));
+						        nvps.add(new BasicNameValuePair("snipnick", ""));
+						        nvps.add(new BasicNameValuePair("sniptitle", ""));
+						        nvps.add(new BasicNameValuePair("snipowner", ""));
+						        nvps.add(new BasicNameValuePair("snipformat", "simple"));
+						        nvps.add(new BasicNameValuePair("snippk", ""));
+						        
+						        post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+								
+						        HttpResponse response = httpclient.execute(post);
+						        HttpEntity entity = response.getEntity();
+						        
+						        
+								BufferedReader in2 = new BufferedReader(
+										new InputStreamReader(entity.getContent()));
 
-						String inputLine2;
-						StringBuilder sb2 = new StringBuilder();
+								String inputLine2;
+								StringBuilder sb2 = new StringBuilder();
 
-						while ((inputLine2 = in2.readLine()) != null)
-							sb2.append(inputLine2);
-				        
-				        System.out.println(sb2);
-						
-						Matcher m = p.matcher(sb);
-						if (m.find()) {
-							PluggableBot.Message(channel, sb2 + " : " +  m.group(1));
-							System.out.println(sb2 + " : " +  m.group(1));
+								while ((inputLine2 = in2.readLine()) != null)
+									sb2.append(inputLine2);
+						        
+						        System.out.println(sb2);
+								
+								Matcher m = p.matcher(sb);
+								if (m.find()) {
+									PluggableBot.Message(channel, sb2 + " : " +  m.group(1));
+									System.out.println(sb2 + " : " +  m.group(1));
+								}
+							}
+
 						}
+
+					} catch (MalformedURLException e) {
+					} catch (IOException e) {
+					} finally {
 					}
-
-				}
-
-			} catch (MalformedURLException e) {
-			} catch (IOException e) {
-			} finally {
+				
 			}
-
+		};
+		
+		new Thread(r).start();
 	}
 
 	@Override
