@@ -130,6 +130,11 @@ public class Pounce implements Plugin {
 
 			} catch (Exception e) {
 			}
+		} else if (message.toLowerCase().trim().equals("!help Actions")) {
+			
+			PluggableBot
+			.Message(sender,
+					"Actions Admin Help: !pounce setProb <prob>");
 		}
 
 	}
