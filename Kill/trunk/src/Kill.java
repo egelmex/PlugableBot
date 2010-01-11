@@ -59,14 +59,14 @@ public class Kill implements Plugin {
 		String killString = def;
 		List<String> listOfUserKills = getKillList(sender).getKills();
 		if (listOfUserKills.size() > 0) {
-			def = listOfUserKills.get(rng
+			killString = listOfUserKills.get(rng
 					.nextInt(listOfUserKills.size()));
 		}
 		String target = message.substring(6).trim();
 		if (target.toLowerCase().equals(PluggableBot.Nick().toLowerCase()))
 			target = sender;
 		PluggableBot
-				.Action(channel, def.replaceAll("%NAME", target));
+				.Action(channel, killString.replaceAll("%NAME", target));
 	}
 	
 	private void addKill(String sender, String message) {

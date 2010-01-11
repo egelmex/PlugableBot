@@ -52,15 +52,15 @@ public class Markov implements Plugin {
 			public void run() {
 				synchronized (spamCount) {
 					if (spamCount > 0) {
-						Logger.getLogger(Markov.class.getName()).log(Level.INFO, "spamCount == " + spamCount);
 						spamCount--;
 						
+						Logger.getLogger(Markov.class.getName()).log(Level.INFO, "spamCount == " + spamCount);
 					}
 				}
 				
 			}
 		};
-		(timer = new Timer(true)).schedule(spamControl, 1000, 1000);
+		(timer = new Timer(true)).schedule(spamControl, 10000, 10000);
     }
 
     public void onAction(String sender, String login, String hostname,
