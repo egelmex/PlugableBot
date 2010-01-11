@@ -1,0 +1,32 @@
+<project name="EmailReader" basedir="." default="build">
+
+<property name="module.name" value="EmailReader"/>
+
+<target name="build" depends="setup">
+	<javac srcdir="src" destdir="build">
+		<classpath>
+			<pathelement location="../../lib/pircbot.jar" /> 
+			<pathelement location="../../MainBot/trunk/jar/PluggableBot.jar" />
+			
+			<pathelement location="../../lib/mailapi.jar" /> 
+			<pathelement location="../../lib/imap.jar" /> 
+			<pathelement location="../../lib/dsn.jar" /> 
+		</classpath>
+	</javac>
+</target>
+
+<target name="setup">
+	<mkdir dir="build" />
+	<mkdir dir="jar" />
+</target>
+
+<target name="jar" depends="build">
+	<jar destfile="jar/${module.name}.jar" basedir="build" />
+</target>
+
+<target name="clean">
+	<deltree dir="build" />
+	<deltree dir="jar" />
+</target>
+
+</project>

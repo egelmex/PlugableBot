@@ -31,6 +31,11 @@ public class PluggableBot extends PircBot {
 	private static String password = "P@ssw0rd";
 	private static PluggableBot b = new PluggableBot();
 	private static ArrayList<String> channels = new ArrayList<String>();
+	
+	public static String[] getChans() {
+		return b.getChannels();
+	}
+
 	private static String admin = "";
 
 	public static void main(String[] args) {
