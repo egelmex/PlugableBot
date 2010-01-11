@@ -10,6 +10,8 @@ import AndrewCassidy.PluggableBot.PluggableBot;
 import AndrewCassidy.PluggableBot.Plugin;
 
 public class EmailReader implements Plugin {
+	
+	private TimerTask t;
 
 	public EmailReader() {
 		String username = "";
@@ -51,7 +53,7 @@ public class EmailReader implements Plugin {
 
 			// Get folder
 			
-			TimerTask t = new TimerTask() {
+			t = new TimerTask() {
 				
 				@Override
 				public void run() {
@@ -70,7 +72,7 @@ public class EmailReader implements Plugin {
 									+ message[i].getSubject());
 							 
 							for (String chan : PluggableBot.getChans()) {
-								PluggableBot.Message(chan, message[i].getFrom()[0] + message[i].getSubject());
+								PluggableBot.Message(chan, "email: " + message[i].getSubject());
 							}
 							message[i].setFlag(Flags.Flag.DELETED, true);
 						}
@@ -158,7 +160,7 @@ public class EmailReader implements Plugin {
 
 	@Override
 	public void unload() {
-		// TODO Auto-generated method stub
+		t.cancel();
 
 	}
 
