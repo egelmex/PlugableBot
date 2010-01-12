@@ -40,6 +40,9 @@
 	<ant dir="EmailReader/trunk" target="jar" />
 	<copy file="EmailReader/trunk/jar/EmailReader.jar" todir="output/plugins" />
 	
+	<ant dir="PieSpy/trunk" target="jar" />
+	<copy file="PieSpy/trunk/jar/PieSpy.jar" todir="output/plugins" />
+	
 	<copy file="lib/pircbot.jar" todir="output/lib" />
 	<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
 	<copy file="lib/httpclient-4.0.1.jar"  todir="output/lib" /> 
