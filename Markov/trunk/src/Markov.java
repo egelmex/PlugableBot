@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.IgnoreLib;
 import AndrewCassidy.PluggableBot.PluggableBot;
-import AndrewCassidy.PluggableBot.Plugin;
 import Markov2.MarkovDatabase;
 import Markov2.MarkovNode;
 import Markov2.MarkovString;
@@ -28,7 +28,7 @@ import Markov2.MarkovString;
  * 
  * @author Administrator
  */
-public class Markov implements Plugin {
+public class Markov extends DefaultPlugin {
 
     private static final LinkedBlockingQueue<String> learnQueue = new LinkedBlockingQueue<String>();
     private static final LinkedBlockingQueue<MarkovNode> saveQueue = new LinkedBlockingQueue<MarkovNode>();
@@ -63,18 +63,6 @@ public class Markov implements Plugin {
 		(timer = new Timer(true)).schedule(spamControl, 10000, 10000);
     }
 
-    public void onAction(String sender, String login, String hostname,
-            String target, String action) {
-    }
-
-    public void onJoin(String channel, String sender, String login,
-            String hostname) {
-    }
-
-    public void onKick(String channel, String kickerNick, String kickerLogin,
-            String kickerHostname, String recipientNick, String reason) {
-    }
-
     public void onMessage(String channel, String sender, String login,
             String hostname, String message) {
         if (!ignore.ignore(sender)) {
@@ -103,17 +91,6 @@ public class Markov implements Plugin {
         }
     }
     
-
-    
-    
-    public void onPart(String channel, String sender, String login,
-            String hostname) {
-    }
-
-    public void onQuit(String sourceNick, String sourceLogin,
-            String sourceHostname, String reason) {
-    }
-
     public String getHelp() {
         return "The Markov plugin is a simple implementation of Markov chains. This plugin allows me to 'Learn' from what is said in the channel and be able to peice together sentences.";
     }
@@ -157,10 +134,4 @@ public class Markov implements Plugin {
         }
 
     }
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-		
-	}
 }

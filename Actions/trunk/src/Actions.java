@@ -6,19 +6,25 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-import AndrewCassidy.PluggableBot.PluggableBot;
-import AndrewCassidy.PluggableBot.Plugin;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.io.*;
+
+import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  * 
  * @author andee, Mex
  */
-public class Actions implements Plugin {
+public class Actions extends DefaultPlugin{
 
 	private ArrayList<String> attacks = new ArrayList<String>();
 	private Random r = new Random();
@@ -26,11 +32,6 @@ public class Actions implements Plugin {
 
 	private ThreadPoolExecutor pool = new ThreadPoolExecutor(3, 5, 60,
 			TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
-
-	public Actions() {
-		reloadActions();
-
-	}
 
 	public void onAction(String sender, String login, String hostname,
 			String target, String action) {
@@ -45,14 +46,6 @@ public class Actions implements Plugin {
 								"%SENDER", sender).replaceAll("%NAME", sender));
 			}
 		}
-	}
-
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-	}
-
-	public void onKick(String channel, String kickerNick, String kickerLogin,
-			String kickerHostname, String recipientNick, String reason) {
 	}
 
 	public void reloadActions() {
@@ -132,13 +125,6 @@ public class Actions implements Plugin {
 
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-	}
-
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-	}
 
 	public String getHelp() {
 		if (adminEnabled) {
@@ -147,14 +133,6 @@ public class Actions implements Plugin {
 			return "This plugin makes me retaliate to any action performed against me.";
 		}
 
-	}
-
-	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-
-	}
-
-	public void unload() {
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import java.io.*;
  *
  * @author Administrator
  */
-public class Hometime implements Plugin {
+public class Hometime extends DefaultPlugin {
     
     private HashMap<String, String> hometimes = new HashMap<String, String>();
     

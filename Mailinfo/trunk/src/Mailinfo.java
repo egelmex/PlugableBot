@@ -3,35 +3,19 @@
  * and open the template in the editor.
  */
 
-import AndrewCassidy.PluggableBot.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  * 
  * @author AndyC
  */
-public class Mailinfo implements Plugin {
+public class Mailinfo extends DefaultPlugin {
 
 	private static final String COMMAND = "/usr/local/bin/mailinfo";
-
-	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
-
-	}
-
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-
-	}
-
-	public void onKick(String channel, String kickerNick, String kickerLogin,
-			String kickerHostname, String recipientNick, String reason) {
-
-	}
 
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
@@ -59,32 +43,8 @@ public class Mailinfo implements Plugin {
 		}
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-
-	}
-
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-
-	}
-
-	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-
-	}
-
 	public String getHelp() {
 		return "Type !mailinfo <login> to get email info for the specified login";
 	}
 
-	public void unload() {
-	}
-
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-
-	}
 }

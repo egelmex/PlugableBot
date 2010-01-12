@@ -1,171 +1,76 @@
-import java.util.Timer;
-import java.util.TimerTask;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-
-import AndrewCassidy.PluggableBot.PluggableBot;
+import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.Plugin;
 
-public class EmailReader implements Plugin {
+import com.eleventytwo.EmailReader.Connection;
+
+public class EmailReader extends DefaultPlugin {
+
+	private List<Connection> connections = new ArrayList<Connection>();
 	
-	private TimerTask t;
+	private String location = "emailreader";
 
 	public EmailReader() {
-		String username = "";
-		String password = "";
 		
-		final javax.mail.Store store;
-		try {
-			// configure the jvm to use the jsse security.
-			java.security.Security
-					.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-
-			// create the properties for the Session
-			java.util.Properties props = new java.util.Properties();
-
-			// set this session up to use SSL for IMAP connections
-			props.setProperty("mail.imap.socketFactory.class",
-					"javax.net.ssl.SSLSocketFactory");
-			// don't fallback to normal IMAP connections on failure.
-			props.setProperty("mail.imap.socketFactory.fallback", "false");
-			// use the simap port for imap/ssl connections.
-			props.setProperty("mail.imap.socketFactory.port", "993");
-
-			// note that you can also use the defult imap port (including the
-			// port specified by mail.imap.port) for your SSL port
-			// configuration.
-			// however, specifying mail.imap.socketFactory.port means that,
-			// if you decide to use fallback, you can try your SSL connection
-			// on the SSL port, and if it fails, you can fallback to the normal
-			// IMAP port.
-
-			// create the Session
-			javax.mail.Session session = javax.mail.Session.getInstance(props);
-			// and create the store..
-			store = session.getStore(new javax.mail.URLName(
-					"imap://" + username + ":" + password + "@imap.gmail.com/"));
-			// and connect.
-			store.connect();
-			System.out.println("connected to store.");
-
-			// Get folder
-			
-			t = new TimerTask() {
-				
-				@Override
-				public void run() {
+		
+		File file = new File(location);
+		for (File f : file.listFiles()) {
+			if (f.isFile()) {
+				if (f.getName().endsWith(".xml")) {
 					try {
-						System.out.println("Checking mailbox");
-						
-						Folder folder = store.getFolder("INBOX");
-						
-						folder.open(Folder.READ_WRITE);
-
-						// Get directory
-						Message message[] = folder.getMessages();
-
-						for (int i = 0, n = message.length; i < n; i++) {
-							System.out.println(i + ": " + message[i].getFrom()[0] + "\t"
-									+ message[i].getSubject());
-							 
-							for (String chan : PluggableBot.getChans()) {
-								PluggableBot.Message(chan, "email: " + message[i].getSubject());
-							}
-							message[i].setFlag(Flags.Flag.DELETED, true);
-						}
-						
-						folder.close(true);
-					} catch (MessagingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						FileInputStream fis = new FileInputStream(f);
+						XMLDecoder decoder = new XMLDecoder(fis);
+						Connection c = (Connection)decoder.readObject();
+						connections.add(c);
+					} catch (Exception e) {
 					}
 					
 				}
-			};
-			
-			Timer tim = new Timer(false);
-			
-			tim.schedule(t,0,1 * 60 * 1000);
-			
-		} catch (Exception e) {
-			System.out.println("caught exception: " + e);
-			e.printStackTrace();
+			}
+		}
+		
+		for (Connection x : connections) {
+			new Thread(x).start();
 		}
 	}
 
 	@Override
-	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onKick(String channel, String kickerNick, String kickerLogin,
-			String kickerHostname, String recipientNick, String reason) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void unload() {
-		t.cancel();
+
+		for (Connection con : connections) {
+			try {
+				System.out.println(con.getUsername());
+				
+				File f = new File (location + "/"
+						+ con.getUsername() + "_" + con.getServer() + ".xml");
+				System.out.println(f.toString());
+				FileOutputStream os = new FileOutputStream(f);
+				XMLEncoder encoder = new XMLEncoder(os);
+				encoder.writeObject(con);
+				encoder.close();
+			} catch (FileNotFoundException e) {
+			}
+		}
 
 	}
 
-	public static void main(String[] args) {
-		new EmailReader();
+	public static void main(String[] args) throws InterruptedException {
+		EmailReader m = new EmailReader();
+		Thread.sleep(60 * 1000 * 10);
+		m.unload();
+	}
+
+	@Override
+	public String getHelp() {
+		return "Reads Subjects of recieved mail in a mailbox.";
 	}
 
 }

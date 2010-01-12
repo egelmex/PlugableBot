@@ -13,22 +13,10 @@ import java.util.Random;
  *
  * @author AndyC
  */
-public class Choose implements Plugin {
+public class Choose extends DefaultPlugin {
     
     private static Random r = new Random();
     
-    /** Creates a new instance of Choose */
-    public Choose() {
-    }
-
-    public void onAction(String sender, String login, String hostname, String target, String action) {
-    }
-
-    public void onJoin(String channel, String sender, String login, String hostname) {
-    }
-
-    public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
-    }
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
         if (message.startsWith("!choose"))
@@ -45,26 +33,8 @@ public class Choose implements Plugin {
         }
     }
 
-    public void onPart(String channel, String sender, String login, String hostname) {
-    }
-
-    public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason) {
-    }
-
     public String getHelp() {
         return "This plugin will allow me to make a simple decision between a list of items. Use !choose <item 1> or <item 2>...";
     }
     
-    public void onPrivateMessage(String sender, String login, String hostname, String message) {
-       
-    }
-    
-    public void unload() {}
-
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jibble.pircbot.PircBot;
+import org.jibble.pircbot.User;
 
 /**
  * 
@@ -279,5 +280,17 @@ public class PluggableBot extends PircBot {
 			b.sendMessage(sender, "left");
 		}
 
+	}
+	
+	@Override
+	protected void onUserList(String channel, User[] users) {
+		super.onUserList(channel, users);
+		for (Plugin p : loadedPlugins.values())
+			p.onUserList(channel, users);
+		
+	}
+	
+	public static void sendFileDcc(File file, String nick, int timeout){
+		b.dccSendFile(file, nick, timeout);
 	}
 }

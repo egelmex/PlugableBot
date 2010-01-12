@@ -6,16 +6,21 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Random;
+
+import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.PluggableBot;
-import AndrewCassidy.PluggableBot.Plugin;
-import java.util.*;
-import java.io.*;
 
 /**
  * 
  * @author AndyC & Mex
  */
-public class Pounce implements Plugin {
+public class Pounce extends DefaultPlugin{
 
 	private ArrayList<String> pounces = new ArrayList<String>();
 	private Random r = new Random();

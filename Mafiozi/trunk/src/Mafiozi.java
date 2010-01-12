@@ -1,9 +1,11 @@
 
-import AndrewCassidy.PluggableBot.Plugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
-import org.jibble.pircbot.Colors;
 import java.util.ArrayList;
 import java.util.Random;
+
+import org.jibble.pircbot.Colors;
+
+import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
 
 /*
  * To change this template, choose Tools | Templates
@@ -14,7 +16,7 @@ import java.util.Random;
  *
  * @author Andrew
  */
-public class Mafiozi implements Plugin {
+public class Mafiozi extends DefaultPlugin {
 
     private Boolean inGame = false, voted = false;
     private static Random r = new Random();

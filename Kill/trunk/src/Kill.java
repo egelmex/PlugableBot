@@ -11,8 +11,8 @@ import java.util.Random;
 
 import Kill.*;
 
+import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.PluggableBot;
-import AndrewCassidy.PluggableBot.Plugin;
 
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
@@ -22,7 +22,7 @@ import com.db4o.ObjectSet;
  * 
  * @author AndyC
  */
-public class Kill implements Plugin {
+public class Kill extends DefaultPlugin{
 
 	private ObjectContainer database;
 	private String def = "stabs %NAME with a elongated frozen eel";
@@ -33,17 +33,6 @@ public class Kill implements Plugin {
 		load();
 	}
 
-	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
-	}
-
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-	}
-
-	public void onKick(String channel, String kickerNick, String kickerLogin,
-			String kickerHostname, String recipientNick, String reason) {
-	}
 
 	private KillLists getKillList(String sender) {
 		KillLists proto = new KillLists(sender);
@@ -128,14 +117,6 @@ public class Kill implements Plugin {
 		}
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-	}
-
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-	}
-
 	public String getHelp() {
 		return "This allows users to order me to kill other users, by using !kill <username>. To customise your kill message, use !addkill, followed by the attack. use %NAME as a placeholder for a user's nick. !listkills, !removekill <number>";
 	}
@@ -159,10 +140,5 @@ public class Kill implements Plugin {
 		database.close();
 	}
 	
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }
