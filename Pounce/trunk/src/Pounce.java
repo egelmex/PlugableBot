@@ -79,7 +79,7 @@ public class Pounce implements Plugin {
 				}
 			}
 		} else if (message.startsWith("ls ") || message.startsWith("cd ")|| message.startsWith("cp ") ||
-				   message.equals("ls")      || message.equals("cd ")) {
+				   message.equals("ls")      || message.equals("cd")) {
 			PluggableBot.Message(channel, sender + ": Wrong window?");
 		} else if (message.trim().toLowerCase().equals("ping")) {
 			PluggableBot.Message(channel, sender +": Wrong window?");
