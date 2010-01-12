@@ -87,10 +87,10 @@ public class Pounce implements Plugin {
 		} else if (message.startsWith("rm ") || message.startsWith("cd ")|| message.startsWith("cp ")) {
 			PluggableBot.Message(channel, sender + ": delete porn [y/n]");
 		} else if (tMessage.equals("ps") || message.startsWith("cd ")|| message.startsWith("cp ")) {
-			PluggableBot.Message(channel, "PID		TTY		TIME		CMD");
-			PluggableBot.Message(channel, "18101	pts/5	00:00:00	bashsvn up");
-			PluggableBot.Message(channel, "18187	pts/5	00:00:00	'firefox.com hotbabes.com'");
-			PluggableBot.Message(channel, "18200	pts/5	00:00:00	ps");
+			PluggableBot.Message(channel, "PID      TTY     TIME        CMD");
+			PluggableBot.Message(channel, "18101    pts/5   00:00:00    bash");
+			PluggableBot.Message(channel, "18187    pts/5   00:00:00    'firefox.com hotbabes.com'");
+			PluggableBot.Message(channel, "18200    pts/5   00:00:00    ps");
 			
 			
 		} 
