@@ -13,7 +13,7 @@ import java.io.*;
 
 /**
  * 
- * @author AndyC
+ * @author AndyC & Mex
  */
 public class Pounce implements Plugin {
 
@@ -76,8 +76,13 @@ public class Pounce implements Plugin {
 					pounces.remove(s);
 				}
 			}
+		} else if (message.trim().equals("ls")) {
+			PluggableBot.Message(channel, sender + ": Wrong window?");
+		} else if (message.trim().toLowerCase().equals("ping")) {
+			PluggableBot.Message(channel, sender +": Wrong window?");
 		}
 	}
+
 
 	private boolean saveActions() {
 		boolean ok = true;
