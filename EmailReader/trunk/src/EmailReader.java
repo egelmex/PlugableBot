@@ -1,14 +1,13 @@
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.Plugin;
 
 import com.eleventytwo.EmailReader.Connection;
 
@@ -20,15 +19,15 @@ public class EmailReader extends DefaultPlugin {
 
 	public EmailReader() {
 		
-		
 		File file = new File(location);
 		for (File f : file.listFiles()) {
 			if (f.isFile()) {
-				if (f.getName().endsWith(".xml")) {
+				if (f.getName().endsWith(".properties")) {
 					try {
 						FileInputStream fis = new FileInputStream(f);
-						XMLDecoder decoder = new XMLDecoder(fis);
-						Connection c = (Connection)decoder.readObject();
+						Properties p = new Properties();
+						p.load(fis);
+						Connection c = new Connection(p); 
 						connections.add(c);
 					} catch (Exception e) {
 					}
@@ -36,6 +35,7 @@ public class EmailReader extends DefaultPlugin {
 				}
 			}
 		}
+		
 		
 		for (Connection x : connections) {
 			new Thread(x).start();
@@ -47,19 +47,22 @@ public class EmailReader extends DefaultPlugin {
 
 		for (Connection con : connections) {
 			try {
-				System.out.println(con.getUsername());
+				Properties p = con.getProps();
 				
 				File f = new File (location + "/"
-						+ con.getUsername() + "_" + con.getServer() + ".xml");
+						+ p.getProperty("username") + "_" + p.getProperty("server") + ".properties");
 				System.out.println(f.toString());
 				FileOutputStream os = new FileOutputStream(f);
-				XMLEncoder encoder = new XMLEncoder(os);
-				encoder.writeObject(con);
-				encoder.close();
+				p.store(os, "");
+				
+				os.close();
 			} catch (FileNotFoundException e) {
+			} catch (IOException e) {
 			}
 		}
 
+		
+		
 	}
 
 	public static void main(String[] args) throws InterruptedException {
