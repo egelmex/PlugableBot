@@ -78,15 +78,16 @@ public class Pounce implements Plugin {
 					pounces.remove(s);
 				}
 			}
-		} else if (message.startsWith("ls ") || message.startsWith("cd ")|| message.startsWith("cp ")) {
+		} else if (message.startsWith("ls ") || message.startsWith("cd ")|| message.startsWith("cp ") ||
+				   message.equals("ls")      || message.equals("cd ")) {
 			PluggableBot.Message(channel, sender + ": Wrong window?");
 		} else if (message.trim().toLowerCase().equals("ping")) {
 			PluggableBot.Message(channel, sender +": Wrong window?");
 		} else if (message.trim().toLowerCase().startsWith("win ")) {
 			PluggableBot.Message(channel, sender +": Fail!");
-		} else if (message.startsWith("rm ") || message.startsWith("cd ")|| message.startsWith("cp ")) {
+		} else if (message.startsWith("rm ") || tMessage.equals("rm")) {
 			PluggableBot.Message(channel, sender + ": delete porn [y/n]");
-		} else if (tMessage.equals("ps") || message.startsWith("cd ")|| message.startsWith("cp ")) {
+		} else if (tMessage.equals("ps")) {
 			PluggableBot.Message(channel, "PID      TTY     TIME        CMD");
 			PluggableBot.Message(channel, "18101    pts/5   00:00:00    bash");
 			PluggableBot.Message(channel, "18187    pts/5   00:00:00    'firefox.com hotbabes.com'");
