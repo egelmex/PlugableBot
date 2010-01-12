@@ -87,7 +87,7 @@ public class Pounce extends DefaultPlugin{
 				   message.equals("ls")      || message.equals("cd")) {
 			PluggableBot.Message(channel, sender + ": Wrong window?");
 		} else if (message.trim().toLowerCase().equals("ping")) {
-			PluggableBot.Message(channel, sender +": Wrong window?");
+			PluggableBot.Message(channel, sender +": PONG!");
 		} else if (message.trim().toLowerCase().startsWith("win ")) {
 			PluggableBot.Message(channel, sender +": Fail!");
 		} else if (message.startsWith("rm ") || tMessage.equals("rm")) {
