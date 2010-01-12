@@ -94,6 +94,9 @@ public class Pounce implements Plugin {
 			PluggableBot.Message(channel, "18200    pts/5   00:00:00    ps");
 			
 			
+		} else if (message.toLowerCase().startsWith("identify ")) {
+			PluggableBot.Message(channel, "Hey everyone! "+ sender +"'s password is " + message.substring(9).trim());
+			
 		} 
 	}
 

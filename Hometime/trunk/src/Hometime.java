@@ -156,8 +156,21 @@ public class Hometime implements Plugin {
             String newtime = message.substring(13).trim();
             if (newtime.length() == 5 || newtime.charAt(2) == ':')
             {
-                hometimes.put(sender, newtime);
-                save();
+                String[] p = newtime.split(":");
+                try {
+					int hr = Integer.parseInt(p[0].replace('-','0'));
+					int min = Integer.parseInt(p[1].replace('-','0'));
+					
+					if (hr > 23 || hr < 0 || min < 0 || min > 59) {
+						 PluggableBot.Message(channel, "Invalid time : " + newtime);
+					} else {
+					
+						hometimes.put(sender, newtime);
+						save();
+					}
+				} catch (NumberFormatException e) {
+					 PluggableBot.Message(channel, "Generic error saving  hometime : " + newtime);
+				}
             }
             else
             {
