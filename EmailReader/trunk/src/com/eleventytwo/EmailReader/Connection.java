@@ -61,13 +61,13 @@ public class Connection implements Runnable {
 
 					Session session = javax.mail.Session.getInstance(props);
 					System.out.println("imap://"
-							+ props.getProperty("username") + ":"
-							+ props.getProperty("password") + "@"
-							+ props.getProperty("server") + "/");
+							+ props.getProperty("username").trim() + ":"
+							+ props.getProperty("password").trim() + "@"
+							+ props.getProperty("server").trim() + "/");
 					store = session.getStore(new javax.mail.URLName("imap://"
-							+ props.getProperty("username") + ":"
-							+ props.getProperty("password") + "@"
-							+ props.getProperty("server") + "/"));
+							+ props.getProperty("username").trim() + ":"
+							+ props.getProperty("password").trim() + "@"
+							+ props.getProperty("server").trim() + "/"));
 					store.connect();
 					ok = true;
 
@@ -113,11 +113,11 @@ public class Connection implements Runnable {
 
 			for (int i = 0, n = message.length; i < n; i++) {
 				for (String chan :  props.getProperty("channels").split(",")) {
-					System.out.println(chan + " : " + message[i].getSubject());
-					PluggableBot.Message(chan, "email: "
+					System.out.println(chan.trim() + " : " + message[i].getSubject());
+					PluggableBot.Message(chan.trim(), "email: "
 							+ message[i].getSubject());
 				}
-				message[i].setFlag(Flags.Flag.DELETED, true);
+				//message[i].setFlag(Flags.Flag.DELETED, true);
 			}
 
 			folder.close(true);
