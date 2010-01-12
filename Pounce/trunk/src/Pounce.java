@@ -58,6 +58,8 @@ public class Pounce implements Plugin {
 
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
+		
+		String tMessage = message.trim();
 		if (message.startsWith("!addpounce")) {
 
 			String s = message.substring(11);
@@ -76,10 +78,12 @@ public class Pounce implements Plugin {
 					pounces.remove(s);
 				}
 			}
-		} else if (message.trim().equals("ls")) {
+		} else if (message.startsWith("ls ") || message.startsWith("cd ")|| message.startsWith("cp ")) {
 			PluggableBot.Message(channel, sender + ": Wrong window?");
 		} else if (message.trim().toLowerCase().equals("ping")) {
 			PluggableBot.Message(channel, sender +": Wrong window?");
+		} else if (message.trim().toLowerCase().startsWith("win ")) {
+			PluggableBot.Message(channel, sender +": Fail!");
 		}
 	}
 
