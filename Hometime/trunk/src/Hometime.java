@@ -154,9 +154,10 @@ public class Hometime implements Plugin {
         else if (message.startsWith("!sethometime"))
         {
             String newtime = message.substring(13).trim();
-            if (newtime.length() == 5 || newtime.charAt(2) == ':')
+            if (newtime.length() == 5 && newtime.charAt(2) == ':')
             {
                 String[] p = newtime.split(":");
+               
                 try {
 					int hr = Integer.parseInt(p[0].replace('-','0'));
 					int min = Integer.parseInt(p[1].replace('-','0'));
@@ -169,7 +170,7 @@ public class Hometime implements Plugin {
 						save();
 					}
 				} catch (NumberFormatException e) {
-					 PluggableBot.Message(channel, "Generic error saving  hometime : " + newtime);
+					 PluggableBot.Message(channel, "Generic error saving hometime : " + newtime);
 				}
             }
             else
