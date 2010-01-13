@@ -44,9 +44,11 @@ public class EmailReader extends DefaultPlugin {
 
 	@Override
 	public void unload() {
-
+		
 		for (Connection con : connections) {
 			try {
+				con.kill();
+				
 				Properties p = con.getProps();
 				
 				File f = new File (location + "/"

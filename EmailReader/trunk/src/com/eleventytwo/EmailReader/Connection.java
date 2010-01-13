@@ -2,6 +2,7 @@ package com.eleventytwo.EmailReader;
 
 import java.util.Properties;
 
+import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,6 +13,12 @@ import AndrewCassidy.PluggableBot.PluggableBot;
 public class Connection implements Runnable {
 
 	java.util.Properties props;
+	
+	private boolean running = true;
+	
+	public void kill() {
+		running = false;
+	}
 
 	private static final int MAX_RETRIES = 3;
 
@@ -24,7 +31,7 @@ public class Connection implements Runnable {
 	public void run() {
 		int retries = 0;
 		javax.mail.Store store = null;
-		while (retries < MAX_RETRIES) {
+		while (retries < MAX_RETRIES && running) {
 			System.out.println("retries = " + retries);
 			if (store == null || !store.isConnected()) {
 				boolean ok = false;
@@ -90,14 +97,14 @@ public class Connection implements Runnable {
 			// Get directory
 			Message message[] = folder.getMessages();
 
-			for (int i = 0, n = message.length; i < n; i++) {
+			for (int i = 0, n = message.length; (i < n) && running; i++) {
 				for (String chan : props.getProperty("channels").split(",")) {
 					System.out.println(chan.trim() + " : "
 							+ message[i].getSubject());
 					PluggableBot.Message(chan.trim(), "email: "
 							+ message[i].getSubject());
 				}
-				// message[i].setFlag(Flags.Flag.DELETED, true);
+				 message[i].setFlag(Flags.Flag.DELETED, true);
 			}
 
 			folder.close(true);
@@ -105,7 +112,7 @@ public class Connection implements Runnable {
 			e.printStackTrace();
 		}
 		try {
-			Thread.sleep(30 * 1000);
+			Thread.sleep(2 * 60 * 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
