@@ -84,6 +84,7 @@ public class Connection implements Runnable {
 					try {
 						Thread.sleep(30 * 1000);
 					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			} else {
@@ -127,6 +128,7 @@ public class Connection implements Runnable {
 		try {
 			Thread.sleep(30 * 1000);
 		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
