@@ -3,28 +3,17 @@ package com.eleventytwo.EmailReader;
 import java.security.Security;
 import java.util.Properties;
 
-import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
+import com.sun.net.ssl.internal.ssl.Provider;
 
 import AndrewCassidy.PluggableBot.PluggableBot;
 
 public class Connection implements Runnable {
-
-	// private String username;
-	// private String password;
-	//
-	// private String mailbox;
-	//
-	// private List<String> channels = new ArrayList<String>();
-	//
-	// private String server;
-	//
-	// private int port;
 
 	Properties props;
 
@@ -33,10 +22,6 @@ public class Connection implements Runnable {
 	public Connection(Properties props) {
 		super();
 		this.props = props;
-	}
-
-	public Connection() {
-
 	}
 
 	@Override
@@ -48,26 +33,27 @@ public class Connection implements Runnable {
 			if (store == null || !store.isConnected()) {
 				boolean ok = false;
 
+				String port = props.getProperty("port");
+				String username = props.getProperty("username").trim();
+				String password = props.getProperty("password").trim();
+				String server = props.getProperty("server").trim();
 				try {
+			
 					Security
-							.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+							.addProvider(new Provider());
 					Properties ssl_props = new java.util.Properties();
 					ssl_props.setProperty("mail.imap.socketFactory.class",
 							"javax.net.ssl.SSLSocketFactory");
 					ssl_props.setProperty("mail.imap.socketFactory.fallback",
 							"false");
-					ssl_props.setProperty("mail.imap.socketFactory.port", props
-							.getProperty("port"));
+					ssl_props.setProperty("mail.imap.socketFactory.port", port);
 
-					Session session = javax.mail.Session.getInstance(props);
-					System.out.println("imap://"
-							+ props.getProperty("username").trim() + ":"
-							+ props.getProperty("password").trim() + "@"
-							+ props.getProperty("server").trim() + "/");
-					store = session.getStore(new javax.mail.URLName("imap://"
-							+ props.getProperty("username").trim() + ":"
-							+ props.getProperty("password").trim() + "@"
-							+ props.getProperty("server").trim() + "/"));
+					Session session = javax.mail.Session.getInstance(ssl_props);
+
+					String imap_url = "imap://" + username + ":" + password
+							+ "@" + server + "/";
+					System.out.println(imap_url);
+					store = session.getStore(new javax.mail.URLName(imap_url));
 					store.connect();
 					ok = true;
 
@@ -88,7 +74,7 @@ public class Connection implements Runnable {
 					}
 				}
 			} else {
-				read(store,  props.getProperty("mailbox"));
+				read(store, props.getProperty("mailbox"));
 			}
 
 		}
@@ -113,12 +99,13 @@ public class Connection implements Runnable {
 			Message message[] = folder.getMessages();
 
 			for (int i = 0, n = message.length; i < n; i++) {
-				for (String chan :  props.getProperty("channels").split(",")) {
-					System.out.println(chan.trim() + " : " + message[i].getSubject());
+				for (String chan : props.getProperty("channels").split(",")) {
+					System.out.println(chan.trim() + " : "
+							+ message[i].getSubject());
 					PluggableBot.Message(chan.trim(), "email: "
 							+ message[i].getSubject());
 				}
-				//message[i].setFlag(Flags.Flag.DELETED, true);
+				// message[i].setFlag(Flags.Flag.DELETED, true);
 			}
 
 			folder.close(true);
@@ -131,7 +118,5 @@ public class Connection implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
-	
 
 }
