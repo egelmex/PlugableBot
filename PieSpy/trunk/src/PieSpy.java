@@ -60,67 +60,72 @@ public class PieSpy extends DefaultPlugin{
 	@Override
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
-		message = message.substring(config.password.length()).trim();
-		String messageLc = message.toLowerCase();
+		try {
+			message = message.substring(config.password.length()).trim();
+			String messageLc = message.toLowerCase();
 
-		if (messageLc.equals("stats")) {
-			// Tell the user about the Graphs currently stored.
+			if (messageLc.equals("stats")) {
+				// Tell the user about the Graphs currently stored.
 
-			Iterator<String> keyIt = _graphs.keySet().iterator();
-			while (keyIt.hasNext()) {
-				String key = (String) keyIt.next();
-				Graph graph = (Graph) _graphs.get(key);
-				PluggableBot.Message(sender, key + ": " + graph.toString());
-			}
-		} else if (messageLc.startsWith("ignore ")
-				|| messageLc.startsWith("remove ")) {
-			// Add a user to the IgnoreSet and remove them from all Graphs.
-			String nick = message.substring(7);
-			config.ignoreSet.add(nick.toLowerCase());
-			Iterator<Graph> graphIt = _graphs.values().iterator();
-			while (graphIt.hasNext()) {
-				Graph g = (Graph) graphIt.next();
-				boolean changed = g.removeNode(new Node(nick));
-				if (changed) {
-					g.makeNextImage();
+				Iterator<String> keyIt = _graphs.keySet().iterator();
+				while (keyIt.hasNext()) {
+					String key = (String) keyIt.next();
+					Graph graph = (Graph) _graphs.get(key);
+					PluggableBot.Message(sender, key + ": " + graph.toString());
 				}
-			}
-		} else if (messageLc.startsWith("draw ")) {
-			// DCC SEND the latest file for a channel.
-			StringTokenizer tokenizer = new StringTokenizer(message
-					.substring(5));
-			if (tokenizer.countTokens() >= 1) {
-				String channel = tokenizer.nextToken();
+			} else if (messageLc.startsWith("ignore ")
+					|| messageLc.startsWith("remove ")) {
+				// Add a user to the IgnoreSet and remove them from all Graphs.
+				String nick = message.substring(7);
+				config.ignoreSet.add(nick.toLowerCase());
+				Iterator<Graph> graphIt = _graphs.values().iterator();
+				while (graphIt.hasNext()) {
+					Graph g = (Graph) graphIt.next();
+					boolean changed = g.removeNode(new Node(nick));
+					if (changed) {
+						g.makeNextImage();
+					}
+				}
+			} else if (messageLc.startsWith("draw ")) {
+				// DCC SEND the latest file for a channel.
+				StringTokenizer tokenizer = new StringTokenizer(message
+						.substring(5));
+				if (tokenizer.countTokens() >= 1) {
+					String channel = tokenizer.nextToken();
 
-				Graph graph = (Graph) _graphs.get(channel.toLowerCase());
-				if (graph != null) {
-					try {
-						File file = (File) graph.getLastFile();
-						if (file != null) {
-							PluggableBot
-									.Message(
-											sender,
-											"Trying to send \""
-													+ file.getName()
-													+ "\"... If you have difficultly in recieving this file via DCC, there may be a firewall between us.");
-							PluggableBot.sendFileDcc(file, sender, 120000);
-						} else {
-							PluggableBot.Message(sender,
-									"I have not generated any images for "
-											+ channel + " yet.");
+					Graph graph = (Graph) _graphs.get(channel.toLowerCase());
+					if (graph != null) {
+						try {
+							File file = (File) graph.getLastFile();
+							if (file != null) {
+								PluggableBot
+										.Message(
+												sender,
+												"Trying to send \""
+														+ file.getName()
+														+ "\"... If you have difficultly in recieving this file via DCC, there may be a firewall between us.");
+								PluggableBot.sendFileDcc(file, sender, 120000);
+							} else {
+								PluggableBot.Message(sender,
+										"I have not generated any images for "
+												+ channel + " yet.");
+							}
+						} catch (Exception e) {
+							PluggableBot.Message(sender, "Sorry, mate: "
+									+ e.toString());
 						}
-					} catch (Exception e) {
-						PluggableBot.Message(sender, "Sorry, mate: "
-								+ e.toString());
+					} else {
+						PluggableBot.Message(sender,
+								"Sorry, I don't know much about that channel yet.");
 					}
 				} else {
 					PluggableBot.Message(sender,
-							"Sorry, I don't know much about that channel yet.");
+							"Example of correct use is \"draw <#channel>\"");
 				}
-			} else {
-				PluggableBot.Message(sender,
-						"Example of correct use is \"draw <#channel>\"");
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
