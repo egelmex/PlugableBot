@@ -28,22 +28,25 @@ public class PieSpy extends DefaultPlugin{
 	public PieSpy() {
 		try {
 			Properties p = new Properties();
-			String configFile = "./piespy.ini";
+			String configFile = "./cfg/piespy.ini";
 			p.load(new FileInputStream(configFile));
 			config = new Configuration(p);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			throw new IllegalStateException("Balls");
 		} catch (NoSuchElementException e) {
 			e.printStackTrace();
+			throw new IllegalStateException("Balls");
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new IllegalStateException("Balls");
 		}
 
 	}
 
 	@Override
 	public String getHelp() {
-		return null;
+		return "";
 	}
 
 	@Override
