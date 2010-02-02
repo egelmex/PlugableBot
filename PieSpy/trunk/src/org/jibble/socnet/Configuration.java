@@ -22,11 +22,11 @@ import java.util.*;
 
 public class Configuration implements java.io.Serializable {
     
-    public String server;
-    public int port;
-    public String serverPassword;
-    public String nick;
-    public HashSet channelSet;
+//    public String server;
+//    public int port;
+//    public String serverPassword;
+//    public String nick;
+//    public HashSet channelSet;
     
     public int outputWidth;
     public int outputHeight;
@@ -45,7 +45,7 @@ public class Configuration implements java.io.Serializable {
     
     public String password;
     
-    public HashSet ignoreSet;
+    public HashSet<String> ignoreSet;
     
     public double temporalDecayAmount;
     public int springEmbedderIterations;
@@ -66,11 +66,11 @@ public class Configuration implements java.io.Serializable {
     public Configuration(Properties p) throws NoSuchElementException {
         properties = p;
         
-        server = getString("Server");
-        port = getInt("Port");
-        serverPassword = getString("ServerPassword");
-        nick = getString("Nick");
-        channelSet = getSet("ChannelSet");
+        //server = getString("Server");
+        //port = getInt("Port");
+        //serverPassword = getString("ServerPassword");
+        //nick = getString("Nick");
+        //channelSet = getSet("ChannelSet");
         
         outputWidth = getInt("OutputWidth");
         outputHeight = getInt("OutputHeight");
@@ -87,7 +87,7 @@ public class Configuration implements java.io.Serializable {
         edgeColor = getColor("EdgeColor");
         borderColor = getColor("BorderColor");
         
-        password = getString("Password");
+        //password = getString("Password");
         
         ignoreSet = getSet("IgnoreSet");
         
@@ -102,8 +102,8 @@ public class Configuration implements java.io.Serializable {
         nodeRadius = getInt("NodeRadius");
         edgeThreshold = getDouble("EdgeThreshold");
         showEdges = getBoolean("ShowEdges");
-        verbose = getBoolean("Verbose");
-        encoding = getString("Encoding");
+        //verbose = getBoolean("Verbose");
+        //encoding = getString("Encoding");
         
     }
     
@@ -133,10 +133,10 @@ public class Configuration implements java.io.Serializable {
         return color;
     }
     
-    public HashSet getSet(String label) {
+    public HashSet<String> getSet(String label) {
         String values = getString(label);
         String[] tokens = values.split(",");
-        HashSet set = new HashSet();
+        HashSet<String> set = new HashSet<String>();
         for (int i = 0; i < tokens.length; i++) {
             set.add(tokens[i].trim().toLowerCase());
         }

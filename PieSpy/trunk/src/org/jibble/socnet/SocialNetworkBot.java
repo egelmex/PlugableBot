@@ -295,36 +295,6 @@ public class SocialNetworkBot extends PircBot {
 		return (Graph) _graphs.get(channel);
 	}
 
-	public static void main(String[] args) throws Exception {
-
-		Properties p = new Properties();
-		String configFile = "./config.ini";
-		if (args.length > 0) {
-			configFile = args[0];
-		}
-		p.load(new FileInputStream(configFile));
-		Configuration config = new Configuration(p);
-
-		SocialNetworkBot bot = new SocialNetworkBot(config);
-		bot.setVerbose(config.verbose);
-		bot.setName(config.nick);
-		bot.setLogin("piespy");
-		bot.setVersion(VERSION + " http://www.jibble.org/piespy/");
-
-		try {
-			bot.setEncoding(config.encoding);
-		} catch (UnsupportedEncodingException e) {
-			// Stick with the platform default.
-		}
-
-		bot.connect(config.server, config.port, config.serverPassword);
-		Iterator channelIt = config.channelSet.iterator();
-		while (channelIt.hasNext()) {
-			String channel = (String) channelIt.next();
-			bot.joinChannel(channel);
-		}
-	}
-
 	// HashMap of String -> Graph objects.
 	private HashMap _graphs = new HashMap();
 

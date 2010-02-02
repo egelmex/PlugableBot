@@ -20,16 +20,51 @@ import org.jibble.socnet.SocialNetworkBot;
 import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.PluggableBot;
 
-public class PieSpy extends DefaultPlugin{
+public class PieSpy extends DefaultPlugin {
 
 	private Map<String, Graph> _graphs = new HashMap<String, Graph>();
 	private Configuration config;
 
+	private static Properties defaults;
+
+	{
+		defaults = new Properties();
+		defaults.setProperty("OutputWidth", "800");
+		defaults.setProperty("OutputHeight", "600");
+		defaults.setProperty("OutputDirectory", "piespy");
+		defaults.setProperty("CreateCurrent", "true");
+		defaults.setProperty("CreateArchive", "true");
+		defaults.setProperty("CreateRestorePoints", "false");
+		defaults.setProperty("BackgroundColor", "#FFFFFF");
+		defaults.setProperty("ChannelColor", "#00FF00");
+		defaults.setProperty("LabelColor", "#000000");
+		defaults.setProperty("TitleColor", "#FF00FF");
+		defaults.setProperty("NodeColor", "#0000FF");
+		defaults.setProperty("EdgeColor", "#FF0000");
+		defaults.setProperty("BorderColor", "#000000");
+		defaults.setProperty("IgnoreSet", "");
+		defaults.setProperty("TemporalDecayAmount", "0.2");
+		defaults.setProperty("SpringEmbedderIterations", "2");
+		defaults.setProperty("TemporalDecayAmount", "5");
+		defaults.setProperty("K", "5");
+		defaults.setProperty("C", "5");
+		defaults.setProperty("MaxRepulsiveForceDistance", "5");
+		defaults.setProperty("MaxNodeMovement", "5");
+		defaults.setProperty("MinDiagramSize", "5");
+		defaults.setProperty("BorderSize", "1");
+		defaults.setProperty("NodeRadius", "5");
+		defaults.setProperty("EdgeThreshold", "5");
+		defaults.setProperty("ShowEdges", "true");
+
+	}
+
 	public PieSpy() {
 		try {
-			Properties p = new Properties();
-			String configFile = "./cfg/piespy.ini";
-			p.load(new FileInputStream(configFile));
+			Properties p = new Properties(defaults);
+			File configFile = new File("./cfg/piespy.ini");
+			if (configFile.exists()) {
+				p.load(new FileInputStream(configFile));
+			}
 			config = new Configuration(p);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -41,6 +76,8 @@ public class PieSpy extends DefaultPlugin{
 			e.printStackTrace();
 			throw new IllegalStateException("Balls");
 		}
+		
+		
 
 	}
 
@@ -61,7 +98,7 @@ public class PieSpy extends DefaultPlugin{
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
 		try {
-			message = message.substring(config.password.length()).trim();
+			//message = message.substring(config.password.length()).trim();
 			String messageLc = message.toLowerCase();
 
 			if (messageLc.equals("stats")) {
@@ -115,8 +152,9 @@ public class PieSpy extends DefaultPlugin{
 									+ e.toString());
 						}
 					} else {
-						PluggableBot.Message(sender,
-								"Sorry, I don't know much about that channel yet.");
+						PluggableBot
+								.Message(sender,
+										"Sorry, I don't know much about that channel yet.");
 					}
 				} else {
 					PluggableBot.Message(sender,
@@ -231,10 +269,14 @@ public class PieSpy extends DefaultPlugin{
 			graph.mergeNode(oldNode, newNode);
 		}
 	}
-	
+
 	public Graph getGraph(String channel) {
 		channel = channel.toLowerCase();
 		return (Graph) _graphs.get(channel);
 	}
-	
+
+	public static void main(String[] args) {
+		PieSpy p = new PieSpy();
+		p.onAdminMessage("Mex", "me92", "test", "hello");
+	}
 }

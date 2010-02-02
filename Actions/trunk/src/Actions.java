@@ -25,6 +25,10 @@ import AndrewCassidy.PluggableBot.PluggableBot;
  * @author andee, Mex
  */
 public class Actions extends DefaultPlugin{
+	
+	public Actions() {
+		reloadActions();
+	}
 
 	private ArrayList<String> attacks = new ArrayList<String>();
 	private Random r = new Random();
