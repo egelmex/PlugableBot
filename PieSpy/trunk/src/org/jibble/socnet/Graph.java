@@ -653,7 +653,7 @@ public class Graph implements java.io.Serializable {
             oos.close();
         }
         catch (Exception e) {
-            // Do nothing?
+            e.printStackTrace();
         }
     }
   
