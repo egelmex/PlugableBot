@@ -16,6 +16,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
@@ -32,6 +35,9 @@ public class PluggableBot extends PircBot {
 	private static String password = "P@ssw0rd";
 	private static PluggableBot b = new PluggableBot();
 	private static ArrayList<String> channels = new ArrayList<String>();
+
+	
+	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5,10, 100, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(100));
 	
 	public static String[] getChans() {
 		return b.getChannels();
@@ -83,7 +89,7 @@ public class PluggableBot extends PircBot {
 		}
 	}
 
-	public static Plugin loadPlugin(String name) {
+	public static void loadPlugin(String name) {
 		try {
 			System.out.println("MainBot: attempting to load " + name);
 			
@@ -97,15 +103,16 @@ public class PluggableBot extends PircBot {
 
 			URL[] urls = new URL[paths.size()];
 			paths.toArray(urls);
-			URLClassLoader newLoader = new URLClassLoader(urls);
-			Plugin p = (Plugin) newLoader.loadClass(name).newInstance();
-			loadedPlugins.put(name, p);
-			return p;
+			
+			
+			pool.execute(b.new loader(name, urls));
+			
+			
 		} catch (Exception ex) {
 			System.err.println("Failed to load plugin: " + ex.getMessage());
 			ex.printStackTrace();
 		}
-		return null;
+		
 	}
 
 	private static void unloadPlugin(String name) {
@@ -294,5 +301,33 @@ public class PluggableBot extends PircBot {
 	
 	public static void sendFileDcc(File file, String nick, int timeout){
 		b.dccSendFile(file, nick, timeout);
+	}
+	
+	private class loader implements Runnable{
+		private String name;
+		private URL[] urls;
+		
+		public loader(String name, URL[] urls) {
+			this.name = name;
+			this.urls = urls;
+		}
+		@Override
+		public void run() {
+			try {
+				URLClassLoader newLoader = new URLClassLoader(urls);
+				Plugin p = (Plugin) newLoader.loadClass(name).newInstance();
+				loadedPlugins.put(name, p);
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	}
 }
