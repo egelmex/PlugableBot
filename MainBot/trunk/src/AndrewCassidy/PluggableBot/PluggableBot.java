@@ -85,6 +85,8 @@ public class PluggableBot extends PircBot {
 
 	public static Plugin loadPlugin(String name) {
 		try {
+			System.out.println("MainBot: attempting to load " + name);
+			
 			ArrayList<URL> paths = new ArrayList<URL>();
 			File f = new File("plugins/" + name + ".jar");
 			paths.add(f.toURI().toURL());

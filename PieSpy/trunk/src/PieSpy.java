@@ -36,29 +36,33 @@ public class PieSpy extends DefaultPlugin {
 		defaults.setProperty("CreateArchive", "true");
 		defaults.setProperty("CreateRestorePoints", "false");
 		defaults.setProperty("BackgroundColor", "#FFFFFF");
-		defaults.setProperty("ChannelColor", "#00FF00");
+		defaults.setProperty("ChannelColor", "#eeeeff");
 		defaults.setProperty("LabelColor", "#000000");
-		defaults.setProperty("TitleColor", "#FF00FF");
-		defaults.setProperty("NodeColor", "#0000FF");
-		defaults.setProperty("EdgeColor", "#FF0000");
-		defaults.setProperty("BorderColor", "#000000");
+		defaults.setProperty("TitleColor", "#9999cc");
+		defaults.setProperty("NodeColor", "#ffff00");
+		defaults.setProperty("EdgeColor", "#6666FF");
+		defaults.setProperty("BorderColor", "#666666");
 		defaults.setProperty("IgnoreSet", "");
-		defaults.setProperty("TemporalDecayAmount", "0.2");
-		defaults.setProperty("SpringEmbedderIterations", "2");
-		defaults.setProperty("TemporalDecayAmount", "5");
-		defaults.setProperty("K", "5");
-		defaults.setProperty("C", "5");
-		defaults.setProperty("MaxRepulsiveForceDistance", "5");
-		defaults.setProperty("MaxNodeMovement", "5");
-		defaults.setProperty("MinDiagramSize", "5");
-		defaults.setProperty("BorderSize", "1");
+		defaults.setProperty("SpringEmbedderIterations", "1000");
+		defaults.setProperty("TemporalDecayAmount", "0.02");
+		defaults.setProperty("K", "2");
+		defaults.setProperty("C", "0.01");
+		defaults.setProperty("MaxRepulsiveForceDistance", "6");
+		defaults.setProperty("MaxNodeMovement", "0.5");
+		defaults.setProperty("MinDiagramSize", "10");
+		defaults.setProperty("BorderSize", "50");
 		defaults.setProperty("NodeRadius", "5");
-		defaults.setProperty("EdgeThreshold", "5");
+		defaults.setProperty("EdgeThreshold", "0");
 		defaults.setProperty("ShowEdges", "true");
-
+		defaults.setProperty("org.jibble.socnet.DirectAddressingInferenceHeuristic", "1");
+		defaults.setProperty("org.jibble.socnet.IndirectAddressingInferenceHeuristic", "0.3");
+		defaults.setProperty("org.jibble.socnet.BinarySequenceInferenceHeuristic", "1");
+		defaults.setProperty("org.jibble.socnet.AdjacencyInferenceHeuristic", "0");
 	}
 
 	public PieSpy() {
+		System.setProperty("java.awt.headless", "true"); 
+
 		try {
 			Properties p = new Properties(defaults);
 			File configFile = new File("./cfg/piespy.ini");
@@ -278,5 +282,11 @@ public class PieSpy extends DefaultPlugin {
 	public static void main(String[] args) {
 		PieSpy p = new PieSpy();
 		p.onAdminMessage("Mex", "me92", "test", "hello");
+		p.onMessage("#a", "Mex", "me92", "test", "edd");
+		p.onMessage("#a", "edd", "edd", "test2", "Mex");
+		p.onMessage("#a", "edd", "Bob", "test2", "Mex");
+		p.onMessage("#a", "edd", "Bob", "test2", "Mex");
+		p.onMessage("#a", "edd", "Pete", "test2", "mmeh");
+		System.out.println(p.getGraph("#a"));
 	}
 }

@@ -25,8 +25,8 @@ public class DirectAddressingInferenceHeuristic extends InferenceHeuristic imple
     public void infer(String nick, String message) {
         
         Graph g = getGraph();
-        Configuration config = getConfig();
-        double weighting = getHeuristicWeighting();
+        //Configuration config = getConfig();
+        //double weighting = getHeuristicWeighting();
         
         Node source = new Node(nick);
         String[] words = message.split("[\\s\\t\\n\\r\\f\\:\\.\\(\\)\\-\\,\\/\\&\\!\\?\"\"<>]+", 2);

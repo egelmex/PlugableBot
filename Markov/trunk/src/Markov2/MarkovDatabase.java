@@ -4,14 +4,14 @@
  */
 package Markov2;
 
-import com.db4o.defragment.Defragment;
-import com.db4o.Db4o;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.db4o.Db4o;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
 
 /**
  *

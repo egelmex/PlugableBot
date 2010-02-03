@@ -28,7 +28,8 @@ public abstract class InferenceHeuristic implements java.io.Serializable {
             weighting = config.getDouble(className);
         }
         catch (Exception e) {
-            System.out.println("Could not find a set weighting for " + className + ": " + e);
+            System.out.println("Could not find a set weighting for " + className);
+            e.printStackTrace();
         }
         _weighting = weighting;
     }
