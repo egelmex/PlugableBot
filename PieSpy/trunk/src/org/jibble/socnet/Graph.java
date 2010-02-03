@@ -642,6 +642,9 @@ public class Graph implements java.io.Serializable {
         try {
             String strippedChannel = _label.toLowerCase().substring(1);
             File dir = new File(config.outputDirectory, strippedChannel);
+            if (!dir.exists()) {
+            	dir.mkdirs();
+            }
             File file = new File(dir, strippedChannel + "-restore.dat");
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(SocialNetworkBot.VERSION);
