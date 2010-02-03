@@ -594,12 +594,16 @@ public class Graph implements java.io.Serializable {
     }
     
     public void makeNextImage() {
+    	
+    	
         _frameCount++;
         String strippedChannel = _label.toLowerCase().substring(1);
         
         File dir = new File(config.outputDirectory, strippedChannel);
         dir.mkdir();
             
+        
+        
         doLayout(config.springEmbedderIterations);
         calcBounds(config.outputWidth, config.outputHeight);
             
@@ -609,6 +613,7 @@ public class Graph implements java.io.Serializable {
             // Write the archive image.
             File file = new File(dir, strippedChannel + "-" + _nf.format(_frameCount) + ".png");
             if (config.createArchive) {
+            	System.out.println("Making frame: " + file);
                 ImageIO.write(image, "png", file);
                 _lastFile = file;
             }

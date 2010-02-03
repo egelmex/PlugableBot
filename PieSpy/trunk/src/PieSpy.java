@@ -34,7 +34,7 @@ public class PieSpy extends DefaultPlugin {
 		defaults.setProperty("OutputDirectory", "piespy");
 		defaults.setProperty("CreateCurrent", "true");
 		defaults.setProperty("CreateArchive", "true");
-		defaults.setProperty("CreateRestorePoints", "false");
+		defaults.setProperty("CreateRestorePoints", "true");
 		defaults.setProperty("BackgroundColor", "#FFFFFF");
 		defaults.setProperty("ChannelColor", "#eeeeff");
 		defaults.setProperty("LabelColor", "#000000");
