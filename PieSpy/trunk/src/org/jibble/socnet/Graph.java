@@ -640,12 +640,14 @@ public class Graph implements java.io.Serializable {
     // Serialize this Graph and write it to a File.
     public void writeGraph() {
         try {
+        	
             String strippedChannel = _label.toLowerCase().substring(1);
             File dir = new File(config.outputDirectory, strippedChannel);
             if (!dir.exists()) {
             	dir.mkdirs();
             }
             File file = new File(dir, strippedChannel + "-restore.dat");
+            System.out.println("Serialize Graph to: " + file);
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(SocialNetworkBot.VERSION);
             oos.writeObject(this);
