@@ -85,6 +85,7 @@ public class Graph implements java.io.Serializable {
 		_heuristics.add(new IndirectAddressingInferenceHeuristic(this, config));
 		_heuristics.add(new AdjacencyInferenceHeuristic(this, config));
 		_heuristics.add(new BinarySequenceInferenceHeuristic(this, config));
+		_heuristics.add(new KarmaInferenceHeuristic(this, config));
 
 	}
 
