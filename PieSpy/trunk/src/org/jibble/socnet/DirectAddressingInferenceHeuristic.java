@@ -16,6 +16,7 @@ $Id: DirectAddressingInferenceHeuristic.java,v 1.2 2004/05/11 15:45:59 pjm2 Exp 
 
 package org.jibble.socnet;
 
+@SuppressWarnings("serial")
 public class DirectAddressingInferenceHeuristic extends InferenceHeuristic implements java.io.Serializable {
     
     public DirectAddressingInferenceHeuristic(Graph g, Configuration config) {

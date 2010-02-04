@@ -26,8 +26,8 @@ public class AdjacencyInferenceHeuristic extends InferenceHeuristic implements j
     public void infer(String nick, String message) {
         
         Graph g = getGraph();
-        Configuration config = getConfig();
-        double weighting = getHeuristicWeighting();
+        //Configuration config = getConfig();
+        //double weighting = getHeuristicWeighting();
         
         if (_lastNick != null) {
             //g.setCaption(this.toString() + " awarded weighting of " + getHeuristicWeighting() + " to " + nick + " - " + _lastNick);

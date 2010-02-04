@@ -17,6 +17,7 @@ $Id: Edge.java,v 1.6 2004/05/11 14:37:23 pjm2 Exp $
 
 package org.jibble.socnet;
 
+@SuppressWarnings("serial")
 public class Edge implements java.io.Serializable {
     
     public Edge(Node source, Node target) {

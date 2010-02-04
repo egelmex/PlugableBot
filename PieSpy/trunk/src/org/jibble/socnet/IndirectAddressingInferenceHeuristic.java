@@ -16,6 +16,7 @@ $Id: IndirectAddressingInferenceHeuristic.java,v 1.1 2004/05/10 13:04:34 pjm2 Ex
 
 package org.jibble.socnet;
 
+@SuppressWarnings("serial")
 public class IndirectAddressingInferenceHeuristic extends InferenceHeuristic implements java.io.Serializable {
     
     public IndirectAddressingInferenceHeuristic(Graph g, Configuration config) {
@@ -25,8 +26,8 @@ public class IndirectAddressingInferenceHeuristic extends InferenceHeuristic imp
     public void infer(String nick, String message) {
         
         Graph g = getGraph();
-        Configuration config = getConfig();
-        double weighting = getHeuristicWeighting();
+        //Configuration config = getConfig();
+        //double weighting = getHeuristicWeighting();
         
         Node source = new Node(nick);
         String[] words = message.split("[\\s\\t\\n\\r\\f\\:\\.\\(\\)\\-\\,\\/\\&\\!\\?\"\"<>]+");

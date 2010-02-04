@@ -18,6 +18,7 @@ package org.jibble.socnet;
 
 import java.util.*;
 
+@SuppressWarnings("serial")
 public class BinarySequenceInferenceHeuristic extends InferenceHeuristic implements java.io.Serializable {
     
     public static final int MIN_SEQ_SIZE = 5;
@@ -29,14 +30,14 @@ public class BinarySequenceInferenceHeuristic extends InferenceHeuristic impleme
     public void infer(String nick, String message) {
         
         Graph g = getGraph();
-        Configuration config = getConfig();
-        double weighting = getHeuristicWeighting();
+        //Configuration config = getConfig();
+        //double weighting = getHeuristicWeighting();
         
         nickHistory.add(nick);
         if (nickHistory.size() > MIN_SEQ_SIZE) {
             nickHistory.removeFirst();
-            Iterator nickIt = nickHistory.iterator();
-            HashSet uniqueNicks = new HashSet();
+            Iterator<String> nickIt = nickHistory.iterator();
+            HashSet<String> uniqueNicks = new HashSet<String> ();
             while (nickIt.hasNext()) {
                 uniqueNicks.add(nickIt.next());
             }
@@ -44,7 +45,7 @@ public class BinarySequenceInferenceHeuristic extends InferenceHeuristic impleme
                 // This means only two people were seen chatting over the
                 // last MIN_SEQ_SIZE lines in this channel, so we can assume
                 // they were talking to each other.
-                Iterator setIt = uniqueNicks.iterator();
+                Iterator<String>  setIt = uniqueNicks.iterator();
                 String nick1 = (String) setIt.next();
                 String nick2 = (String) setIt.next();
                 //g.setCaption(this.toString() + " awarded weighting of " + getHeuristicWeighting() + " to " + nick1 + " - " + nick2);
@@ -56,6 +57,6 @@ public class BinarySequenceInferenceHeuristic extends InferenceHeuristic impleme
         
     }
     
-    private LinkedList nickHistory = new LinkedList();
+    private LinkedList<String> nickHistory = new LinkedList<String>();
     
 }

@@ -47,6 +47,14 @@ public class PluggableBot extends PircBot {
 	public static void kill(String nick, String channel) {
 		b.kick(channel, nick);
 	}
+	
+	public static User[] users(String channel) {
+		return b.getUsers(channel);
+	}
+	
+	public static void getNicks() {
+		
+	}
 
 	public static void main(String[] args) {
 		// add the shutdown hook for cleaning up
@@ -311,6 +319,7 @@ public class PluggableBot extends PircBot {
 		b.dccSendFile(file, nick, timeout);
 	}
 
+	
 	
 	private class loader implements Runnable{
 		private String name;

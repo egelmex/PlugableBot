@@ -16,6 +16,7 @@ $Id: Node.java,v 1.9 2004/05/10 10:28:06 pjm2 Exp $
 
 package org.jibble.socnet;
 
+@SuppressWarnings("serial")
 public class Node implements java.io.Serializable {
     
     public Node(String nick) {

@@ -20,11 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.jibble.pircbot.Colors;
@@ -48,6 +46,9 @@ public class SocialNetworkBot extends PircBot {
 			throw new IOException("Output directory (" + config.outputDirectory
 					+ ") does not exist.");
 		}
+		
+		
+		
 
 	}
 
@@ -221,7 +222,7 @@ public class SocialNetworkBot extends PircBot {
 		}
 
 		// We are now connected. Rejoin all channels.
-		Iterator it = _channelSet.iterator();
+		Iterator<String> it = _channelSet.iterator();
 		while (it.hasNext()) {
 			joinChannel((String) it.next());
 		}
@@ -254,7 +255,7 @@ public class SocialNetworkBot extends PircBot {
 
 	private void changeNick(String oldNick, String newNick) {
 		// Effect the nick change by calling the mergeNode method on all Graphs.
-		Iterator graphIt = _graphs.values().iterator();
+		Iterator<Graph> graphIt = _graphs.values().iterator();
 		while (graphIt.hasNext()) {
 			Graph graph = (Graph) graphIt.next();
 			Node oldNode = new Node(oldNick);
@@ -281,7 +282,7 @@ public class SocialNetworkBot extends PircBot {
 			}
 			ois.close();
 		} catch (Exception e) {
-			// Do nothing?
+			e.printStackTrace();
 		}
 		return g;
 	}
@@ -296,10 +297,10 @@ public class SocialNetworkBot extends PircBot {
 	}
 
 	// HashMap of String -> Graph objects.
-	private HashMap _graphs = new HashMap();
+	private HashMap<String, Graph> _graphs = new HashMap<String, Graph> ();
 
 	// Used to remember which channels we should be in
-	private HashSet _channelSet = new HashSet();
+	private HashSet<String> _channelSet = new HashSet<String>();
 
 	private Configuration config;
 

@@ -16,6 +16,7 @@ $Id: InferenceHeuristic.java,v 1.1 2004/05/10 10:13:53 pjm2 Exp $
 
 package org.jibble.socnet;
 
+@SuppressWarnings("serial")
 public abstract class InferenceHeuristic implements java.io.Serializable {
     
     public InferenceHeuristic(Graph graph, Configuration config) {

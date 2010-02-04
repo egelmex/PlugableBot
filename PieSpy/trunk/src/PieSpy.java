@@ -84,7 +84,17 @@ public class PieSpy extends DefaultPlugin {
 		}
 		
 		
-
+		String[] chans = PluggableBot.getChans();
+		for (String chan : chans) {
+			Graph g = getGraph(chan);
+			
+			User[] users = PluggableBot.users(chan);
+			for (User u : users) {
+				Node n = new Node(u.getNick());
+				g.addNode(n);
+			}
+		}
+		
 	}
 
 	@Override

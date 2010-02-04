@@ -1,6 +1,7 @@
 package org.jibble.socnet;
 
 
+@SuppressWarnings("serial")
 public class KarmaInferenceHeuristic extends InferenceHeuristic {
 
 	public enum Karma  {

@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.*;
 
+@SuppressWarnings("serial")
 public class Configuration implements java.io.Serializable {
     
 //    public String server;
