@@ -35,8 +35,7 @@ public class PluggableBot extends PircBot {
 	private static String password = "P@ssw0rd";
 	private static PluggableBot b = new PluggableBot();
 	private static ArrayList<String> channels = new ArrayList<String>();
-
-	
+	private static String nickservPassword = null;
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5,10, 100, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(100));
 	
 	public static String[] getChans() {
@@ -44,6 +43,10 @@ public class PluggableBot extends PircBot {
 	}
 
 	private static String admin = "";
+
+	public static void kill(String nick, String channel) {
+		b.kick(channel, nick);
+	}
 
 	public static void main(String[] args) {
 		// add the shutdown hook for cleaning up
@@ -60,7 +63,9 @@ public class PluggableBot extends PircBot {
 					+ e.getMessage());
 			System.exit(0);
 		}
-
+		if (nickservPassword != null) {
+			b.identify(password);
+		}
 		b.connect();
 	}
 
@@ -85,6 +90,8 @@ public class PluggableBot extends PircBot {
 					loadPlugin(line);
 				else if (context.equals("password"))
 					password = line;
+				else if (context.equals("nickserv"))
+					nickservPassword = line;
 			}
 		}
 	}
@@ -178,7 +185,7 @@ public class PluggableBot extends PircBot {
 			if (message.trim().split(" ").length == 1) {
 				// loaded plugins
 				String m = "Plugins loaded: ";
-			
+
 				for (String s : loadedPlugins.keySet())
 					m += s + ", ";
 
@@ -187,19 +194,20 @@ public class PluggableBot extends PircBot {
 			} else {
 				// try to find loaded plugin help
 				String[] s = message.trim().split(" ");
-				
+
 				boolean flag = false;
 				for (String string : loadedPlugins.keySet()) {
 					if (string.toLowerCase().equals(s[1].toLowerCase())) {
-						sendMessage(channel, loadedPlugins.get(string).getHelp());
+						sendMessage(channel, loadedPlugins.get(string)
+								.getHelp());
 						flag = true;
 					}
 				}
 				if (!flag) {
 					sendMessage(channel,
-					"Could not find help for the specified plugin");
+							"Could not find help for the specified plugin");
 				}
-				
+
 			}
 		} else {
 			for (Plugin p : loadedPlugins.values())
@@ -290,18 +298,19 @@ public class PluggableBot extends PircBot {
 		}
 
 	}
-	
+
 	@Override
 	protected void onUserList(String channel, User[] users) {
 		super.onUserList(channel, users);
 		for (Plugin p : loadedPlugins.values())
 			p.onUserList(channel, users);
-		
+
 	}
-	
-	public static void sendFileDcc(File file, String nick, int timeout){
+
+	public static void sendFileDcc(File file, String nick, int timeout) {
 		b.dccSendFile(file, nick, timeout);
 	}
+
 	
 	private class loader implements Runnable{
 		private String name;

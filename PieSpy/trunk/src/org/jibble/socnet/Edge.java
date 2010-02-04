@@ -1,5 +1,6 @@
 /* 
 Copyright Paul James Mutton, 2001-2004, http://www.jibble.org/
+Copyright Martin Ellis, 2009
 
 This file is part of PieSpy.
 
@@ -41,6 +42,23 @@ public class Edge implements java.io.Serializable {
         return _target;
     }
     
+    public double getKarma() {
+		return _karma;
+	}
+
+	public void setKarma(double karma) {
+		_karma = karma;
+	}
+
+	public boolean is_gay() {
+		return _gay;
+	}
+
+	public void set_gay(boolean gay) {
+		_gay = gay;
+	}
+
+    
     public boolean equals(Object o) {
         if (o instanceof Edge) {
             Edge other = (Edge) o;
@@ -60,5 +78,6 @@ public class Edge implements java.io.Serializable {
     private Node _source;
     private Node _target;
     private double _weight;
-    
+    private double _karma;
+	private boolean _gay;
 }

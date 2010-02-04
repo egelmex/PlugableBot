@@ -41,6 +41,8 @@ public class PieSpy extends DefaultPlugin {
 		defaults.setProperty("TitleColor", "#9999cc");
 		defaults.setProperty("NodeColor", "#ffff00");
 		defaults.setProperty("EdgeColor", "#6666FF");
+		defaults.setProperty("KarmaMinusColor", "#660000");
+		defaults.setProperty("KarmaPlusColor", "#006600");
 		defaults.setProperty("BorderColor", "#666666");
 		defaults.setProperty("IgnoreSet", "");
 		defaults.setProperty("SpringEmbedderIterations", "1000");

@@ -146,12 +146,12 @@ public class Actions extends DefaultPlugin{
 			this.adminEnabled = true;
 			PluggableBot.Message(sender, "Action Admin Enabled");
 		} else if (message.toLowerCase().startsWith("!actiondisableadmin")) {
-			this.adminEnabled = true;
+			this.adminEnabled = false;
 			PluggableBot.Message(sender, "Action Admin Re-enabled");
 		} else if (message.toLowerCase().startsWith("!actionreload")) {
 			reloadActions();
 			PluggableBot.Message(sender, "Tried to reload Actions");
-		} else if (message.toLowerCase().trim().equals("!help Actions")) {
+		} else if (message.toLowerCase().trim().equals("!help actions")) {
 			PluggableBot
 					.Message(sender,
 							"Actions Admin Help: !actionenableadmin, !actiondisableadmin, !actionreload");

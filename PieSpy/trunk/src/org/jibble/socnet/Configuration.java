@@ -41,6 +41,8 @@ public class Configuration implements java.io.Serializable {
     public Color titleColor;
     public Color nodeColor;
     public Color edgeColor;
+    public Color karmaPlusColor;
+    public Color karmaMinusColor;
     public Color borderColor;
     
     public String password;
@@ -85,6 +87,8 @@ public class Configuration implements java.io.Serializable {
         titleColor = getColor("TitleColor");
         nodeColor = getColor("NodeColor");
         edgeColor = getColor("EdgeColor");
+        karmaPlusColor = getColor("KarmaPlusColor");
+        karmaMinusColor = getColor("KarmaMinusColor");
         borderColor = getColor("BorderColor");
         
         //password = getString("Password");
