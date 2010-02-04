@@ -60,6 +60,8 @@ public class PieSpy extends DefaultPlugin {
 		defaults.setProperty("org.jibble.socnet.IndirectAddressingInferenceHeuristic", "0.3");
 		defaults.setProperty("org.jibble.socnet.BinarySequenceInferenceHeuristic", "1");
 		defaults.setProperty("org.jibble.socnet.AdjacencyInferenceHeuristic", "0");
+		defaults.setProperty("org.jibble.socnet.KarmaInferenceHeuristic", "1");
+		
 	}
 
 	public PieSpy() {
@@ -301,4 +303,5 @@ public class PieSpy extends DefaultPlugin {
 		p.onMessage("#a", "edd", "Pete", "test2", "mmeh");
 		System.out.println(p.getGraph("#a"));
 	}
+	
 }

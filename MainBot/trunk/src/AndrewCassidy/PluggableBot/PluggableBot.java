@@ -15,13 +15,14 @@ import java.io.FileReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
+
 
 /**
  * 
@@ -29,7 +30,7 @@ import org.jibble.pircbot.User;
  */
 public class PluggableBot extends PircBot {
 
-	private static HashMap<String, Plugin> loadedPlugins = new HashMap<String, Plugin>();
+	private static ConcurrentHashMap<String, Plugin> loadedPlugins = new ConcurrentHashMap<String, Plugin>();
 	private static String nick = "Bob";
 	private static String server = "irc.freenode.net";
 	private static String password = "P@ssw0rd";
@@ -309,7 +310,7 @@ public class PluggableBot extends PircBot {
 
 	@Override
 	protected void onUserList(String channel, User[] users) {
-		super.onUserList(channel, users);
+		
 		for (Plugin p : loadedPlugins.values())
 			p.onUserList(channel, users);
 
