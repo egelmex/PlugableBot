@@ -107,7 +107,10 @@ public class Graph implements java.io.Serializable {
 		}
 	}
 
-	// Add a Node to the Graph.
+	/**
+	 *  Add a Node to the Graph.
+	 * @param node
+	 */
 	public void addNode(Node node) {
 
 		// Only add the Node to the HashMap if it's not already in there.
@@ -370,6 +373,9 @@ public class Graph implements java.io.Serializable {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void decayKarma() {
 		Iterator<Edge> edgeIt = _edges.keySet().iterator();
 		while (edgeIt.hasNext()) {
@@ -400,7 +406,10 @@ public class Graph implements java.io.Serializable {
 		return connectedNodes;
 	}
 
-	// Applies the spring embedder.
+	/**
+	 *  Applies the spring embedder.
+	 * @param iterations
+	 */
 	public void doLayout(int iterations) {
 
 		// For performance, copy each set into an array.
@@ -453,7 +462,9 @@ public class Graph implements java.io.Serializable {
 				}
 			}
 
-			// Calculate forces acting on nodes due to edge attractions.
+			/**
+			 *  Calculate forces acting on nodes due to edge attractions.
+			 */
 			for (int e = 0; e < edges.length; e++) {
 				Edge edge = edges[e];
 				Node nodeA = edge.getSource();
@@ -505,7 +516,9 @@ public class Graph implements java.io.Serializable {
 
 			}
 
-			// Now move each node to its new location...
+			/**
+			 *  Now move each node to its new location...
+			 */
 			for (int a = 0; a < nodes.length; a++) {
 				Node node = nodes[a];
 
@@ -537,7 +550,11 @@ public class Graph implements java.io.Serializable {
 
 	}
 
-	// Work out the drawing boundaries...
+	/**
+	 *  Work out the drawing boundaries...
+	 * @param width
+	 * @param height
+	 */
 	public void calcBounds(int width, int height) {
 
 		minX = Double.POSITIVE_INFINITY;
@@ -751,7 +768,7 @@ public class Graph implements java.io.Serializable {
 		String strippedChannel = _label.toLowerCase().substring(1);
 
 		File dir = new File(config.outputDirectory, strippedChannel);
-		dir.mkdir();
+		dir.mkdirs();
 
 		doLayout(config.springEmbedderIterations);
 		calcBounds(config.outputWidth, config.outputHeight);
