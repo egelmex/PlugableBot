@@ -20,8 +20,9 @@ import org.apache.http.protocol.HTTP;
 
 import AndrewCassidy.PluggableBot.PluggableBot;
 import AndrewCassidy.PluggableBot.Plugin;
+import AndrewCassidy.PluggableBot.DefaultPlugin;
 
-public class TitleReader implements Plugin {
+public class TitleReader extends DefaultPlugin {
 
 	private static final Pattern p = Pattern
 			.compile("\\<title\\>(.*)\\<\\/title\\>");
