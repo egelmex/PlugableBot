@@ -24,6 +24,8 @@ public class MarkovDatabase implements Runnable {
     private LinkedBlockingQueue<MarkovNode> saveQueue;
     private static final int MAX_SENTANCE_LENGTH = 30;
     private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
+    private final MarkovExplorer ex;
+    
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
 
     public MarkovDatabase(LinkedBlockingQueue<MarkovNode> saveQueue) {
@@ -45,6 +47,7 @@ public class MarkovDatabase implements Runnable {
         Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(2);
         database = Db4o.openFile("Markov2.db4o");
         populate();
+        ex = new MarkovExplorer(cache);
     }
 
     public void populate() {

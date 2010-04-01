@@ -11,7 +11,6 @@
 	<classpathentry kind="src" path="Markov/trunk/src"/>
 	<classpathentry kind="src" path="Pounce/trunk/src"/>
 	<classpathentry kind="src" path="TitleReader/trunk/src"/>
-	<classpathentry kind="src" path="Wikipedia/trunk/src"/>
 	<classpathentry kind="src" path="EmailReader/trunk/src"/>
 	<classpathentry kind="src" path="Payments/trunk/src"/>
 	<classpathentry kind="src" path="PieSpy/trunk/src"/>
@@ -29,6 +28,9 @@
 	<classpathentry kind="lib" path="lib/mailapi.jar"/>
 	<classpathentry kind="lib" path="lib/pop3.jar"/>
 	<classpathentry kind="lib" path="lib/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/ooweb-0.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/pygmy-core-ooweb.jar"/>
+	<classpathentry kind="lib" path="lib/pygmy-handlers.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

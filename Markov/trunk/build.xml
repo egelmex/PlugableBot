@@ -8,6 +8,9 @@
 			<pathelement location="../../lib/pircbot.jar" /> 
 			<pathelement location="../../lib/db4o-6.4.54.11278-java5.jar" />
 			<pathelement location="../../MainBot/trunk/jar/PluggableBot.jar" />
+			<pathelement location="../../lib/ooweb-0.8.0.jar" />
+			<pathelement location="../../lib/pygmy-core-ooweb.jar" />
+			<pathelement location="../../lib/pygmy-handlers.jar" />
 		</classpath>
 	</javac>
 </target>
