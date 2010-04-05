@@ -1,63 +1,66 @@
 /*
  * PluggableBot.java
+ * An implementation of a PircBot with loadable module support.
  *
  * Created on 09 October 2007, 14:04
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
  */
 
 package AndrewCassidy.PluggableBot;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
-
 /**
  * 
  * @author AndyC
+ * @author M.Ellis (ellism88@gmail.com)
  */
 public class PluggableBot extends PircBot {
 
 	private static ConcurrentHashMap<String, Plugin> loadedPlugins = new ConcurrentHashMap<String, Plugin>();
-	private static String nick = "Bob";
-	private static String server = "irc.freenode.net";
-	private static String password = "P@ssw0rd";
+	private static Settings settings;
 	private static PluggableBot b = new PluggableBot();
 	private static ArrayList<String> channels = new ArrayList<String>();
-	private static String nickservPassword = null;
-	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5,10, 100, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(100));
+	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 100,
+			TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100));
+	private static String admin = "";
+	private static Logger log = Logger.getLogger(PluggableBot.class.getName());
+	
+
+	private static final String PLUGIN_DIR = "plugin";
 	
 	public static String[] getChans() {
 		return b.getChannels();
 	}
 
-	private static String admin = "";
-
 	public static void kill(String nick, String channel) {
 		b.kick(channel, nick);
 	}
-	
+
 	public static User[] users(String channel) {
 		return b.getUsers(channel);
 	}
-	
+
 	public static void getNicks() {
-		
+
 	}
 
 	public static void main(String[] args) {
+
+		settings = new Settings();
+
 		// add the shutdown hook for cleaning up
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
@@ -65,52 +68,24 @@ public class PluggableBot extends PircBot {
 			}
 		});
 		b.setVerbose(true);
-		try {
-			loadSettings();
-		} catch (Exception e) {
-			System.err.println("Failed to process config file: "
-					+ e.getMessage());
-			System.exit(0);
-		}
-		if (nickservPassword != null) {
-			b.identify(password);
-		}
+		loadPlugins(settings.getPlugins());
+		channels.addAll(Arrays.asList(settings.getChannels()));
+		
+		b.identify(settings.getNickservPassword()); //I think this needs to come after the connect
 		b.connect();
 	}
 
-	private static void loadSettings() throws Exception {
-		String context = "", line;
-		FileReader fr = new FileReader("config");
-		BufferedReader br = new BufferedReader(fr);
 
-		while ((line = br.readLine()) != null) {
-			if (line.startsWith("[") && line.endsWith("]")) {
-				context = line.substring(1, line.length() - 1);
-			} else {
-				if (line.trim().length() == 0)
-					continue;
-				else if (context.equals("nick"))
-					nick = line;
-				else if (context.equals("server"))
-					server = line;
-				else if (context.equals("channels"))
-					channels.add(line);
-				else if (context.equals("plugins"))
-					loadPlugin(line);
-				else if (context.equals("password"))
-					password = line;
-				else if (context.equals("nickserv"))
-					nickservPassword = line;
-			}
-		}
+	public static void loadPlugins(String[] plugins) {
+		for (String plugin: plugins) loadPlugin(plugin);
 	}
-
+	
 	public static void loadPlugin(String name) {
 		try {
-			System.out.println("MainBot: attempting to load " + name);
-			
+			log.log(Level.INFO, "MainBot: attempting to load " + name);
+
 			ArrayList<URL> paths = new ArrayList<URL>();
-			File f = new File("plugins/" + name + ".jar");
+			File f = new File( PLUGIN_DIR + "/" + name + ".jar");
 			paths.add(f.toURI().toURL());
 
 			File f2 = new File("lib");
@@ -119,16 +94,19 @@ public class PluggableBot extends PircBot {
 
 			URL[] urls = new URL[paths.size()];
 			paths.toArray(urls);
-			
-			
-			pool.execute(b.new loader(name, urls));
-			
-			
+
+			pool.execute(new PluggableBotLoader(name, urls));
+
 		} catch (Exception ex) {
-			System.err.println("Failed to load plugin: " + ex.getMessage());
+			log.log(Level.WARNING, "Failed to load plugin: " + ex.getMessage());
 			ex.printStackTrace();
 		}
-		
+
+	}
+
+	public static void addPlugin(String name, Plugin p) {
+		loadedPlugins.put(name, p);
+
 	}
 
 	private static void unloadPlugin(String name) {
@@ -155,8 +133,8 @@ public class PluggableBot extends PircBot {
 
 	private void connect() {
 		try {
-			b.setName(nick);
-			b.connect(server);
+			b.setName(settings.getNick());
+			b.connect(settings.getServer());
 			for (String s : channels)
 				b.joinChannel(s);
 		} catch (Exception e) {
@@ -246,14 +224,14 @@ public class PluggableBot extends PircBot {
 			String hostname, String message) {
 
 		if (message.startsWith("identify")) {
-			if (message.substring(9).equals(password)) {
-				admin = nick;
+			if (message.substring(9).equals(settings.getPassword())) {
+				admin = sender;
 				b.sendMessage(sender, "identified");
 			}
-		} else if (message.startsWith("load") && admin.equals(nick)) {
+		} else if (message.startsWith("load") && admin.equals(sender)) {
 			loadPlugin(message.substring(5));
 			b.sendMessage(sender, "loaded");
-		} else if (admin.equals(nick)) {
+		} else if (admin.equals(sender)) {
 			onAdminMessage(sender, login, hostname, message);
 			for (Plugin p : loadedPlugins.values())
 				p.onAdminMessage(sender, login, hostname, message);
@@ -284,7 +262,7 @@ public class PluggableBot extends PircBot {
 	}
 
 	private static void cleanup() {
-		System.out.println("Shutting down...");
+		log.log(Level.INFO, "Shutting down...");
 		for (Plugin p : loadedPlugins.values())
 			p.unload();
 	}
@@ -310,7 +288,7 @@ public class PluggableBot extends PircBot {
 
 	@Override
 	protected void onUserList(String channel, User[] users) {
-		
+
 		for (Plugin p : loadedPlugins.values())
 			p.onUserList(channel, users);
 
@@ -320,33 +298,4 @@ public class PluggableBot extends PircBot {
 		b.dccSendFile(file, nick, timeout);
 	}
 
-	
-	
-	private class loader implements Runnable{
-		private String name;
-		private URL[] urls;
-		
-		public loader(String name, URL[] urls) {
-			this.name = name;
-			this.urls = urls;
-		}
-		@Override
-		public void run() {
-			try {
-				URLClassLoader newLoader = new URLClassLoader(urls);
-				Plugin p = (Plugin) newLoader.loadClass(name).newInstance();
-				loadedPlugins.put(name, p);
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-	}
 }

@@ -1,61 +1,64 @@
 <project default="build">
-<target name="build">
-	<mkdir dir="output" />
-	<mkdir dir="output/plugins" />
-	<mkdir dir="output/lib" />
-	
-	<ant dir="MainBot/trunk" target="jar"/>
-	<copy file="MainBot/trunk/jar/PluggableBot.jar" todir="output" />
+	<target name="build">
+		<mkdir dir="output" />
+		<mkdir dir="output/plugins" />
+		<mkdir dir="output/lib" />
 
-	<ant dir="Markov/trunk" target="jar" />
-	<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />
-	
-	<ant dir="TitleReader/trunk" target="jar" />
-	<copy file="TitleReader/trunk/jar/TitleReader.jar" todir="output/plugins" />
+		<ant dir="MainBot/trunk" target="jar" />
+		<copy file="MainBot/trunk/jar/PluggableBot.jar" todir="output" />
 
-	<ant dir="Actions/trunk" target="jar" />
-	<copy file="Actions/trunk/jar/Actions.jar" todir="output/plugins" />
+		<ant dir="Markov/trunk" target="jar" />
+		<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />
 
-	<ant dir="Choose/trunk" target="jar" />
-	<copy file="Choose/trunk/jar/Choose.jar" todir="output/plugins" />
+		<ant dir="TitleReader/trunk" target="jar" />
+		<copy file="TitleReader/trunk/jar/TitleReader.jar" todir="output/plugins" />
 
-	<ant dir="Dns/trunk" target="jar" />
-	<copy file="Dns/trunk/jar/Dns.jar" todir="output/plugins" />
+		<ant dir="Actions/trunk" target="jar" />
+		<copy file="Actions/trunk/jar/Actions.jar" todir="output/plugins" />
 
-	<ant dir="Hometime/trunk" target="jar" />
-	<copy file="Hometime/trunk/jar/Hometime.jar" todir="output/plugins" />
+		<ant dir="Choose/trunk" target="jar" />
+		<copy file="Choose/trunk/jar/Choose.jar" todir="output/plugins" />
 
-	<ant dir="Kill/trunk" target="jar" />
-	<copy file="Kill/trunk/jar/Kill.jar" todir="output/plugins" />
+		<ant dir="Dns/trunk" target="jar" />
+		<copy file="Dns/trunk/jar/Dns.jar" todir="output/plugins" />
 
-	<ant dir="Mafiozi/trunk" target="jar" />
-	<copy file="Mafiozi/trunk/jar/Mafiozi.jar" todir="output/plugins" />
+		<ant dir="Hometime/trunk" target="jar" />
+		<copy file="Hometime/trunk/jar/Hometime.jar" todir="output/plugins" />
 
-	<ant dir="Mailinfo/trunk" target="jar" />
-	<copy file="Mailinfo/trunk/jar/Mailinfo.jar" todir="output/plugins" />
-	
-	<ant dir="Pounce/trunk" target="jar" />
-	<copy file="Pounce/trunk/jar/Pounce.jar" todir="output/plugins" />
-	
-	<ant dir="EmailReader/trunk" target="jar" />
-	<copy file="EmailReader/trunk/jar/EmailReader.jar" todir="output/plugins" />
-	
-	<ant dir="PieSpy/trunk" target="jar" />
-	<copy file="PieSpy/trunk/jar/PieSpy.jar" todir="output/plugins" />
-	
-	<copy file="lib/pircbot.jar" todir="output/lib" />
-	<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
-	<copy file="lib/httpclient-4.0.1.jar"  todir="output/lib" /> 
-	<copy file="lib/httpcore-4.0.1.jar" todir="output/lib" />
-	<copy file="lib/httpmime-4.0.1.jar" todir="output/lib" /> 
-	<copy file="lib/apache-mime4j-0.6.jar" todir="output/lib" /> 
-	<copy file="lib/commons-codec-1.3.jar" todir="output/lib" />  
-	<copy file="lib/commons-logging-1.1.1.jar" todir="output/lib" />  
-	
-	<copy file="lib/imap.jar" todir="output/lib" /> 
-	<copy file="lib/mailapi.jar" todir="output/lib" /> 
-	<copy file="lib/dsn.jar" todir="output/lib" />  
-	
-</target>
+		<ant dir="Kill/trunk" target="jar" />
+		<copy file="Kill/trunk/jar/Kill.jar" todir="output/plugins" />
 
+		<ant dir="Mafiozi/trunk" target="jar" />
+		<copy file="Mafiozi/trunk/jar/Mafiozi.jar" todir="output/plugins" />
+
+		<ant dir="Mailinfo/trunk" target="jar" />
+		<copy file="Mailinfo/trunk/jar/Mailinfo.jar" todir="output/plugins" />
+
+		<ant dir="Pounce/trunk" target="jar" />
+		<copy file="Pounce/trunk/jar/Pounce.jar" todir="output/plugins" />
+
+		<ant dir="EmailReader/trunk" target="jar" />
+		<copy file="EmailReader/trunk/jar/EmailReader.jar" todir="output/plugins" />
+
+		<ant dir="PieSpy/trunk" target="jar" />
+		<copy file="PieSpy/trunk/jar/PieSpy.jar" todir="output/plugins" />
+
+		<copy file="lib/pircbot.jar" todir="output/lib" />
+		<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
+		<copy file="lib/httpclient-4.0.1.jar" todir="output/lib" />
+		<copy file="lib/httpcore-4.0.1.jar" todir="output/lib" />
+		<copy file="lib/httpmime-4.0.1.jar" todir="output/lib" />
+		<copy file="lib/apache-mime4j-0.6.jar" todir="output/lib" />
+		<copy file="lib/commons-codec-1.3.jar" todir="output/lib" />
+		<copy file="lib/commons-logging-1.1.1.jar" todir="output/lib" />
+
+		<copy file="lib/imap.jar" todir="output/lib" />
+		<copy file="lib/mailapi.jar" todir="output/lib" />
+		<copy file="lib/dsn.jar" todir="output/lib" />
+
+	</target>
+
+	<target name="run">
+		<java jar="output/PluggableBot.jar" fork="true" dir="output"/>
+	</target>
 </project>
