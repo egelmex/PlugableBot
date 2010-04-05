@@ -14,6 +14,7 @@
 	<classpathentry kind="src" path="EmailReader/trunk/src"/>
 	<classpathentry kind="src" path="Payments/trunk/src"/>
 	<classpathentry kind="src" path="PieSpy/trunk/src"/>
+	<classpathentry kind="src" path="Admin/trunk/src"/>
 	<classpathentry kind="lib" path="lib/db4o-6.4.54.11278-java5.jar"/>
 	<classpathentry kind="lib" path="lib/pircbot.jar"/>
 	<classpathentry kind="lib" path="lib/jwpl_0.45beta.jar"/>

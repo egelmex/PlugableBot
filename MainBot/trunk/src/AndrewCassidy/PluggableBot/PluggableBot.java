@@ -109,12 +109,9 @@ public class PluggableBot extends PircBot {
 
 	}
 
-	private static void unloadPlugin(String name) {
+	public static void unloadPlugin(String name) {
 		loadedPlugins.get(name).unload();
 		loadedPlugins.remove(name);
-		System.gc();
-		System.gc();
-		System.gc();
 	}
 
 	@Override
@@ -172,10 +169,13 @@ public class PluggableBot extends PircBot {
 			if (message.trim().split(" ").length == 1) {
 				// loaded plugins
 				String m = "Plugins loaded: ";
-
+			
+				if (loadedPlugins.size() > 0){
 				for (String s : loadedPlugins.keySet())
 					m += s + ", ";
-
+				} else {
+					m += " no plugins laoded., ";
+				}
 				m = m.substring(0, m.length() - 2);
 				sendMessage(channel, m);
 			} else {
@@ -232,7 +232,6 @@ public class PluggableBot extends PircBot {
 			loadPlugin(message.substring(5));
 			b.sendMessage(sender, "loaded");
 		} else if (admin.equals(sender)) {
-			onAdminMessage(sender, login, hostname, message);
 			for (Plugin p : loadedPlugins.values())
 				p.onAdminMessage(sender, login, hostname, message);
 		}
@@ -269,20 +268,7 @@ public class PluggableBot extends PircBot {
 
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
-		if (message.startsWith("unload")) {
-			unloadPlugin(message.substring(7));
-			b.sendMessage(sender, "unloaded");
-		} else if (message.startsWith("reload")) {
-			unloadPlugin(message.substring(7));
-			loadPlugin(message.substring(7));
-			b.sendMessage(sender, "reloaded");
-		} else if (message.startsWith("join")) {
-			b.joinChannel(message.substring(5));
-			b.sendMessage(sender, "joined");
-		} else if (message.startsWith("part")) {
-			b.partChannel(message.substring(5));
-			b.sendMessage(sender, "left");
-		}
+		
 
 	}
 

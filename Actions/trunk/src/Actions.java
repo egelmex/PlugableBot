@@ -22,7 +22,7 @@ import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  * 
- * @author andee, Mex
+ * @author andee, Mex (ellism88@gmail.com)
  */
 public class Actions extends DefaultPlugin{
 	

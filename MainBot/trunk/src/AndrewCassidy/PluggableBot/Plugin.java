@@ -16,6 +16,7 @@ import org.jibble.pircbot.User;
  * @author AndyC
  */
 public interface Plugin {
+	void setBot(PluggableBot bot);
     void onAction(String sender, String login, String hostname, String target, String action);
     void onJoin(String channel, String sender, String login, String hostname);
     void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason);

@@ -4,11 +4,16 @@
 		<mkdir dir="output/plugins" />
 		<mkdir dir="output/lib" />
 
+
+
 		<ant dir="MainBot/trunk" target="jar" />
 		<copy file="MainBot/trunk/jar/PluggableBot.jar" todir="output" />
 
 		<ant dir="Markov/trunk" target="jar" />
 		<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />
+
+		<ant dir="Admin/trunk" target="jar" />
+		<copy file="Admin/trunk/jar/Admin.jar" todir="output/plugins" />
 
 		<ant dir="TitleReader/trunk" target="jar" />
 		<copy file="TitleReader/trunk/jar/TitleReader.jar" todir="output/plugins" />
@@ -59,6 +64,6 @@
 	</target>
 
 	<target name="run">
-		<java jar="output/PluggableBot.jar" fork="true" dir="output"/>
+		<java jar="output/PluggableBot.jar" fork="true" dir="output" />
 	</target>
 </project>

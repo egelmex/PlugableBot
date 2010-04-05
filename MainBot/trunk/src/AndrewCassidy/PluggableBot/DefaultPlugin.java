@@ -4,82 +4,56 @@ import org.jibble.pircbot.User;
 
 public abstract class DefaultPlugin implements Plugin {
 
+	public PluggableBot bot;
+	
 	@Override
 	public abstract String getHelp() ;
 
 	@Override
 	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
-		// TODO Auto-generated method stub
-
-	}
+			String target, String action) {	}
 
 	@Override
 	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-
-	}
+			String message) {	}
 
 	@Override
 	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
+			String hostname) {}
 	@Override
 	public void onKick(String channel, String kickerNick, String kickerLogin,
-			String kickerHostname, String recipientNick, String reason) {
-		// TODO Auto-generated method stub
-
-	}
+			String kickerHostname, String recipientNick, String reason) {	}
 
 	@Override
 	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		// TODO Auto-generated method stub
-
-	}
+			String hostname, String message) {	}
 
 	@Override
 	public void onPart(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
+			String hostname) {	}
 
 	@Override
 	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-
-	}
+			String message) {	}
 
 	@Override
 	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-		// TODO Auto-generated method stub
-
-	}
+			String sourceHostname, String reason) {	}
 
 	@Override
-	public void onUserList(String channel, User[] users) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onUserList(String channel, User[] users) {	}
 
 	@Override
-	public void unload() {
-		// TODO Auto-generated method stub
-
-	}
+	public void unload() {	}
 
 	@Override
 	public void onNickChange(String oldNick, String login, String hostname,
 			String newNick) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public void setBot(PluggableBot bot) {
+		this.bot = bot;
 	}
 
 }
