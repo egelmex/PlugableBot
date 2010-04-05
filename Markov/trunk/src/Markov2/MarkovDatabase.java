@@ -47,7 +47,7 @@ public class MarkovDatabase implements Runnable {
         Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(2);
         database = Db4o.openFile("Markov2.db4o");
         populate();
-        ex = new MarkovExplorer(cache);
+        //ex = new MarkovExplorer(cache);
     }
 
     public void populate() {

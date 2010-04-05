@@ -109,7 +109,7 @@ public class PluggableBot extends PircBot {
 
 	}
 
-	private static void unloadPlugin(String name) {
+	public static void unloadPlugin(String name) {
 		loadedPlugins.get(name).unload();
 		loadedPlugins.remove(name);
 	}
