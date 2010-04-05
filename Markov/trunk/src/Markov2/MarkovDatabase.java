@@ -24,7 +24,7 @@ public class MarkovDatabase implements Runnable {
     private LinkedBlockingQueue<MarkovNode> saveQueue;
     private static final int MAX_SENTANCE_LENGTH = 30;
     private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
-    private final MarkovExplorer ex;
+    //private final MarkovExplorer ex;
     
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
 
