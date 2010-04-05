@@ -39,7 +39,7 @@ public class PluggableBot extends PircBot {
 	private static Logger log = Logger.getLogger(PluggableBot.class.getName());
 	
 
-	private static final String PLUGIN_DIR = "plugin";
+	private static final String PLUGIN_DIR = "plugins";
 	
 	public static String[] getChans() {
 		return b.getChannels();
@@ -109,7 +109,7 @@ public class PluggableBot extends PircBot {
 
 	}
 
-	public static void unloadPlugin(String name) {
+	private static void unloadPlugin(String name) {
 		loadedPlugins.get(name).unload();
 		loadedPlugins.remove(name);
 	}

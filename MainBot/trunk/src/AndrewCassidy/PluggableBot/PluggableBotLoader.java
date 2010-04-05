@@ -2,6 +2,7 @@ package AndrewCassidy.PluggableBot;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -10,6 +11,8 @@ import java.net.URLClassLoader;
 class PluggableBotLoader implements Runnable {
 	private String name;
 	private URL[] urls;
+	private static final Logger log = Logger.getLogger(PluggableBotLoader.class
+			.getName());
 
 	public PluggableBotLoader(String name, URL[] urls) {
 		this.name = name;
@@ -29,7 +32,9 @@ class PluggableBotLoader implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			log.warning("Could not find class looked in...");
+			for (URL url : urls)
+				log.warning("looked in:" + url);
 			e.printStackTrace();
 		}
 
