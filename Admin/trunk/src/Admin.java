@@ -24,6 +24,8 @@ public class Admin extends DefaultPlugin {
 		} else if (message.startsWith("part")) {
 			bot.partChannel(message.substring(5));
 			PluggableBot.Message(sender, "left");
+		} else if (message.startsWith("load")) {
+			bot.loadPlugin(message.substring(5));
 		}
 
 	}

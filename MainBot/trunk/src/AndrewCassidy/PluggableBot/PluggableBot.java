@@ -37,10 +37,9 @@ public class PluggableBot extends PircBot {
 			TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100));
 	private static String admin = "";
 	private static Logger log = Logger.getLogger(PluggableBot.class.getName());
-	
 
 	private static final String PLUGIN_DIR = "plugins";
-	
+
 	public static String[] getChans() {
 		return b.getChannels();
 	}
@@ -70,22 +69,23 @@ public class PluggableBot extends PircBot {
 		b.setVerbose(true);
 		loadPlugins(settings.getPlugins());
 		channels.addAll(Arrays.asList(settings.getChannels()));
-		
-		b.identify(settings.getNickservPassword()); //I think this needs to come after the connect
+
+		b.identify(settings.getNickservPassword()); // I think this needs to
+		// come after the connect
 		b.connect();
 	}
 
-
 	public static void loadPlugins(String[] plugins) {
-		for (String plugin: plugins) loadPlugin(plugin);
+		for (String plugin : plugins)
+			loadPlugin(plugin);
 	}
-	
+
 	public static void loadPlugin(String name) {
 		try {
 			log.log(Level.INFO, "MainBot: attempting to load " + name);
 
 			ArrayList<URL> paths = new ArrayList<URL>();
-			File f = new File( PLUGIN_DIR + "/" + name + ".jar");
+			File f = new File(PLUGIN_DIR + "/" + name + ".jar");
 			paths.add(f.toURI().toURL());
 
 			File f2 = new File("lib");
@@ -169,10 +169,10 @@ public class PluggableBot extends PircBot {
 			if (message.trim().split(" ").length == 1) {
 				// loaded plugins
 				String m = "Plugins loaded: ";
-			
-				if (loadedPlugins.size() > 0){
-				for (String s : loadedPlugins.keySet())
-					m += s + ", ";
+
+				if (loadedPlugins.size() > 0) {
+					for (String s : loadedPlugins.keySet())
+						m += s + ", ";
 				} else {
 					m += " no plugins laoded., ";
 				}
@@ -224,13 +224,14 @@ public class PluggableBot extends PircBot {
 			String hostname, String message) {
 
 		if (message.startsWith("identify")) {
-			if (message.substring(9).equals(settings.getPassword())) {
-				admin = sender;
-				b.sendMessage(sender, "identified");
+			if (settings.getPassword() != null) {
+				if (message.substring(9).equals(settings.getPassword())) {
+					admin = sender;
+					b.sendMessage(sender, "identified");
+				}
+			} else {
+				log.info("Password was not Set, Admin is disabled.");
 			}
-		} else if (message.startsWith("load") && admin.equals(sender)) {
-			loadPlugin(message.substring(5));
-			b.sendMessage(sender, "loaded");
 		} else if (admin.equals(sender)) {
 			for (Plugin p : loadedPlugins.values())
 				p.onAdminMessage(sender, login, hostname, message);
@@ -268,7 +269,6 @@ public class PluggableBot extends PircBot {
 
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
-		
 
 	}
 

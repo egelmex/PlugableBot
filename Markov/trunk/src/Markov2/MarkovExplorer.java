@@ -39,6 +39,16 @@ public class MarkovExplorer {
     	
         return  output;
     }
+    
+    public String get(String word) {
+    	String output = "";
+    	List<MarkovNode> nodes = cache.get(word).getChildren();
+    	for (MarkovNode node : nodes) {
+    		output += node.getWord() + "\n";
+    	}
+    	
+        return  output;
+    }
 
     
 }

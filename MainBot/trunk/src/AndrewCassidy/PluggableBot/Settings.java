@@ -38,8 +38,6 @@ public class Settings {
 
 	public String getPassword() {
 		String password = properties.getProperty("password");
-		if (password == null)
-			throw new RuntimeException("A password has not been defined");
 		return password;
 	}
 
