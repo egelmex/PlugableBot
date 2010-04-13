@@ -1,0 +1,275 @@
+/*
+ * News.java
+ *
+ */
+
+import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
+import News.Phrase;
+import News.Noun;
+import News.Verb;
+
+/**
+ * 
+ * @author Murmew
+ */
+public class News extends DefaultPlugin
+{
+    private static final Verb[] auxiliary_verbs = new Verb[] {
+        new Verb("will", "will", "present"), 
+        new Verb("could", "could", "present"),
+        new Verb("is", "are", "active"),
+        new Verb("has", "have", "past")
+    };
+    
+    private static final Noun[] subjects = new Noun[] {
+        new Noun("new labour",3,1),
+        new Noun("brussels",3,1),
+        new Noun("the bbc",3,1),
+        new Noun("the e.u.",3,1),
+        new Noun("the euro",3,1),
+        new Noun("the loony left",3,1),
+        new Noun("the unions",3,2),       // May be a bit quaint this one
+        new Noun("channel 4",3,1),
+        new Noun("your local council",3,1),
+    
+    
+        new Noun("the french",3,2),
+        new Noun("the germans",3,2),
+        new Noun("the poles",3,2),
+        new Noun("brussels bureaucrats",3,2),
+        new Noun("muslims",3,2),
+        new Noun("immigrants",3,2),        // Except those from the UK to Spain & the Algarve of course
+        new Noun("teachers",3,2),
+        new Noun("the unemployed",3,2),
+        new Noun("gypsies",3,2),
+        new Noun("yobs",3,2),
+        new Noun("hoodies",3,2),
+        new Noun("feral children",3,2),    // They hate children *and* paedophiles FFS, make your minds up
+        new Noun("chavs",3,2),
+        new Noun("the p.c. brigade",3,2),
+    
+        
+        new Noun("asylum seekers",3,2),    // Nicer way of saying 'brown people'
+        new Noun("gays",3,2),
+        new Noun("lesbians",3,2),
+        new Noun("single mothers",3,2),
+        new Noun("paedophiles",3,2),
+        
+    
+        new Noun("gordon brown",3,1),
+        new Noun("alistair darling",3,1),
+        new Noun("jacqui smith",3,1),   
+        new Noun("russell brand",3,1),     // FIXME: Delete when latest moral panic is over
+        
+        new Noun("teenage sex",3,1),
+        new Noun("political correctness",3,1),
+        new Noun("health & safety",3,1),
+        new Noun("feminism",3,1),
+        new Noun("the metric system",3,1),    // For fuck's sake
+        new Noun("dumbing-down",3,1),
+        new Noun("rip-off britain",3,1),
+        new Noun("the internet",3,1),
+        new Noun("facebook",3,1),             // I CAN'T BELIEVE THE MAIL ACTUALLY SAID FACEBOOK COULD GIVE YOU CANCER, FOR REAL
+        new Noun("filth on television",3,1),
+        new Noun("the human rights act",3,1),
+        new Noun("the nanny state",3,1),
+        new Noun("cancer",3,1),               // Could cancer give you cancer?
+        new Noun("binge drinking",3,1),
+        new Noun("the house price crash",3,1) // Hahahaha
+    };
+
+    private static final Phrase[] transitive_phrases = new Phrase[] {
+        new Phrase("give", "given", "giving", "cancer"),
+        new Phrase("give", "given", "giving", "cancer"), // Have it twice as they're so bloody obsessed by it
+        new Phrase("infect", "infected", "infecting", "with AIDS"),
+        new Phrase("make", "made", "making", "obese"),
+        new Phrase("give", "given", "giving", "diabetes"),
+        new Phrase("make", "made", "making", "impotent"),
+    
+        new Phrase("turn","turned","turning","gay"),    // Cunts
+    
+        new Phrase("scrounge off","scrounged off","scrounging off",""),
+        new Phrase("tax", "taxed", "taxing", ""),
+        new Phrase("cheat", "cheated", "cheating", ""),
+        new Phrase("defraud", "defrauded", "defrauding", ""),
+        new Phrase("steal from","stolen from","stealing from",""),
+        new Phrase("burgle","burgled","burgling",""),
+        new Phrase("devalue","devalued","devaluing",""),
+        new Phrase("rip off","ripped off","ripping off",""),
+        
+        new Phrase("molest","molested","molesting",""),
+        new Phrase("have sex with","had sex with","having sex with",""),
+        new Phrase("impregnate", "impregnated", "impregnating", ""),
+        
+        new Phrase("steal the identity of","stolen the identity of","stealing the identity of",""), 
+    
+        new Phrase("destroy","destroyed","destroying",""),
+        new Phrase("kill","killed", "killing",""),
+        new Phrase("ruin","ruined","ruining",""),
+        new Phrase("hurt","hurt", "hurting","")
+    };
+    
+    private static final String[] objects = new String[] {
+        "the british people",
+        "the middle class",
+        "middle britain", // Cunts
+        "england",
+    
+        "hard-working families",
+        "homeowners",
+        "pensioners",
+        "drivers",
+        "taxpayers",
+        "taxpayers' money",
+    
+        "house prices",
+        "property prices", // Hahahahahahahaa
+        
+        "britain's farmers",
+        "the countryside",
+    
+        "british justice",
+        "british sovereignty",
+        "common sense and decency",
+    
+        "the queen",    // God bless 'er
+        "the royal family",
+        "the church",
+    
+        "you",
+        "your mortgage",
+        "your pension",
+        "your daughters",
+        "your children",
+        "your house",
+        "your pets",
+    
+        "the conservative party",  // FAIL
+        "cliff richard",           // Should this be in here?
+        "the memory of diana",
+        "Britain's swans"          // This always stays
+    };
+    
+    /**
+     * Return a random string given an array
+     */
+    public static Object getRandom(Object[] a)
+    {
+        double[] n = new double[50];
+        
+        for (int i = 0; i < n.length; i++) {
+            n[i] = Math.random();
+        }
+        
+        double m = n[(int)Math.floor(Math.random() * n.length)];
+        int o = (int)Math.floor(m * (double)a.length);
+        
+        return a[o];
+    }
+
+    /**
+     * Matches a verb with a subject (noun)
+     */
+    private static String match_verb_and_subject(Noun subject, Verb verb)
+    {
+        if (subject.number == 1 && subject.person == 3) {
+             return(verb.singular);
+        }
+        else {
+             return(verb.plural);
+        }
+    }
+
+    /**
+     *  Matches the transitive verb's tense with that of the verb
+     */
+    private static String match_verb_and_tense(Verb verb, Phrase phrase)
+    {
+        if (verb.tense.equals("present")) {
+            return phrase.present;
+        }
+        else if (verb.tense.equals("past")) {
+            return phrase.past;
+        }
+        else if (verb.tense.equals("active")) {
+            return phrase.active;
+        }
+        return null;
+    }
+
+    // Returns a Daily Mail Headline as a string
+    public static String getHeadline()
+    {
+        String sentence = "";
+    
+        Noun subject = (Noun)getRandom(subjects);
+        Phrase phrase = (Phrase)getRandom(transitive_phrases);
+        Verb verb = (Verb)getRandom(auxiliary_verbs);
+        String object = (String)getRandom(objects);
+    
+        sentence += match_verb_and_subject(subject, verb);
+        sentence += " " + subject.word;
+        sentence += " " + match_verb_and_tense(verb, phrase);
+        sentence += " " + object;
+        
+        if (phrase.object != "") {
+            sentence += " " + phrase.object;
+        }
+    
+        return sentence.toUpperCase() + "?";
+    }
+	
+	public News()
+	{
+	}
+
+	public void onAction(String sender, String login, String hostname,
+			String target, String action) {
+
+	}
+
+	public void onJoin(String channel, String sender, String login,
+			String hostname) {
+	}
+
+	public void onKick(String channel, String kickerNick, String kickerLogin,
+			String kickerHostname, String recipientNick, String reason) {
+	}
+
+	public void onMessage(String channel, String sender, String login,
+			String hostname, String message) {
+		if (message.startsWith("!news")) {
+            PluggableBot.Message(channel, sender + ": " + getHeadline());
+        }
+	}
+
+	public void onPart(String channel, String sender, String login,
+			String hostname) {
+	}
+
+	public void onQuit(String sourceNick, String sourceLogin,
+			String sourceHostname, String reason) {
+	}
+
+	public String getHelp() {
+		return "Type !news to get a random news headline!";
+	}
+
+	public void onPrivateMessage(String sender, String login, String hostname,
+			String message) {
+	}
+
+	public void unload() {
+	}
+	
+	@Override
+	public void onAdminMessage(String sender, String login, String hostname,
+			String message) {
+	}
+
+	@Override
+	public void setBot(PluggableBot bot) {
+		this.bot = bot;
+	}
+}
