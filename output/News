@@ -1,0 +1,128 @@
+verb;will;will;present 
+verb;could;could;present
+verb;is;are;active
+verb;has;have;past
+    
+noun;new labour;3;1
+noun;brussels;3;1
+noun;the bbc;3;1
+noun;the e.u.;3;1
+noun;the euro;3;1
+noun;the loony left;3;1
+noun;the unions;3;2;// May be a bit quaint this one
+noun;channel 4;3;1
+noun;your local council;3;1
+    
+    
+noun;the french;3;2
+noun;the germans;3;2
+noun;the poles;3;2
+noun;brussels bureaucrats;3;2
+noun;muslims;3;2
+noun;immigrants;3;2;// Except those from the UK to Spain & the Algarve of course
+noun;teachers;3;2
+noun;the unemployed;3;2
+noun;gypsies;3;2
+noun;yobs;3;2
+noun;hoodies;3;2
+noun;feral children;3;2;// They hate children *and* paedophiles FFS;make your minds up
+noun;chavs;3;2
+noun;the p.c. brigade;3;2
+    
+objects;
+noun;asylum seekers;3;2;// Nicer way of saying 'brown people'
+noun;gays;3;2
+noun;lesbians;3;2
+noun;single mothers;3;2
+noun;paedophiles;3;2
+objects;
+    
+noun;gordon brown;3;1
+noun;alistair darling;3;1
+noun;jacqui smith;3;1  
+noun;russell brand;3;1;    // FIXME: Delete when latest moral panic is over
+objects;
+noun;teenage sex;3;1
+noun;political correctness;3;1
+noun;health & safety;3;1
+noun;feminism;3;1
+noun;the metric system;3;1;   // For fuck's sake
+noun;dumbing-down;3;1
+noun;rip-off britain;3;1
+noun;the internet;3;1
+noun;facebook;3;1;objects;    // I CAN'T BELIEVE THE MAIL ACTUALLY SAID FACEBOOK COULD GIVE YOU CANCER;FOR REAL
+noun;filth on television;3;1
+noun;the human rights act;3;1
+noun;the nanny state;3;1
+noun;cancer;3;1;objects;      // Could cancer give you cancer?
+noun;binge drinking;3;1
+noun;the house price crash;3;1; // Hahahaha
+
+phrase;give;given;giving;cancer
+phrase;give;given;giving;cancer;// Have it twice as they're so bloody obsessed by it
+phrase;infect;infected;infecting;with AIDS
+phrase;make;made;making;obese
+phrase;give;given;giving;diabetes
+phrase;make;made;making;impotent
+    
+phrase;turn;turned;turning;gay;   // Cunts
+    
+phrase;scrounge off;scrounged off;scrounging off;
+phrase;tax;taxed;taxing;
+phrase;cheat;cheated;cheating;
+phrase;defraud;defrauded;defrauding;
+phrase;steal from;stolen from;stealing from;
+phrase;burgle;burgled;burgling;
+phrase;devalue;devalued;devaluing;
+phrase;rip off;ripped off;ripping off;
+objects;
+phrase;molest;molested;molesting;
+phrase;have sex with;had sex with;having sex with;
+phrase;impregnate;impregnated;impregnating;
+objects;
+phrase;steal the identity of;stolen the identity of;stealing the identity of;
+    
+phrase;destroy;destroyed;destroying;
+phrase;kill;killed;killing;
+phrase;ruin;ruined;ruining;
+phrase;hurt;hurt;hurting;
+
+    
+objects;the british people;
+objects;the middle class;
+objects;middle britain;// Cunts
+objects;england;
+    
+objects;hard-working families;
+objects;homeowners;
+objects;pensioners;
+objects;drivers;
+objects;taxpayers;
+objects;taxpayers' money;
+    
+objects;house prices;
+objects;property prices;// Hahahahahahahaa
+objects;
+objects;britain's farmers;
+objects;the countryside;
+    
+objects;british justice;
+objects;british sovereignty;
+objects;common sense and decency;
+    
+objects;the queen;   // God bless 'er
+objects;the royal family;
+objects;the church;
+    
+objects;you;
+objects;your mortgage;
+objects;your pension;
+objects;your daughters;
+objects;your children;
+objects;your house;
+objects;your pets;
+    
+objects;the conservative party; // FAIL
+objects;cliff richard;objects;  // Should this be in here?
+objects;the memory of diana;
+objects;Britain's swansobjects;  // This always stays
