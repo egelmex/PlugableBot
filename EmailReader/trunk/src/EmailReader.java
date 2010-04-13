@@ -18,6 +18,8 @@ public class EmailReader extends DefaultPlugin {
 	private String location = "emailreader";
 
 	public EmailReader() {
+		String username = "sneakypetebunix";
+		String password = "reeDee9a";
 		
 		File file = new File(location);
 		for (File f : file.listFiles()) {

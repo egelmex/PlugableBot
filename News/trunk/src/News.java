@@ -57,11 +57,17 @@ public class News extends DefaultPlugin {
 					}
 				} catch (Exception e) {
 					System.out.println("Failed to add line " + line);
+					e.printStackTrace();
 				}
 			}
 		} catch (Exception e) {
 			throw new IllegalStateException("Unable to load pounce file.");
 		}
+
+		System.out.println("---------verbs" + verbs.size());
+		System.out.println("---------nouns" + nouns.size());
+		System.out.println("---------phrases" + phrases.size());
+		System.out.println("---------objects" + objects.size());
 	}
 
 

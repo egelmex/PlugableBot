@@ -29,19 +29,17 @@ noun;feral children;3;2;// They hate children *and* paedophiles FFS;make your mi
 noun;chavs;3;2
 noun;the p.c. brigade;3;2
     
-objects;
 noun;asylum seekers;3;2;// Nicer way of saying 'brown people'
 noun;gays;3;2
 noun;lesbians;3;2
 noun;single mothers;3;2
 noun;paedophiles;3;2
-objects;
     
 noun;gordon brown;3;1
 noun;alistair darling;3;1
 noun;jacqui smith;3;1  
 noun;russell brand;3;1;    // FIXME: Delete when latest moral panic is over
-objects;
+
 noun;teenage sex;3;1
 noun;political correctness;3;1
 noun;health & safety;3;1
@@ -68,61 +66,61 @@ phrase;make;made;making;impotent
 phrase;turn;turned;turning;gay;   // Cunts
     
 phrase;scrounge off;scrounged off;scrounging off;
-phrase;tax;taxed;taxing;
-phrase;cheat;cheated;cheating;
-phrase;defraud;defrauded;defrauding;
-phrase;steal from;stolen from;stealing from;
-phrase;burgle;burgled;burgling;
-phrase;devalue;devalued;devaluing;
-phrase;rip off;ripped off;ripping off;
-objects;
-phrase;molest;molested;molesting;
-phrase;have sex with;had sex with;having sex with;
-phrase;impregnate;impregnated;impregnating;
-objects;
+phrase;tax;taxed;taxing;;
+phrase;cheat;cheated;cheating;;
+phrase;defraud;defrauded;defrauding;;
+phrase;steal from;stolen from;stealing from;;
+phrase;burgle;burgled;burgling;;
+phrase;devalue;devalued;devaluing;;
+phrase;rip off;ripped off;ripping off;;
+
+phrase;molest;molested;molesting;;
+phrase;have sex with;had sex with;having sex with;;
+phrase;impregnate;impregnated;impregnating;;
+
 phrase;steal the identity of;stolen the identity of;stealing the identity of;
     
-phrase;destroy;destroyed;destroying;
-phrase;kill;killed;killing;
-phrase;ruin;ruined;ruining;
-phrase;hurt;hurt;hurting;
+phrase;destroy;destroyed;destroying;;
+phrase;kill;killed;killing;;
+phrase;ruin;ruined;ruining;;
+phrase;hurt;hurt;hurting;;
 
     
-objects;the british people;
-objects;the middle class;
-objects;middle britain;// Cunts
-objects;england;
+object;the british people;
+object;the middle class;
+object;middle britain;// Cunts
+object;england;
     
-objects;hard-working families;
-objects;homeowners;
-objects;pensioners;
-objects;drivers;
-objects;taxpayers;
-objects;taxpayers' money;
+object;hard-working families;
+object;homeowners;
+object;pensioners;
+object;drivers;
+object;taxpayers;
+object;taxpayers' money;
     
-objects;house prices;
-objects;property prices;// Hahahahahahahaa
-objects;
-objects;britain's farmers;
-objects;the countryside;
+object;house prices;
+object;property prices;// Hahahahahahahaa
+
+object;britain's farmers;
+object;the countryside;
     
-objects;british justice;
-objects;british sovereignty;
-objects;common sense and decency;
+object;british justice;
+object;british sovereignty;
+object;common sense and decency;
     
-objects;the queen;   // God bless 'er
-objects;the royal family;
-objects;the church;
+object;the queen;   // God bless 'er
+object;the royal family;
+object;the church;
     
-objects;you;
-objects;your mortgage;
-objects;your pension;
-objects;your daughters;
-objects;your children;
-objects;your house;
-objects;your pets;
+object;you;
+object;your mortgage;
+object;your pension;
+object;your daughters;
+object;your children;
+object;your house;
+object;your pets;
     
-objects;the conservative party; // FAIL
-objects;cliff richard;objects;  // Should this be in here?
-objects;the memory of diana;
-objects;Britain's swansobjects;  // This always stays
+object;the conservative party; // FAIL
+object;cliff richard;objects;  // Should this be in here?
+object;the memory of diana;
+object;Britain's swansobjects;  // This always stays
