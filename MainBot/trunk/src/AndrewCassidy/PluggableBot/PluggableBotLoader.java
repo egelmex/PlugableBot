@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 class PluggableBotLoader implements Runnable {
 	private String name;
 	private URL[] urls;
+	
 	private static final Logger log = Logger.getLogger(PluggableBotLoader.class
 			.getName());
 
