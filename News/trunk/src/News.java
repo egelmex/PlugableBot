@@ -95,11 +95,11 @@ public class News extends DefaultPlugin {
 	 * Matches the transitive verb's tense with that of the verb
 	 */
 	private String match_verb_and_tense(Verb verb, Phrase phrase) {
-		if (verb.tense.equals("present")) {
+		if (verb.tense == Tense.present) {
 			return phrase.present;
-		} else if (verb.tense.equals("past")) {
+		} else if (verb.tense  == Tense.past) {
 			return phrase.past;
-		} else if (verb.tense.equals("active")) {
+		} else if (verb.tense == Tense.active) {
 			return phrase.active;
 		}
 		return null;
