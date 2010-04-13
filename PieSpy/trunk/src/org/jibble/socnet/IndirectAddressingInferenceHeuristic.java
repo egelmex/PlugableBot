@@ -23,8 +23,10 @@ public class IndirectAddressingInferenceHeuristic extends InferenceHeuristic imp
         super(g, config);
     }
     
-    public void infer(String nick, String message) {
+    public boolean infer(String nick, String message) {
         
+    	boolean changed = true;
+    	
         Graph g = getGraph();
         //Configuration config = getConfig();
         //double weighting = getHeuristicWeighting();
@@ -35,11 +37,11 @@ public class IndirectAddressingInferenceHeuristic extends InferenceHeuristic imp
             Node target = new Node(words[i]);
             if (g.contains(target)) {
                 //g.setCaption(this.toString() + " awarded weighting of " + getHeuristicWeighting() + " to " + source + " - " + target);
-                g.addEdge(source, target, getHeuristicWeighting());
+            	changed = changed || g.addEdge(source, target, getHeuristicWeighting());
                 break;
             }
         }
-        
+        return changed;
     }
     
 }

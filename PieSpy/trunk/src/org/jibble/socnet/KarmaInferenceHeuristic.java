@@ -14,8 +14,10 @@ public class KarmaInferenceHeuristic extends InferenceHeuristic {
 	}
 
 	@Override
-	public void infer(String nick, String message) {
+	public boolean infer(String nick, String message) {
 		Graph g = getGraph();
+		boolean changed = false;
+		
 		String[] parts = message.split(" ");
 		for (String part : parts) {
 			Node n = null;
@@ -44,12 +46,12 @@ public class KarmaInferenceHeuristic extends InferenceHeuristic {
 					g.addEdge(new Node(nick), n, -1);
 					break;
 				}
-				
+				changed = true;
 				
 			}
 		}
 		
-		
+		return changed;
 
 	}
 

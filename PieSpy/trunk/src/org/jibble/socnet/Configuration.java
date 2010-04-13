@@ -64,6 +64,8 @@ public class Configuration implements java.io.Serializable {
     public boolean verbose;
     public String encoding;
     
+    public static final String VERSION = "PieSpy 0.4.0_pluggable.bot";
+    
     private Properties properties;
     
     public Configuration(Properties p) throws NoSuchElementException {

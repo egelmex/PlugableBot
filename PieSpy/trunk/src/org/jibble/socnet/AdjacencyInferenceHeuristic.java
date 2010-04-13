@@ -23,18 +23,22 @@ public class AdjacencyInferenceHeuristic extends InferenceHeuristic implements j
         super(g, config);
     }
     
-    public void infer(String nick, String message) {
+    public boolean infer(String nick, String message) {
         
         Graph g = getGraph();
         //Configuration config = getConfig();
         //double weighting = getHeuristicWeighting();
         
+        boolean changed = false;
+        
         if (_lastNick != null) {
             //g.setCaption(this.toString() + " awarded weighting of " + getHeuristicWeighting() + " to " + nick + " - " + _lastNick);
-            g.addEdge(new Node(nick), new Node(_lastNick), getHeuristicWeighting());
+            changed = changed || g.addEdge(new Node(nick), new Node(_lastNick), getHeuristicWeighting());
         }
         
         _lastNick = nick;
+        
+        return changed;
     }
     
     private String _lastNick = null;

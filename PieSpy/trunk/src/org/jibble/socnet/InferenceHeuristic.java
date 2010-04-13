@@ -59,7 +59,12 @@ public abstract class InferenceHeuristic implements java.io.Serializable {
         return toString().equals(o);
     }
     
-    public abstract void infer(String nick, String message);
+    /**
+     * Infer relashonships
+     * @param nick
+     * @param message
+     */
+    public abstract boolean infer(String nick, String message);
     
     private double _weighting;
     private Graph _graph;

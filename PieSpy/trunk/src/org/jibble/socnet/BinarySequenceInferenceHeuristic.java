@@ -27,8 +27,10 @@ public class BinarySequenceInferenceHeuristic extends InferenceHeuristic impleme
         super(g, config);
     }
     
-    public void infer(String nick, String message) {
+    public boolean infer(String nick, String message) {
         
+    	boolean changed = false;
+    	
         Graph g = getGraph();
         //Configuration config = getConfig();
         //double weighting = getHeuristicWeighting();
@@ -49,12 +51,12 @@ public class BinarySequenceInferenceHeuristic extends InferenceHeuristic impleme
                 String nick1 = (String) setIt.next();
                 String nick2 = (String) setIt.next();
                 //g.setCaption(this.toString() + " awarded weighting of " + getHeuristicWeighting() + " to " + nick1 + " - " + nick2);
-                g.addEdge(new Node(nick1), new Node(nick2), getHeuristicWeighting());
+                changed = g.addEdge(new Node(nick1), new Node(nick2), getHeuristicWeighting());
                 
                 nickHistory.clear();
             }
         }
-        
+        return changed;
     }
     
     private LinkedList<String> nickHistory = new LinkedList<String>();

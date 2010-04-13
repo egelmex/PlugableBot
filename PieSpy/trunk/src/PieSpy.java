@@ -15,7 +15,6 @@ import org.jibble.pircbot.User;
 import org.jibble.socnet.Configuration;
 import org.jibble.socnet.Graph;
 import org.jibble.socnet.Node;
-import org.jibble.socnet.SocialNetworkBot;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.PluggableBot;
@@ -25,6 +24,8 @@ public class PieSpy extends DefaultPlugin {
 	private Map<String, Graph> _graphs = new HashMap<String, Graph>();
 	private Configuration config;
 
+	
+	
 	private static Properties defaults;
 
 	{
@@ -252,7 +253,7 @@ public class PieSpy extends DefaultPlugin {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 					file));
 			String version = (String) ois.readObject();
-			if (version.equals(SocialNetworkBot.VERSION)) {
+			if (version.equals(Configuration.VERSION)) {
 				// Only read the object if the file is for the correct version.
 				g = (Graph) ois.readObject();
 			}
