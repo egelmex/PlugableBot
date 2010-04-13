@@ -12,20 +12,21 @@
 	<classpathentry kind="src" path="Pounce/trunk/src"/>
 	<classpathentry kind="src" path="TitleReader/trunk/src"/>
 	<classpathentry kind="src" path="EmailReader/trunk/src"/>
-	<classpathentry kind="src" path="Payments/trunk/src"/>
 	<classpathentry kind="src" path="PieSpy/trunk/src"/>
 	<classpathentry kind="src" path="Admin/trunk/src"/>
+	<classpathentry kind="src" path="News/trunk/src"/>
+	<classpathentry kind="src" path="Random/trunk/src"/>
 	<classpathentry kind="lib" path="lib/db4o-6.4.54.11278-java5.jar"/>
 	<classpathentry kind="lib" path="lib/pircbot.jar"/>
-	<classpathentry kind="lib" path="lib/jwpl_0.45beta.jar"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-0.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dsn.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/dsn.jar"/>
 	<classpathentry kind="lib" path="lib/imap.jar"/>
+	<classpathentry kind="lib" path="lib/jwpl_0.45beta.jar"/>
 	<classpathentry kind="lib" path="lib/mailapi.jar"/>
 	<classpathentry kind="lib" path="lib/pop3.jar"/>
 	<classpathentry kind="lib" path="lib/smtp.jar"/>

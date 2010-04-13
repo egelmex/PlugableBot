@@ -39,8 +39,14 @@
 		<ant dir="Mailinfo/trunk" target="jar" />
 		<copy file="Mailinfo/trunk/jar/Mailinfo.jar" todir="output/plugins" />
 
+		<ant dir="News/trunk" target="jar" />
+		<copy file="News/trunk/jar/News.jar" todir="output/plugins" />
+
 		<ant dir="Pounce/trunk" target="jar" />
 		<copy file="Pounce/trunk/jar/Pounce.jar" todir="output/plugins" />
+
+		<ant dir="Random/trunk" target="jar" />
+		<copy file="Random/trunk/jar/Random.jar" todir="output/plugins" />
 
 		<ant dir="EmailReader/trunk" target="jar" />
 		<copy file="EmailReader/trunk/jar/EmailReader.jar" todir="output/plugins" />
