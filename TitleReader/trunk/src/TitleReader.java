@@ -18,9 +18,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import AndrewCassidy.PluggableBot.PluggableBot;
-import AndrewCassidy.PluggableBot.Plugin;
 import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
 
 public class TitleReader extends DefaultPlugin {
 
@@ -32,26 +31,6 @@ public class TitleReader extends DefaultPlugin {
 		return "Gets the title of pages from mentioned urls";
 	}
 
-	@Override
-	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onJoin(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onKick(String channel, String kickerNick, String kickerLogin,
-			String kickerHostname, String recipientNick, String reason) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void onMessage(final String channel, final String sender, final String login,
@@ -92,19 +71,7 @@ public class TitleReader extends DefaultPlugin {
 								HttpPost post = new HttpPost("http://snipr.com/site/getsnip");
 							    
 								
-								/*
-								 * $postfield =  'sniplink='  . $sniplink  . '&' .
-		              'snipnick='  . $snipnick  . '&' .
-		              'snipuser='  . $snipuser  . '&' .
-		              'snipapi='   . $snipapi   . '&' .
-		              'sniptitle=' . $sniptitle . '&' .
-		              'snipowner=' . $snipowner . '&' .
-		              'snipformat='. $snipformat. '&' .
-		              'snippk='    . $snippk   
-								 * 
-								 * 
-								 */
-									List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+								List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 						        nvps.add(new BasicNameValuePair("sniplink", url.toString()));
 						        nvps.add(new BasicNameValuePair("snipuser", "mex"));
 						        nvps.add(new BasicNameValuePair("snipapi", "b23ff81382e8ff92307f4c56951f2815"));
@@ -151,33 +118,6 @@ public class TitleReader extends DefaultPlugin {
 		new Thread(r).start();
 	}
 
-	@Override
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unload() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public static void main(String[] args) {
 		TitleReader t = new TitleReader();
 		t.onMessage(null, null, null, null, "hello http://google.com fish");
@@ -186,10 +126,4 @@ public class TitleReader extends DefaultPlugin {
 
 	}
 
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-		
-	}
 }

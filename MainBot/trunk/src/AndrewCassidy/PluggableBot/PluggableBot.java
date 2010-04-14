@@ -70,9 +70,8 @@ public class PluggableBot extends PircBot {
 		loadPlugins(settings.getPlugins());
 		channels.addAll(Arrays.asList(settings.getChannels()));
 
-		b.identify(settings.getNickservPassword()); // I think this needs to
-		// come after the connect
 		b.connect();
+		b.identify(settings.getNickservPassword());
 	}
 
 	public static void loadPlugins(String[] plugins) {
@@ -106,6 +105,7 @@ public class PluggableBot extends PircBot {
 
 	public static void addPlugin(String name, Plugin p) {
 		loadedPlugins.put(name, p);
+		p.setBot(b);
 	}
 
 	public static void unloadPlugin(String name) {
