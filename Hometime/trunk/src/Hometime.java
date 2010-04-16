@@ -6,9 +6,17 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-import AndrewCassidy.PluggableBot.*;
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  *
@@ -61,14 +69,6 @@ public class Hometime extends DefaultPlugin {
         }
     }
 
-    public void onAction(String sender, String login, String hostname, String target, String action) {
-    }
-
-    public void onJoin(String channel, String sender, String login, String hostname) {
-    }
-
-    public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
-    }
 
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
         if (message.startsWith("!hometime"))
@@ -180,25 +180,9 @@ public class Hometime extends DefaultPlugin {
         }
     }
 
-    public void onPart(String channel, String sender, String login, String hostname) {
-    }
-
-    public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason) {
-    }
 
     public String getHelp() {
         return "Call !hometime and i will tell you how long until the next home time. To set your hometime, use !sethometime HH:MM";
     }
-    public void onPrivateMessage(String sender, String login, String hostname, String message) {
-       
-    }
-    
-    public void unload() {}
-    
-	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }

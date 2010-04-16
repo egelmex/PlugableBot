@@ -40,21 +40,7 @@ public class PluggableBot extends PircBot {
 
 	private static final String PLUGIN_DIR = "plugins";
 
-	public static String[] getChans() {
-		return b.getChannels();
-	}
 
-	public static void kill(String nick, String channel) {
-		b.kick(channel, nick);
-	}
-
-	public static User[] users(String channel) {
-		return b.getUsers(channel);
-	}
-
-	public static void getNicks() {
-
-	}
 
 	public static void main(String[] args) {
 
@@ -266,11 +252,6 @@ public class PluggableBot extends PircBot {
 			p.unload();
 	}
 
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-
-	}
-
 	@Override
 	protected void onUserList(String channel, User[] users) {
 
@@ -281,6 +262,22 @@ public class PluggableBot extends PircBot {
 
 	public static void sendFileDcc(File file, String nick, int timeout) {
 		b.dccSendFile(file, nick, timeout);
+	}
+	
+	public static String[] getChans() {
+		return b.getChannels();
+	}
+
+	public static void kill(String nick, String channel) {
+		b.kick(channel, nick);
+	}
+
+	public static User[] users(String channel) {
+		return b.getUsers(channel);
+	}
+
+	public static void getNicks() {
+
 	}
 
 }

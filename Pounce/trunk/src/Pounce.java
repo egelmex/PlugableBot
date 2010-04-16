@@ -39,10 +39,6 @@ public class Pounce extends DefaultPlugin{
 		}
 	}
 
-	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
-
-	}
 
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
@@ -123,27 +119,12 @@ public class Pounce extends DefaultPlugin{
 		return ok;
 	}
 
-	public void onPart(String channel, String sender, String login,
-			String hostname) {
-	}
-
-	public void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
-	}
-
 	public String getHelp() {
 		return "This plugin makes me 'pounce' on new users that enter the channel, with a probablity of 1 in "
 				+ probability
 				+ ". to add a new pounce, use !addpounce followed by the message, using %NAME as a placeholder.";
 	}
 
-	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-
-	}
-
-	public void unload() {
-	}
 
 	@Override
 	public void onAdminMessage(String sender, String login, String hostname,
