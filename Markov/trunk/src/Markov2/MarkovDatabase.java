@@ -24,7 +24,6 @@ public class MarkovDatabase implements Runnable {
 
     private ObjectContainer database;
     private boolean shuttingDown = false;
-    private LinkedBlockingQueue<MarkovNode> saveQueue;
     private static final int MAX_SENTANCE_LENGTH = 30;
     //private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
     //private final MarkovExplorer ex;
@@ -117,6 +116,7 @@ public class MarkovDatabase implements Runnable {
 
     public void shutdown() {
         shuttingDown = true;
+        unload();
     }
 
     public MarkovNode getNode(String word) {
@@ -150,25 +150,10 @@ public class MarkovDatabase implements Runnable {
     }
 
     public void run() {
-        Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Markov Database Thread Running");
-        while (!shuttingDown) {
-            do {
-                try {
-                    MarkovNode n = saveQueue.take();
-                    if (!n.getWord().equals((""))) {
-                        database.set(n);
-                        if (shuttingDown)
-                            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Save Items Left: " + saveQueue.size());
-                    }
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } while (saveQueue.peek() != null);
-            Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Committing");
-            database.commit();
-            Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Committing Complete");
-        }
-        Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Markov Database Thread Finished");
-        database.close();
+
+    }
+    
+    public void unload() {
+    	database.close();
     }
 }
