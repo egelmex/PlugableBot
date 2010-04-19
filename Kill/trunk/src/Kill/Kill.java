@@ -1,3 +1,4 @@
+package Kill;
 /*
  * KillPlugin.java
  *
@@ -9,10 +10,7 @@
 import java.util.List;
 import java.util.Random;
 
-import Kill.*;
-
 import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
 
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
@@ -22,7 +20,7 @@ import com.db4o.ObjectSet;
  * 
  * @author AndyC
  */
-public class Kill extends DefaultPlugin{
+public class Kill extends DefaultPlugin {
 
 	private ObjectContainer database;
 	private String def = "stabs %NAME with a elongated frozen eel";
@@ -32,7 +30,6 @@ public class Kill extends DefaultPlugin{
 	public Kill() {
 		load();
 	}
-
 
 	private KillLists getKillList(String sender) {
 		KillLists proto = new KillLists(sender);
@@ -52,12 +49,11 @@ public class Kill extends DefaultPlugin{
 					.nextInt(listOfUserKills.size()));
 		}
 		String target = message.substring(6).trim();
-		if (target.toLowerCase().equals(PluggableBot.Nick().toLowerCase()))
+		if (target.toLowerCase().equals(bot.Nick().toLowerCase()))
 			target = sender;
-		PluggableBot
-				.Action(channel, killString.replaceAll("%NAME", target));
+		bot.Action(channel, killString.replaceAll("%NAME", target));
 	}
-	
+
 	private void addKill(String sender, String message) {
 		KillLists killer = getKillList(sender);
 		List<String> listOfUserKills = killer.getKills();
@@ -65,24 +61,22 @@ public class Kill extends DefaultPlugin{
 			listOfUserKills.add(message.substring(9));
 			database.set(killer);
 			database.commit();
-			PluggableBot.Message(sender, "Added kill: "
-					+ message.substring(9));
+			bot.Message(sender, "Added kill: " + message.substring(9));
 		} else {
-			PluggableBot.Message(sender, "Kill '" + message.substring(9)
+			bot.Message(sender, "Kill '" + message.substring(9)
 					+ "' already exosists");
 		}
 	}
-	
+
 	private void listKills(String sender) {
 		KillLists killer = getKillList(sender);
-			List<String> listOfUserKills = killer.getKills();
-			PluggableBot.Message(sender, "You kills are :");
-			for (int i = 0; i < listOfUserKills.size(); ++i) {
-				PluggableBot.Message(sender, i + ": "
-						+ listOfUserKills.get(i));
-			}
+		List<String> listOfUserKills = killer.getKills();
+		bot.Message(sender, "You kills are :");
+		for (int i = 0; i < listOfUserKills.size(); ++i) {
+			bot.Message(sender, i + ": " + listOfUserKills.get(i));
+		}
 	}
-	
+
 	private void removeKill(String sender, String message) {
 		try {
 			int remove = Integer.parseInt(message.substring(11).trim());
@@ -93,7 +87,7 @@ public class Kill extends DefaultPlugin{
 				List<String> listOfUserKills = killer.getKills();
 				if (listOfUserKills.size() > remove) {
 					String removed = listOfUserKills.remove(remove);
-					PluggableBot.Message(sender, "kill '" + removed
+					bot.Message(sender, "kill '" + removed
 							+ "' was removed");
 					database.set(killer);
 					database.commit();
@@ -103,7 +97,7 @@ public class Kill extends DefaultPlugin{
 			// TODO: handle exception
 		}
 	}
-	
+
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 		if (message.startsWith("!kill")) {
@@ -139,6 +133,5 @@ public class Kill extends DefaultPlugin{
 	public void unload() {
 		database.close();
 	}
-	
 
 }
