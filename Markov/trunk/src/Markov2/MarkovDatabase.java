@@ -4,6 +4,7 @@
  */
 package Markov2;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.query.Predicate;
 
 /**
  *
@@ -23,7 +25,7 @@ public class MarkovDatabase implements Runnable {
     private boolean shuttingDown = false;
     private LinkedBlockingQueue<MarkovNode> saveQueue;
     private static final int MAX_SENTANCE_LENGTH = 30;
-    private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
+    //private final ConcurrentHashMap<String, MarkovNode> cache = new ConcurrentHashMap<String, MarkovNode>();
     //private final MarkovExplorer ex;
     
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
@@ -40,7 +42,7 @@ public class MarkovDatabase implements Runnable {
         this.saveQueue = saveQueue;
         Db4o.configure().automaticShutDown(false);
         // set up indexing
-        Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(false);
+        Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
         // set it up to update the lists properly
         Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
         // and activate the lists far enough
@@ -54,20 +56,18 @@ public class MarkovDatabase implements Runnable {
         //busy = true;
         Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading data");
         // get a list of all nodes
-        ObjectSet<MarkovNode> set = database.get(MarkovNode.class);
-        // if we dont have any, we have an empty database and need to start
-        // learning
+        List<MarkovNode> set = database.query(new Predicate<MarkovNode>() {
+			@Override
+			public boolean match(MarkovNode node) {
+				return node.getWord() == "[";
+			}
+		});
         if (set.size() == 0) {
             MarkovNode start = new MarkovNode("[");
             MarkovNode end = new MarkovNode("]");
             database.set(start);
             database.set(end);
-            cache.put("[", start);
-            cache.put("]", end);
         } else {
-            for (MarkovNode n : set) {
-                cache.put(n.getWord(), n);
-            }
         }
         Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading done");
     //busy = false;
@@ -106,18 +106,20 @@ public class MarkovDatabase implements Runnable {
 
     public void newNode(MarkovNode n)
     {
-        cache.put(n.getWord(), n);
+//        cache.put(n.getWord(), n);
     }
 
     public int[] getStats() {
         int ret[] = {0, 0};
-        ret[0] = cache.size();
+        ObjectSet<MarkovNode> result = database.get(MarkovNode.class);
+        
+        ret[0] = result.size();
         //ObjectSet<MarkovNode> query = database.get(new MarkovNode(null, false));
         //ret[0] = query.size();
         //for (MarkovNode n : query) {
-        for (MarkovNode n : cache.values()) {
-            ret[1] += n.getConnectionCount();
-        }
+//        for (MarkovNode n : cache.values()) {
+//            ret[1] += n.getConnectionCount();
+//        }
         return ret;
     }
 
@@ -126,19 +128,27 @@ public class MarkovDatabase implements Runnable {
     }
 
     public MarkovNode getNode(String word) {
-        if (cache.containsKey(word)) {
-            return cache.get(word);
-        } else {
-            return null;
-//            ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
-//            if (query.size() == 0) {
-//                return null;
-//            } else {
-//                MarkovNode n = query.get(0);
-//                cache.put(word, n);
-//                return n;
-//            }
-        }
+//        if (cache.containsKey(word)) {
+//            return cache.get(word);
+//        } else {
+//            return null;
+////            ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
+////            if (query.size() == 0) {
+////                return null;
+////            } else {
+////                MarkovNode n = query.get(0);
+////                cache.put(word, n);
+////                return n;
+////            }
+//        }
+    	
+		ObjectSet<MarkovNode> query = database.get(new MarkovNode(word));
+		if (query.size() == 0) {
+			return null;
+		} else {
+			MarkovNode n = query.get(0);
+			return n;
+		}
     }
 
     public void run() {
