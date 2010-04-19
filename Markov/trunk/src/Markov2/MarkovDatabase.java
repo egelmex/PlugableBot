@@ -133,7 +133,10 @@ public class MarkovDatabase implements Runnable {
 		ObjectSet<MarkovNode> result = database.get(MarkovNode.class);
 
 		ret[0] = result.size();
-
+		
+		ObjectSet<MarkovNode> result2 = database.get(MarkovLink.class);
+		ret[1] = result2.size();
+		
 		return ret;
 	}
 
