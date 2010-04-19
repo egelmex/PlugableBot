@@ -1,3 +1,4 @@
+package Mailinfo;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -7,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  * 
@@ -26,15 +26,15 @@ public class Mailinfo extends DefaultPlugin {
 			if (tmp.length() > 0)
 				user = tmp;
 			try {
-				 ProcessBuilder pb = new ProcessBuilder(COMMAND, user);
-				 Process exec = pb.start();
+				ProcessBuilder pb = new ProcessBuilder(COMMAND, user);
+				Process exec = pb.start();
 
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 						exec.getInputStream()));
 				// headers
 				br.readLine();
 				// extra
-				PluggableBot.Message(channel, sender + ": " + br.readLine());
+				bot.Message(channel, sender + ": " + br.readLine());
 				exec.waitFor();
 				br.close();
 			} catch (Exception e) {
