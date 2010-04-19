@@ -1,3 +1,4 @@
+package Actions;
 /*
  * ActionsPlugin.java
  *
@@ -18,14 +19,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  * 
  * @author andee, Mex (ellism88@gmail.com)
  */
-public class Actions extends DefaultPlugin{
-	
+public class Actions extends DefaultPlugin {
+
 	public Actions() {
 		reloadActions();
 	}
@@ -39,15 +39,15 @@ public class Actions extends DefaultPlugin{
 
 	public void onAction(String sender, String login, String hostname,
 			String target, String action) {
-		if (action.toLowerCase().indexOf(PluggableBot.Nick().toLowerCase()) > -1) {
+		if (action.toLowerCase().indexOf(bot.Nick().toLowerCase()) > -1) {
 			if (attacks.size() > 0) {
 				String a = attacks.get(r.nextInt(attacks.size()));
-				PluggableBot.Action(target, a.replaceAll("%SENDER", sender)
-						.replaceAll("%NAME", sender));
+				bot.Action(target, a.replaceAll("%SENDER", sender).replaceAll(
+						"%NAME", sender));
 			} else {
-				PluggableBot.Action(target,
-						"I don't know what to do about that :(".replaceAll(
-								"%SENDER", sender).replaceAll("%NAME", sender));
+				bot.Action(target, "I don't know what to do about that :("
+						.replaceAll("%SENDER", sender).replaceAll("%NAME",
+								sender));
 			}
 		}
 	}
@@ -88,16 +88,15 @@ public class Actions extends DefaultPlugin{
 		if (message.startsWith("!addaction") && adminEnabled) {
 			String s = message.substring(11);
 			if (attacks.contains(s)) {
-				PluggableBot.Message(channel, sender
+				bot.Message(channel, sender
 						+ ": Stop feeding me the same junk!");
 			} else {
 				attacks.add(s);
 				boolean ok = saveActions();
 				if (ok) {
-					PluggableBot.Message(channel, sender
-							+ ": I will remeber that!");
+					bot.Message(channel, sender + ": I will remeber that!");
 				} else {
-					PluggableBot.Message(channel, sender
+					bot.Message(channel, sender
 							+ ": Whoops I am being forgetful today!");
 					attacks.remove(s);
 				}
@@ -113,6 +112,7 @@ public class Actions extends DefaultPlugin{
 		String sender;
 		List<String> actions;
 
+		@SuppressWarnings("unchecked")
 		public Runny(String sender, ArrayList<String> actions) {
 			this.sender = sender;
 			this.actions = (List<String>) actions.clone();
@@ -120,15 +120,14 @@ public class Actions extends DefaultPlugin{
 
 		@Override
 		public void run() {
-			PluggableBot.Message(sender, "My retorts are:");
+			bot.Message(sender, "My retorts are:");
 			for (String s : actions) {
-				PluggableBot.Message(sender, s);
+				bot.Message(sender, s);
 			}
 
 		}
 
 	}
-
 
 	public String getHelp() {
 		if (adminEnabled) {
@@ -144,15 +143,15 @@ public class Actions extends DefaultPlugin{
 			String message) {
 		if (message.toLowerCase().startsWith("!actionenableadmin")) {
 			this.adminEnabled = true;
-			PluggableBot.Message(sender, "Action Admin Enabled");
+			bot.Message(sender, "Action Admin Enabled");
 		} else if (message.toLowerCase().startsWith("!actiondisableadmin")) {
 			this.adminEnabled = false;
-			PluggableBot.Message(sender, "Action Admin Re-enabled");
+			bot.Message(sender, "Action Admin Re-enabled");
 		} else if (message.toLowerCase().startsWith("!actionreload")) {
 			reloadActions();
-			PluggableBot.Message(sender, "Tried to reload Actions");
+			bot.Message(sender, "Tried to reload Actions");
 		} else if (message.toLowerCase().trim().equals("!help actions")) {
-			PluggableBot
+			bot
 					.Message(sender,
 							"Actions Admin Help: !actionenableadmin, !actiondisableadmin, !actionreload");
 		}
