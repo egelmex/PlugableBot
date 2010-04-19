@@ -1,3 +1,4 @@
+package Dns;
 /*
  * DNS.java
  *
@@ -21,10 +22,10 @@ public class Dns extends DefaultPlugin {
 			String hostname, String message) {
 		if (message.toLowerCase().startsWith("!dns")) {
 			try {
-				PluggableBot.Message(channel, InetAddress.getByName(
+				bot.Message(channel, InetAddress.getByName(
 						message.substring(5).trim()).getHostAddress());
 			} catch (Exception e) {
-				PluggableBot.Message(channel,
+				bot.Message(channel,
 						"Sorry, I couldn't find that host");
 			}
 		}
