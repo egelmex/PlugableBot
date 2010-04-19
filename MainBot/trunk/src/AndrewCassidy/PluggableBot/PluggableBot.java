@@ -29,7 +29,7 @@ import org.jibble.pircbot.User;
  */
 public class PluggableBot extends PircBot {
 
-	private static ConcurrentHashMap<String, Plugin> loadedPlugins = new ConcurrentHashMap<String, Plugin>();
+	private ConcurrentHashMap<String, Plugin> loadedPlugins = new ConcurrentHashMap<String, Plugin>();
 	private static Settings settings;
 	private static PluggableBot b = new PluggableBot();
 	private static ArrayList<String> channels = new ArrayList<String>();
@@ -49,23 +49,23 @@ public class PluggableBot extends PircBot {
 		// add the shutdown hook for cleaning up
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				cleanup();
+				b.cleanup();
 			}
 		});
 		b.setVerbose(true);
-		loadPlugins(settings.getPlugins());
+		b.loadPlugins(settings.getPlugins());
 		channels.addAll(Arrays.asList(settings.getChannels()));
 
 		b.connect();
 		b.identify(settings.getNickservPassword());
 	}
 
-	public static void loadPlugins(String[] plugins) {
+	public void loadPlugins(String[] plugins) {
 		for (String plugin : plugins)
 			loadPlugin(plugin);
 	}
 
-	public static void loadPlugin(String name) {
+	public void loadPlugin(String name) {
 		try {
 			log.log(Level.INFO, "MainBot: attempting to load " + name);
 
@@ -80,7 +80,7 @@ public class PluggableBot extends PircBot {
 			URL[] urls = new URL[paths.size()];
 			paths.toArray(urls);
 
-			pool.execute(new PluggableBotLoader(name, urls));
+			pool.execute(new PluggableBotLoader(name, urls, b));
 
 		} catch (Exception ex) {
 			log.log(Level.WARNING, "Failed to load plugin: " + ex.getMessage());
@@ -89,12 +89,12 @@ public class PluggableBot extends PircBot {
 
 	}
 
-	public static void addPlugin(String name, Plugin p) {
+	public void addPlugin(String name, Plugin p) {
 		loadedPlugins.put(name, p);
 		p.setBot(b);
 	}
 
-	public static void unloadPlugin(String name) {
+	public void unloadPlugin(String name) {
 		loadedPlugins.get(name).unload();
 		loadedPlugins.remove(name);
 	}
@@ -234,19 +234,19 @@ public class PluggableBot extends PircBot {
 			admin = newNick;
 	}
 
-	public static String Nick() {
+	public String Nick() {
 		return b.getNick();
 	}
 
-	public static void Action(String target, String action) {
+	public void Action(String target, String action) {
 		b.sendAction(target, action);
 	}
 
-	public static void Message(String target, String action) {
+	public void Message(String target, String action) {
 		b.sendMessage(target, action);
 	}
 
-	private static void cleanup() {
+	private void cleanup() {
 		log.log(Level.INFO, "Shutting down...");
 		for (Plugin p : loadedPlugins.values())
 			p.unload();
@@ -260,24 +260,23 @@ public class PluggableBot extends PircBot {
 
 	}
 
-	public static void sendFileDcc(File file, String nick, int timeout) {
+	public void sendFileDcc(File file, String nick, int timeout) {
 		b.dccSendFile(file, nick, timeout);
 	}
 	
-	public static String[] getChans() {
+	public String[] getChans() {
 		return b.getChannels();
 	}
 
-	public static void kill(String nick, String channel) {
+	public void kill(String nick, String channel) {
 		b.kick(channel, nick);
 	}
 
-	public static User[] users(String channel) {
+	public User[] users(String channel) {
 		return b.getUsers(channel);
 	}
 
-	public static void getNicks() {
-
+	public void getNicks() {
 	}
 
 }

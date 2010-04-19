@@ -11,21 +11,23 @@ import java.util.logging.Logger;
 class PluggableBotLoader implements Runnable {
 	private String name;
 	private URL[] urls;
+	private PluggableBot bot;
 	
 	private static final Logger log = Logger.getLogger(PluggableBotLoader.class
 			.getName());
 
-	public PluggableBotLoader(String name, URL[] urls) {
+	public PluggableBotLoader(String name, URL[] urls, PluggableBot bot) {
 		this.name = name;
 		this.urls = urls;
+		this.bot = bot;
 	}
 
 	@Override
 	public void run() {
 		try {
 			URLClassLoader newLoader = new URLClassLoader(urls);
-			Plugin p = (Plugin) newLoader.loadClass(name).newInstance();
-			PluggableBot.addPlugin(name, p);// loadedPlugins.put(name, p);
+			Plugin p = (Plugin) newLoader.loadClass(name + "." +name).newInstance();
+			bot.addPlugin(name, p);// loadedPlugins.put(name, p);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

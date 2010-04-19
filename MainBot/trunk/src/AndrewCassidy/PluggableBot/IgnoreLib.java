@@ -24,7 +24,7 @@ public class IgnoreLib {
 		openIgnoreListf();
 	}
 	
-	public IgnoreLib(Class clas, String name) {
+	public IgnoreLib(Class<?> clas, String name) {
 		this.ingoreListName = clas.getName() + "-" + name;
 		openIgnoreListf();
 	}
