@@ -1,3 +1,4 @@
+package Chooose;
 /*
  * Choose.java
  *
@@ -24,7 +25,7 @@ public class Choose extends DefaultPlugin {
             try
             {
               String[] opts = message.substring(8).split(" or ");
-              PluggableBot.Message(channel, sender + ": " + opts[r.nextInt(opts.length)]);
+              bot.Message(channel, sender + ": " + opts[r.nextInt(opts.length)]);
             }
             catch (Exception e)
             {
