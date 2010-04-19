@@ -78,8 +78,8 @@ public class MarkovDatabase implements Runnable {
 			MarkovNode end = new MarkovNode("]");
 			database.set(start);
 			database.set(end);
-			MarkovLink link = new MarkovLink(start, end);
-			database.set(link);
+//			MarkovLink link = new MarkovLink(start, end);
+//			database.set(link);
 		} else {
 		}
 		Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO,
