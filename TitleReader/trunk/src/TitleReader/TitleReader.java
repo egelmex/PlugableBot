@@ -1,3 +1,4 @@
+package TitleReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +20,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
 
 public class TitleReader extends DefaultPlugin {
 
@@ -31,14 +31,12 @@ public class TitleReader extends DefaultPlugin {
 		return "Gets the title of pages from mentioned urls";
 	}
 
-
 	@Override
-	public void onMessage(final String channel, final String sender, final String login,
-			final String hostname, final String message) {
-		
-		
+	public void onMessage(final String channel, final String sender,
+			final String login, final String hostname, final String message) {
+
 		Runnable r = new Runnable() {
-			
+
 			@Override
 			public void run() {
 				// separete input by spaces ( URLs don't have spaces )
@@ -55,7 +53,8 @@ public class TitleReader extends DefaultPlugin {
 								|| url.getProtocol().equals("http")) {
 							connection = url.openConnection();
 
-							if (connection.getContentType().startsWith("text/html")) {
+							if (connection.getContentType().startsWith(
+									"text/html")) {
 								System.out.println(connection.getContentType());
 
 								BufferedReader in = new BufferedReader(
@@ -68,40 +67,54 @@ public class TitleReader extends DefaultPlugin {
 									sb.append(inputLine);
 
 								DefaultHttpClient httpclient = new DefaultHttpClient();
-								HttpPost post = new HttpPost("http://snipr.com/site/getsnip");
-							    
-								
-								List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-						        nvps.add(new BasicNameValuePair("sniplink", url.toString()));
-						        nvps.add(new BasicNameValuePair("snipuser", "mex"));
-						        nvps.add(new BasicNameValuePair("snipapi", "b23ff81382e8ff92307f4c56951f2815"));
-						        nvps.add(new BasicNameValuePair("snipnick", ""));
-						        nvps.add(new BasicNameValuePair("sniptitle", ""));
-						        nvps.add(new BasicNameValuePair("snipowner", ""));
-						        nvps.add(new BasicNameValuePair("snipformat", "simple"));
-						        nvps.add(new BasicNameValuePair("snippk", ""));
-						        
-						        post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-								
-						        HttpResponse response = httpclient.execute(post);
-						        HttpEntity entity = response.getEntity();
-						        
-						        
+								HttpPost post = new HttpPost(
+										"http://snipr.com/site/getsnip");
+
+								List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+								nvps.add(new BasicNameValuePair("sniplink", url
+										.toString()));
+								nvps.add(new BasicNameValuePair("snipuser",
+										"mex"));
+								nvps.add(new BasicNameValuePair("snipapi",
+										"b23ff81382e8ff92307f4c56951f2815"));
+								nvps
+										.add(new BasicNameValuePair("snipnick",
+												""));
+								nvps
+										.add(new BasicNameValuePair(
+												"sniptitle", ""));
+								nvps
+										.add(new BasicNameValuePair(
+												"snipowner", ""));
+								nvps.add(new BasicNameValuePair("snipformat",
+										"simple"));
+								nvps.add(new BasicNameValuePair("snippk", ""));
+
+								post.setEntity(new UrlEncodedFormEntity(nvps,
+										HTTP.UTF_8));
+
+								HttpResponse response = httpclient
+										.execute(post);
+								HttpEntity entity = response.getEntity();
+
 								BufferedReader in2 = new BufferedReader(
-										new InputStreamReader(entity.getContent()));
+										new InputStreamReader(entity
+												.getContent()));
 
 								String inputLine2;
 								StringBuilder sb2 = new StringBuilder();
 
 								while ((inputLine2 = in2.readLine()) != null)
 									sb2.append(inputLine2);
-						        
-						        System.out.println(sb2);
-								
+
+								System.out.println(sb2);
+
 								Matcher m = p.matcher(sb);
 								if (m.find()) {
-									PluggableBot.Message(channel, sb2 + " : " +  m.group(1));
-									System.out.println(sb2 + " : " +  m.group(1));
+									bot.Message(channel, sb2 + " : "
+											+ m.group(1));
+									System.out
+											.println(sb2 + " : " + m.group(1));
 								}
 							}
 
@@ -111,10 +124,10 @@ public class TitleReader extends DefaultPlugin {
 					} catch (IOException e) {
 					} finally {
 					}
-				
+
 			}
 		};
-		
+
 		new Thread(r).start();
 	}
 
