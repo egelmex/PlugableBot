@@ -5,6 +5,7 @@
 package Markov2;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
@@ -30,7 +31,7 @@ public class MarkovDatabase implements Runnable {
     
 //    private final ConcurrentLinkedQueue<MarkovNode> queue = new ConcurrentLinkedQueue<MarkovNode>();
 
-    public MarkovDatabase(LinkedBlockingQueue<MarkovNode> saveQueue) {
+    public MarkovDatabase() {
 //        try {
 //            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Defragging Database");
 //            Defragment.defrag("Markov2.db4o");
@@ -39,14 +40,15 @@ public class MarkovDatabase implements Runnable {
 //            Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 
-        this.saveQueue = saveQueue;
         Db4o.configure().automaticShutDown(false);
         // set up indexing
         Db4o.configure().objectClass(MarkovNode.class).objectField("word").indexed(true);
+        Db4o.configure().objectClass(MarkovLink.class).objectField("from").indexed(true);
+        Db4o.configure().objectClass(MarkovLink.class).objectField("to").indexed(true);
         // set it up to update the lists properly
-        Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
+        //Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
         // and activate the lists far enough
-        Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(2);
+        //Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(2);
         database = Db4o.openFile("Markov2.db4o");
         populate();
         //ex = new MarkovExplorer(cache);
@@ -67,6 +69,8 @@ public class MarkovDatabase implements Runnable {
             MarkovNode end = new MarkovNode("]");
             database.set(start);
             database.set(end);
+            MarkovLink link = new MarkovLink(start, end);
+            database.set(link);
         } else {
         }
         Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO, "Loading done");
@@ -81,45 +85,33 @@ public class MarkovDatabase implements Runnable {
         // loop through until we hit the end
         for (int i = 0; i < MAX_SENTANCE_LENGTH && !current.getWord().equals("]"); i++) {
             // get a random next node
-            MarkovNode newNode = current.GetRandomNode();
-            // if its null we need to add a new join to the end
-            if (newNode == null) {
-                MarkovNode end = getNode("]");
-                current.AddChild(end);
-                try {
-                    saveQueue.put(current);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MarkovDatabase.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                newNode = end;
-            }
+            MarkovNode newNode = getRandomNode(current);
+       
             current = newNode;
             // append the word at the new nodes
             sb.append(current.getWord());
             // append a space
             sb.append(" ");
+            Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "sentance = " + sb);
         }
         // return the whole string
         Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Generating End");
         return sb.toString().replace("]", " ").trim();
     }
 
-    public void newNode(MarkovNode n)
-    {
-//        cache.put(n.getWord(), n);
+    public MarkovNode getRandomNode(MarkovNode current) {
+    	ObjectSet<MarkovLink> links = database.get(new MarkovLink(current, null));
+    	return links.get(new Random().nextInt(links.size())).getTo();
+    	
     }
+    
 
     public int[] getStats() {
         int ret[] = {0, 0};
         ObjectSet<MarkovNode> result = database.get(MarkovNode.class);
         
         ret[0] = result.size();
-        //ObjectSet<MarkovNode> query = database.get(new MarkovNode(null, false));
-        //ret[0] = query.size();
-        //for (MarkovNode n : query) {
-//        for (MarkovNode n : cache.values()) {
-//            ret[1] += n.getConnectionCount();
-//        }
+
         return ret;
     }
 
@@ -128,19 +120,6 @@ public class MarkovDatabase implements Runnable {
     }
 
     public MarkovNode getNode(String word) {
-//        if (cache.containsKey(word)) {
-//            return cache.get(word);
-//        } else {
-//            return null;
-////            ObjectSet<MarkovNode> query = database.get(new MarkovNode(word, true));
-////            if (query.size() == 0) {
-////                return null;
-////            } else {
-////                MarkovNode n = query.get(0);
-////                cache.put(word, n);
-////                return n;
-////            }
-//        }
     	
 		ObjectSet<MarkovNode> query = database.get(new MarkovNode(word));
 		if (query.size() == 0) {
@@ -149,6 +128,25 @@ public class MarkovDatabase implements Runnable {
 			MarkovNode n = query.get(0);
 			return n;
 		}
+    }
+    
+    public MarkovLink getLink(MarkovLink link) {
+    	
+		ObjectSet<MarkovLink> query = database.get(link);
+		if (query.size() == 0) {
+			return null;
+		} else {
+			MarkovLink n = query.get(0);
+			return n;
+		}
+    }
+    
+    public void add(MarkovLink link) {
+    	database.set(link);
+    }
+    
+    public void add (MarkovNode node ){
+    	database.set(node);
     }
 
     public void run() {

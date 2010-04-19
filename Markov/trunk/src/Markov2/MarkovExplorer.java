@@ -32,20 +32,20 @@ public class MarkovExplorer {
 	
     public String index() {
     	String output = "";
-    	List<MarkovNode> nodes = cache.get("[").getChildren();
-    	for (MarkovNode node : nodes) {
-    		output += node.getWord() + "\n";
-    	}
-    	
+//    	//List<MarkovNode> nodes = cache.get("[").getChildren();
+//    	for (MarkovNode node : nodes) {
+//    		output += node.getWord() + "\n";
+//    	}
+//    	
         return  output;
     }
     
     public String get(String word) {
     	String output = "";
-    	List<MarkovNode> nodes = cache.get(word).getChildren();
-    	for (MarkovNode node : nodes) {
-    		output += node.getWord() + "\n";
-    	}
+//    	List<MarkovNode> nodes = cache.get(word).getChildren();
+//    	for (MarkovNode node : nodes) {
+//    		output += node.getWord() + "\n";
+//    	}
     	
         return  output;
     }

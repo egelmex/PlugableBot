@@ -17,7 +17,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class MarkovString implements Runnable {
 
     private LinkedBlockingQueue<String> learnQueue;
-    private LinkedBlockingQueue<MarkovNode> saveQueue;
     private MarkovDatabase db;
     private boolean isShuttingDown = false;
 
@@ -36,10 +35,8 @@ public class MarkovString implements Runnable {
     private Pattern p = Pattern.compile(REGEX);
 
     public MarkovString(LinkedBlockingQueue<String> learnQueue,
-            LinkedBlockingQueue<MarkovNode> saveQueue,
             MarkovDatabase db) {
         this.learnQueue = learnQueue;
-        this.saveQueue = saveQueue;
         this.db = db;
     }
 
@@ -67,24 +64,22 @@ public class MarkovString implements Runnable {
             if (query == null) {
                 // if we dont have it, add it
                 n = new MarkovNode(word);
-                try {
-                    db.newNode(n);
-                    saveQueue.put(n);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    db.add(n);
 
             } else {
                 n = query;
             }
 
             // add to the parent node
-            parent.AddChild(n);
-            try {
-                saveQueue.put(parent);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
+            MarkovLink link = db.getLink(new MarkovLink(parent, n));
+            
+            if (link == null) {
+            	link = new MarkovLink(parent, n);
+            	db.add(link);
+            } else {
+            	link.setWeight(link.getWeight() + 1);
             }
+            
             // move to the next node
             parent = n;
         }
@@ -92,11 +87,13 @@ public class MarkovString implements Runnable {
         // not sure why this'd ever be null ...
         if (parent != null) {
             // add the end marker at the end
-            parent.AddChild(db.getNode("]"));
-            try {
-                saveQueue.put(parent);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MarkovString.class.getName()).log(Level.SEVERE, null, ex);
+        	MarkovNode end = db.getNode("]");
+        	MarkovLink link = db.getLink(new MarkovLink(parent, end));
+            if (link == null) {
+            	link = new MarkovLink(parent, end);
+            	db.add(link);
+            } else {
+            	link.setWeight(link.getWeight() + 1);
             }
         }
         Logger.getLogger(MarkovString.class.getName()).log(Level.INFO, "Learning End");

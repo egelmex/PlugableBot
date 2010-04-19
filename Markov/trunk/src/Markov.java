@@ -30,10 +30,9 @@ import Markov2.MarkovString;
 public class Markov extends DefaultPlugin {
 
 	private static final LinkedBlockingQueue<String> learnQueue = new LinkedBlockingQueue<String>();
-	private static final LinkedBlockingQueue<MarkovNode> saveQueue = new LinkedBlockingQueue<MarkovNode>();
-	private static final MarkovDatabase db = new MarkovDatabase(saveQueue);
+	private static final MarkovDatabase db = new MarkovDatabase();
 	private static final MarkovString m = new MarkovString(learnQueue,
-			saveQueue, db);
+			 db);
 	private IgnoreLib ignore = new IgnoreLib(this, "ignore");
 	private IgnoreLib ignoreLearn = new IgnoreLib(this, "learn");
 	private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
@@ -78,8 +77,7 @@ public class Markov extends DefaultPlugin {
 						+ stats[0] + " words and " + stats[1]
 						+ " word associations. My dictionary file is "
 						+ String.format("%1$.2f", size) + " MB. Learn Queue: "
-						+ learnQueue.size() + ", Save Queue: "
-						+ saveQueue.size());
+						+ learnQueue.size() );
 			} else {
 				if (!ignoreLearn.ignore(sender)) {
 					m.Learn(message);
@@ -137,9 +135,6 @@ public class Markov extends DefaultPlugin {
 			}
 
 			db.shutdown();
-			if (saveQueue.peek() == null) {
-				saveQueue.put(new MarkovNode("", true));
-			}
 
 			executor.awaitTermination(10, TimeUnit.MINUTES);
 
