@@ -53,6 +53,7 @@
 
 		<ant dir="PieSpy/trunk" target="jar" />
 		<copy file="PieSpy/trunk/jar/PieSpy.jar" todir="output/plugins" />
+		
 
 		<copy file="lib/pircbot.jar" todir="output/lib" />
 		<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
@@ -66,8 +67,8 @@
 		<copy file="lib/imap.jar" todir="output/lib" />
 		<copy file="lib/mailapi.jar" todir="output/lib" />
 		<copy file="lib/dsn.jar" todir="output/lib" />
-
-	</target>
+		
+	</target> 
 
 	<target name="run">
 		<java jar="output/PluggableBot.jar" fork="true" dir="output" />
