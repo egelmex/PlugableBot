@@ -16,10 +16,6 @@ $Id: TestMain.java,v 1.5 2004/05/11 15:07:04 pjm2 Exp $
 
 package org.jibble.socnet;
 
-import java.util.*;
-import java.io.*;
-
-import AndrewCassidy.PluggableBot.Plugin;
 
 public class TestMain {
     

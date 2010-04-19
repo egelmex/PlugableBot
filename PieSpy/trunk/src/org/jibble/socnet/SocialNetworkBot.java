@@ -29,6 +29,8 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
+import PieSpy.PieSpy;
+
 /**
  * SocialNetworkBot extends PircBot to connect to IRC. It maintains a collection
  * of Graph objects - one per channel.
@@ -36,10 +38,12 @@ import org.jibble.pircbot.User;
 public class SocialNetworkBot extends PircBot {
 
 	public static final String VERSION = "PieSpy 0.4.0";
+	private PieSpy pieSpy;
+	
 
-	public SocialNetworkBot(Configuration config) throws IOException {
+	public SocialNetworkBot(Configuration config, PieSpy pieSpy) throws IOException {
 		this.config = config;
-
+		this.pieSpy = pieSpy;
 		// Prevent construction if the output directory does not exist.
 		if (!config.outputDirectory.exists()
 				|| !config.outputDirectory.isDirectory()) {
@@ -83,7 +87,7 @@ public class SocialNetworkBot extends PircBot {
 
 		if (messageLc.equals("stats")) {
 			// Tell the user about the Graphs currently stored.
-			Iterator keyIt = _graphs.keySet().iterator();
+			Iterator<String> keyIt = _graphs.keySet().iterator();
 			while (keyIt.hasNext()) {
 				String key = (String) keyIt.next();
 				Graph graph = (Graph) _graphs.get(key);
@@ -105,7 +109,7 @@ public class SocialNetworkBot extends PircBot {
 			// Add a user to the IgnoreSet and remove them from all Graphs.
 			String nick = message.substring(7);
 			config.ignoreSet.add(nick.toLowerCase());
-			Iterator graphIt = _graphs.values().iterator();
+			Iterator<Graph> graphIt = _graphs.values().iterator();
 			while (graphIt.hasNext()) {
 				Graph g = (Graph) graphIt.next();
 				boolean changed = g.removeNode(new Node(nick));
@@ -244,7 +248,7 @@ public class SocialNetworkBot extends PircBot {
 				graph = readGraph(key);
 			}
 			if (graph == null) {
-				graph = new Graph(channel, config);
+				graph = new Graph(channel, config, pieSpy);
 			}
 			_graphs.put(key, graph);
 		}

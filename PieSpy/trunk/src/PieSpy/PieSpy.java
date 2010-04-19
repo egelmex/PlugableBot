@@ -1,3 +1,4 @@
+package PieSpy;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,15 +18,12 @@ import org.jibble.socnet.Graph;
 import org.jibble.socnet.Node;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
 
 public class PieSpy extends DefaultPlugin {
 
 	private Map<String, Graph> _graphs = new HashMap<String, Graph>();
 	private Configuration config;
 
-	
-	
 	private static Properties defaults;
 
 	{
@@ -57,16 +55,22 @@ public class PieSpy extends DefaultPlugin {
 		defaults.setProperty("NodeRadius", "5");
 		defaults.setProperty("EdgeThreshold", "0");
 		defaults.setProperty("ShowEdges", "true");
-		defaults.setProperty("org.jibble.socnet.DirectAddressingInferenceHeuristic", "1");
-		defaults.setProperty("org.jibble.socnet.IndirectAddressingInferenceHeuristic", "0.3");
-		defaults.setProperty("org.jibble.socnet.BinarySequenceInferenceHeuristic", "1");
-		defaults.setProperty("org.jibble.socnet.AdjacencyInferenceHeuristic", "0");
+		defaults.setProperty(
+				"org.jibble.socnet.DirectAddressingInferenceHeuristic", "1");
+		defaults
+				.setProperty(
+						"org.jibble.socnet.IndirectAddressingInferenceHeuristic",
+						"0.3");
+		defaults.setProperty(
+				"org.jibble.socnet.BinarySequenceInferenceHeuristic", "1");
+		defaults.setProperty("org.jibble.socnet.AdjacencyInferenceHeuristic",
+				"0");
 		defaults.setProperty("org.jibble.socnet.KarmaInferenceHeuristic", "1");
-		
+
 	}
 
 	public PieSpy() {
-		System.setProperty("java.awt.headless", "true"); 
+		System.setProperty("java.awt.headless", "true");
 
 		try {
 			Properties p = new Properties(defaults);
@@ -85,19 +89,18 @@ public class PieSpy extends DefaultPlugin {
 			e.printStackTrace();
 			throw new IllegalStateException("Balls");
 		}
-		
-		
-		String[] chans = PluggableBot.getChans();
+
+		String[] chans = bot.getChans();
 		for (String chan : chans) {
 			Graph g = getGraph(chan);
-			
-			User[] users = PluggableBot.users(chan);
+
+			User[] users = bot.users(chan);
 			for (User u : users) {
 				Node n = new Node(u.getNick());
 				g.addNode(n);
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -117,7 +120,7 @@ public class PieSpy extends DefaultPlugin {
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
 		try {
-			//message = message.substring(config.password.length()).trim();
+			// message = message.substring(config.password.length()).trim();
 			String messageLc = message.toLowerCase();
 
 			if (messageLc.equals("stats")) {
@@ -127,7 +130,7 @@ public class PieSpy extends DefaultPlugin {
 				while (keyIt.hasNext()) {
 					String key = (String) keyIt.next();
 					Graph graph = (Graph) _graphs.get(key);
-					PluggableBot.Message(sender, key + ": " + graph.toString());
+					bot.Message(sender, key + ": " + graph.toString());
 				}
 			} else if (messageLc.startsWith("ignore ")
 					|| messageLc.startsWith("remove ")) {
@@ -154,34 +157,32 @@ public class PieSpy extends DefaultPlugin {
 						try {
 							File file = (File) graph.getLastFile();
 							if (file != null) {
-								PluggableBot
+								bot
 										.Message(
 												sender,
 												"Trying to send \""
 														+ file.getName()
 														+ "\"... If you have difficultly in recieving this file via DCC, there may be a firewall between us.");
-								PluggableBot.sendFileDcc(file, sender, 120000);
+								bot.sendFileDcc(file, sender, 120000);
 							} else {
-								PluggableBot.Message(sender,
+								bot.Message(sender,
 										"I have not generated any images for "
 												+ channel + " yet.");
 							}
 						} catch (Exception e) {
-							PluggableBot.Message(sender, "Sorry, mate: "
-									+ e.toString());
+							bot.Message(sender, "Sorry, mate: " + e.toString());
 						}
 					} else {
-						PluggableBot
+						bot
 								.Message(sender,
 										"Sorry, I don't know much about that channel yet.");
 					}
 				} else {
-					PluggableBot.Message(sender,
+					bot.Message(sender,
 							"Example of correct use is \"draw <#channel>\"");
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -232,7 +233,7 @@ public class PieSpy extends DefaultPlugin {
 				graph = readGraph(key);
 			}
 			if (graph == null) {
-				graph = new Graph(channel, config);
+				graph = new Graph(channel, config, this);
 			}
 			_graphs.put(key, graph);
 		}
@@ -304,5 +305,5 @@ public class PieSpy extends DefaultPlugin {
 		p.onMessage("#a", "edd", "Pete", "test2", "mmeh");
 		System.out.println(p.getGraph("#a"));
 	}
-	
+
 }
