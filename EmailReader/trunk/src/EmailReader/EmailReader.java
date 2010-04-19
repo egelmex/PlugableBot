@@ -1,3 +1,4 @@
+package EmailReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,8 +9,8 @@ import java.util.List;
 import java.util.Properties;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
+import AndrewCassidy.PluggableBot.PluggableBot;
 
-import com.eleventytwo.EmailReader.Connection;
 
 public class EmailReader extends DefaultPlugin {
 
@@ -18,8 +19,6 @@ public class EmailReader extends DefaultPlugin {
 	private String location = "emailreader";
 
 	public EmailReader() {
-		String username = "sneakypetebunix";
-		String password = "reeDee9a";
 		
 		File file = new File(location);
 		for (File f : file.listFiles()) {
@@ -29,7 +28,7 @@ public class EmailReader extends DefaultPlugin {
 						FileInputStream fis = new FileInputStream(f);
 						Properties p = new Properties();
 						p.load(fis);
-						Connection c = new Connection(p); 
+						Connection c = new Connection(p, this); 
 						connections.add(c);
 					} catch (Exception e) {
 					}
@@ -42,6 +41,11 @@ public class EmailReader extends DefaultPlugin {
 		for (Connection x : connections) {
 			new Thread(x).start();
 		}
+	}
+
+	@Override
+	public void setBot(PluggableBot bot) {
+		super.setBot(bot);
 	}
 
 	@Override
