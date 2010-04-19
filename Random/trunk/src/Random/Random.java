@@ -1,3 +1,4 @@
+package Random;
 /*
  * Random.java
  *
@@ -67,7 +68,7 @@ public class Random extends DefaultPlugin
 						random = getRand(a, b);
 					}
 					else {
-						PluggableBot.Message(channel, sender + ": Nu.");
+						bot.Message(channel, sender + ": Nu.");
 						return;
 					}
 				}
@@ -75,7 +76,7 @@ public class Random extends DefaultPlugin
 			else {
 				random = mersenneRandom.extractNumber();
 			}
-			PluggableBot.Message(channel, sender + ": Your random number is: " + random);
+			bot.Message(channel, sender + ": Your random number is: " + random);
         }
 	}
 

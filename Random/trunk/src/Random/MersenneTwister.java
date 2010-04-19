@@ -1,3 +1,4 @@
+package Random;
 /**
  * RNG ftw :D
  * 
