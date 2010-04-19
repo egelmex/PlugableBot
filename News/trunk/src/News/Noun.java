@@ -1,3 +1,4 @@
+package News;
 
 /**
  * Noun class

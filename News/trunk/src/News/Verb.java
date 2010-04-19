@@ -1,3 +1,4 @@
+package News;
 /**
  * Verb class
  * @author Murmew

@@ -1,3 +1,4 @@
+package News;
 /*
  * News.java
  *
@@ -132,7 +133,7 @@ public class News extends DefaultPlugin {
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 		if (message.startsWith("!news")) {
-			PluggableBot.Message(channel, sender + ": " + getHeadline());
+			bot.Message(channel, sender + ": " + getHeadline());
 		}
 	}
 
