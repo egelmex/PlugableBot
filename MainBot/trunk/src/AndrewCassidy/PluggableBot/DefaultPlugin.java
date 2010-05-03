@@ -56,4 +56,10 @@ public abstract class DefaultPlugin implements Plugin {
 		this.bot = bot;
 	}
 
+	@Override
+	public String getAdminHelp() {
+		return "There is no Admin Help for this plugin... :(";
+	}
+
+	
 }
