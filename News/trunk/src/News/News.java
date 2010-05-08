@@ -1,6 +1,24 @@
+/*	
+ * Copyright 2010 Murmew
+ * Copyright 2010 Mex (ellism88@gmail.com)
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package News;
+
 /*
- * News.java
  *
  */
 
@@ -12,7 +30,7 @@ import AndrewCassidy.PluggableBot.DefaultPlugin;
 import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
- * 
+ * Plugin to provide times style headlines.
  * @author Murmew
  * @author Mex
  */
@@ -29,7 +47,7 @@ public class News extends DefaultPlugin {
 	public News() {
 		loadWords();
 	}
-	
+
 	private void loadWords() {
 		try {
 			FileReader fr = new FileReader("News");
@@ -52,7 +70,8 @@ public class News extends DefaultPlugin {
 
 						nouns.add(new Noun(words[1], p, s));
 					} else if (words[0].equals("phrase")) {
-						phrases.add(new Phrase(words[1], words[2],words[3],words[4]));
+						phrases.add(new Phrase(words[1], words[2], words[3],
+								words[4]));
 					} else if (words[0].equals("object")) {
 						objects.add(words[1]);
 					}
@@ -70,8 +89,6 @@ public class News extends DefaultPlugin {
 		System.out.println("---------phrases" + phrases.size());
 		System.out.println("---------objects" + objects.size());
 	}
-
-
 
 	/**
 	 * Return a random string given an array
@@ -98,7 +115,7 @@ public class News extends DefaultPlugin {
 	private String match_verb_and_tense(Verb verb, Phrase phrase) {
 		if (verb.tense == Tense.present) {
 			return phrase.present;
-		} else if (verb.tense  == Tense.past) {
+		} else if (verb.tense == Tense.past) {
 			return phrase.past;
 		} else if (verb.tense == Tense.active) {
 			return phrase.active;
@@ -107,7 +124,8 @@ public class News extends DefaultPlugin {
 	}
 
 	/**
-	 *  Returns a Daily Mail Headline as a string
+	 * Returns a Daily Mail Headline as a string
+	 * 
 	 * @return
 	 */
 	public String getHeadline() {
@@ -130,6 +148,7 @@ public class News extends DefaultPlugin {
 		return sentence.toUpperCase() + "?";
 	}
 
+	@Override
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 		if (message.startsWith("!news")) {
@@ -137,6 +156,7 @@ public class News extends DefaultPlugin {
 		}
 	}
 
+	@Override
 	public String getHelp() {
 		return "Type !news to get a random news headline!";
 	}
