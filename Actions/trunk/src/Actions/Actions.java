@@ -1,12 +1,23 @@
-package Actions;
-/*
- * ActionsPlugin.java
+/*	
+ * Copyright 2007 andee
+ * Copyright 2010 Mex (ellism88@gmail.com)
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- * Created on 09 October 2007, 20:53
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package Actions;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -21,8 +32,11 @@ import java.util.concurrent.TimeUnit;
 import AndrewCassidy.PluggableBot.DefaultPlugin;
 
 /**
+ * Actions plugin. This plugin provides retorts to users when the Action the
+ * bot.
  * 
- * @author andee, Mex (ellism88@gmail.com)
+ * @author andee 09 October 2007
+ * @author Mex (ellism88@gmail.com)
  */
 public class Actions extends DefaultPlugin {
 
@@ -37,6 +51,7 @@ public class Actions extends DefaultPlugin {
 	private ThreadPoolExecutor pool = new ThreadPoolExecutor(3, 5, 60,
 			TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
 
+	@Override
 	public void onAction(String sender, String login, String hostname,
 			String target, String action) {
 		if (action.toLowerCase().indexOf(bot.Nick().toLowerCase()) > -1) {

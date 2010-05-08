@@ -1,11 +1,20 @@
 /*
- * PluggableBot.java
- * An implementation of a PircBot with loadable module support.
+ * Copyright	Mex (ellism88@gmail.com)	2010
+ * Copyright	Andee 		2007
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- * Created on 09 October 2007, 14:04
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package AndrewCassidy.PluggableBot;
 
 import java.io.File;
@@ -23,8 +32,9 @@ import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
 /**
+ * An implementation of a PircBot with loadable module support.
  * 
- * @author AndyC
+ * @author AndyC 09 October 2007
  * @author M.Ellis (ellism88@gmail.com)
  */
 public class PluggableBot extends PircBot {
@@ -40,8 +50,12 @@ public class PluggableBot extends PircBot {
 
 	private static final String PLUGIN_DIR = "plugins";
 
-
-
+	/**
+	 * Main method. Used to star up the plugin
+	 * 
+	 * @param args
+	 *            takes no options.
+	 */
 	public static void main(String[] args) {
 
 		settings = new Settings();
@@ -60,11 +74,24 @@ public class PluggableBot extends PircBot {
 		b.identify(settings.getNickservPassword());
 	}
 
+	/**
+	 * Load a list of plugins. Currently used to start up the bot.
+	 * 
+	 * @param plugins
+	 *            A list of plugins to load.
+	 */
 	public void loadPlugins(String[] plugins) {
 		for (String plugin : plugins)
 			loadPlugin(plugin);
 	}
 
+	/**
+	 * Load a singular plugin. Currently used internaly to laod plugins. But
+	 * could be used if a plugin wanted to load a plugin.
+	 * 
+	 * @param name
+	 *            The Name of the plugin.
+	 */
 	public void loadPlugin(String name) {
 		try {
 			log.log(Level.INFO, "MainBot: attempting to load " + name);
@@ -89,7 +116,16 @@ public class PluggableBot extends PircBot {
 
 	}
 
-	public void addPlugin(String name, Plugin p) {
+	/**
+	 * Add a plugin to the list of loaded plugins.
+	 * 
+	 * @param name
+	 *            Name of the plugin being added. This is the name you will need
+	 *            to use to remove the plugin.
+	 * @param p
+	 *            The plugin that is being added
+	 */
+	protected void addPlugin(String name, Plugin p) {
 		loadedPlugins.put(name, p);
 		p.setBot(b);
 	}
@@ -242,8 +278,13 @@ public class PluggableBot extends PircBot {
 		b.sendAction(target, action);
 	}
 
-	public void Message(String target, String action) {
-		b.sendMessage(target, action);
+	public void Message(String target, String message) {
+		b.sendMessage(target, message);
+	}
+
+	public void Message(String channel, String target, String message) {
+		b.sendMessage(channel, new StringBuilder().append(target).append(": ")
+				.append(message).toString());
 	}
 
 	private void cleanup() {
@@ -263,7 +304,7 @@ public class PluggableBot extends PircBot {
 	public void sendFileDcc(File file, String nick, int timeout) {
 		b.dccSendFile(file, nick, timeout);
 	}
-	
+
 	public String[] getChans() {
 		return b.getChannels();
 	}

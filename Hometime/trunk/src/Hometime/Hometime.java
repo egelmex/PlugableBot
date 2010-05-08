@@ -1,12 +1,23 @@
-package Hometime;
-/*
- * Hometime.java
+/*	
+ * Copyright 2007 andee
+ * Copyright 2010 Mex (ellism88@gmail.com)
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- * Created on 11 November 2007, 19:37
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package Hometime;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -19,14 +30,18 @@ import java.util.Map;
 import AndrewCassidy.PluggableBot.DefaultPlugin;
 
 /**
+ * Hometime plugin.., Simply tells you how long till you have to go home
  * 
- * @author Administrator
+ * @author Andee 11 November 2007
+ * @author Mex 2010
  */
 public class Hometime extends DefaultPlugin {
 
 	private HashMap<String, String> hometimes = new HashMap<String, String>();
 
-	/** Creates a new instance of Hometime */
+	/**
+	 * Creates a new instance of Hometime
+	 **/
 	public Hometime() {
 		try {
 			FileReader fr = new FileReader("Hometime");
@@ -66,6 +81,7 @@ public class Hometime extends DefaultPlugin {
 		}
 	}
 
+	@Override
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 		if (message.startsWith("!hometime")) {
@@ -142,24 +158,23 @@ public class Hometime extends DefaultPlugin {
 					int min = Integer.parseInt(p[1].replace('-', '0'));
 
 					if (hr > 23 || hr < 0 || min < 0 || min > 59) {
-						bot.Message(channel, "Invalid time : "
-								+ newtime);
+						bot.Message(channel, "Invalid time : " + newtime);
 					} else {
 
 						hometimes.put(sender, newtime);
 						save();
 					}
 				} catch (NumberFormatException e) {
-					bot.Message(channel,
-							"Generic error saving hometime : " + newtime);
+					bot.Message(channel, "Generic error saving hometime : "
+							+ newtime);
 				}
 			} else {
-				bot.Message(channel,
-						"Time must be in the format HH:MM");
+				bot.Message(channel, "Time must be in the format HH:MM");
 			}
 		}
 	}
 
+	@Override
 	public String getHelp() {
 		return "Call !hometime and i will tell you how long until the next home time. To set your hometime, use !sethometime HH:MM";
 	}

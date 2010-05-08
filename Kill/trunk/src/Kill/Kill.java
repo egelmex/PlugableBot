@@ -1,4 +1,23 @@
+/*	
+ * Copyright 2007 andee
+ * Copyright 2009 Mex (ellism88@gmail.com)
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package Kill;
+
 /*
  * KillPlugin.java
  *
@@ -8,7 +27,6 @@ package Kill;
  * and open the template in the editor.
  */
 import java.util.List;
-import java.util.Random;
 
 import AndrewCassidy.PluggableBot.DefaultPlugin;
 
@@ -17,14 +35,16 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
 /**
+ * Plugin to let you !kill people
  * 
- * @author AndyC
+ * @author AndyC 2007
+ * @author Martin Ellis (ellism88@gmail.com) 2009
  */
 public class Kill extends DefaultPlugin {
 
 	private ObjectContainer database;
 	private String def = "stabs %NAME with a elongated frozen eel";
-	private Random rng = new Random();
+	
 
 	/** Creates a new instance of KillPlugin */
 	public Kill() {
@@ -43,11 +63,9 @@ public class Kill extends DefaultPlugin {
 
 	private void kill(String sender, String message, String channel) {
 		String killString = def;
-		List<String> listOfUserKills = getKillList(sender).getKills();
-		if (listOfUserKills.size() > 0) {
-			killString = listOfUserKills.get(rng
-					.nextInt(listOfUserKills.size()));
-		}
+
+		String randomKill = getKillList(sender).getRandomKill();
+		def = randomKill == null ? def : randomKill;
 		String target = message.substring(6).trim();
 		if (target.toLowerCase().equals(bot.Nick().toLowerCase()))
 			target = sender;
@@ -87,17 +105,16 @@ public class Kill extends DefaultPlugin {
 				List<String> listOfUserKills = killer.getKills();
 				if (listOfUserKills.size() > remove) {
 					String removed = listOfUserKills.remove(remove);
-					bot.Message(sender, "kill '" + removed
-							+ "' was removed");
+					bot.Message(sender, "kill '" + removed + "' was removed");
 					database.set(killer);
 					database.commit();
 				}
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
+	@Override
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 		if (message.startsWith("!kill")) {
@@ -111,6 +128,7 @@ public class Kill extends DefaultPlugin {
 		}
 	}
 
+	@Override
 	public String getHelp() {
 		return "This allows users to order me to kill other users, by using !kill <username>. To customise your kill message, use !addkill, followed by the attack. use %NAME as a placeholder for a user's nick. !listkills, !removekill <number>";
 	}
@@ -119,6 +137,7 @@ public class Kill extends DefaultPlugin {
 		database = Db4o.openFile("Kill.db4o");
 	}
 
+	@Override
 	public void onPrivateMessage(String sender, String login, String hostname,
 			String message) {
 		if (message.startsWith("!addkill")) {
@@ -130,6 +149,7 @@ public class Kill extends DefaultPlugin {
 		}
 	}
 
+	@Override
 	public void unload() {
 		database.close();
 	}
