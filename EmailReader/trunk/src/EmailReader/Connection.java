@@ -1,3 +1,21 @@
+/*	
+ * Copyright 2010 Murmew
+ * Copyright 2010 Mex (ellism88@gmail.com)
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package EmailReader;
 
 import java.util.Properties;
@@ -12,7 +30,7 @@ public class Connection implements Runnable {
 
 	java.util.Properties props;
 	EmailReader reader;
-	
+
 	private boolean running = true;
 	private static final int MAX_RETRIES = 3;
 
@@ -21,12 +39,11 @@ public class Connection implements Runnable {
 		this.props = props;
 		this.reader = reader;
 	}
-	
 
 	public void kill() {
 		running = false;
 	}
-	
+
 	@Override
 	public void run() {
 		int retries = 0;
@@ -41,21 +58,23 @@ public class Connection implements Runnable {
 					String username = props.getProperty("username").trim();
 					String password = props.getProperty("password").trim();
 					String server = props.getProperty("server").trim();
-					
-						java.security.Security
-								.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-						java.util.Properties props = new java.util.Properties();
-						props.setProperty("mail.imap.socketFactory.class",
-								"javax.net.ssl.SSLSocketFactory");
-						props.setProperty("mail.imap.socketFactory.fallback", "false");
-						props.setProperty("mail.imap.socketFactory.port", port);
 
-						javax.mail.Session session = javax.mail.Session.getInstance(props);
-						store = session.getStore(new javax.mail.URLName(
-								"imap://" + username + ":" + password + "@" + server + "/"));
-						store.connect();
-						System.out.println("connected to store.");
-						ok = true;
+					java.security.Security
+							.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+					java.util.Properties props = new java.util.Properties();
+					props.setProperty("mail.imap.socketFactory.class",
+							"javax.net.ssl.SSLSocketFactory");
+					props.setProperty("mail.imap.socketFactory.fallback",
+							"false");
+					props.setProperty("mail.imap.socketFactory.port", port);
+
+					javax.mail.Session session = javax.mail.Session
+							.getInstance(props);
+					store = session.getStore(new javax.mail.URLName("imap://"
+							+ username + ":" + password + "@" + server + "/"));
+					store.connect();
+					System.out.println("connected to store.");
+					ok = true;
 				} catch (NoSuchProviderException e1) {
 					e1.printStackTrace();
 				} catch (MessagingException e1) {
@@ -104,7 +123,7 @@ public class Connection implements Runnable {
 					reader.bot.Message(chan.trim(), "email: "
 							+ message[i].getSubject());
 				}
-				 message[i].setFlag(Flags.Flag.DELETED, true);
+				message[i].setFlag(Flags.Flag.DELETED, true);
 			}
 
 			folder.close(true);

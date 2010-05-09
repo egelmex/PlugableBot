@@ -1,5 +1,5 @@
 /*	
- * Copyright 2010 Murmew
+ * Copyright 2007 Andee
  * Copyright 2010 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
