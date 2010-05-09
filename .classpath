@@ -16,6 +16,7 @@
 	<classpathentry kind="src" path="Admin/trunk/src"/>
 	<classpathentry kind="src" path="News/trunk/src"/>
 	<classpathentry kind="src" path="Random/trunk/src"/>
+	<classpathentry kind="src" path="Google/src"/>
 	<classpathentry kind="lib" path="lib/db4o-6.4.54.11278-java5.jar"/>
 	<classpathentry kind="lib" path="lib/pircbot.jar"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-0.6.jar"/>
@@ -33,6 +34,7 @@
 	<classpathentry kind="lib" path="lib/ooweb-0.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/pygmy-core-ooweb.jar"/>
 	<classpathentry kind="lib" path="lib/pygmy-handlers.jar"/>
+	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

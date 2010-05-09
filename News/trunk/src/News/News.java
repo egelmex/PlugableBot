@@ -18,10 +18,6 @@
 
 package News;
 
-/*
- *
- */
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -31,6 +27,7 @@ import AndrewCassidy.PluggableBot.PluggableBot;
 
 /**
  * Plugin to provide times style headlines.
+ * 
  * @author Murmew
  * @author Mex
  */
