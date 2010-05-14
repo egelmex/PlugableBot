@@ -9,7 +9,8 @@
  */
 public abstract class SyntaxTreeNode {
         public OperatorNode Parent;
-        public abstract double Evaluate();
+        public abstract int Evaluate();
         public abstract boolean SubTreeSearch(SyntaxTreeNode node);
         public abstract SyntaxTreeNode DeepCopy();
+        public boolean IsValid() { return true; }
 }

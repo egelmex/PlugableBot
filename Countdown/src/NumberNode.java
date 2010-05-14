@@ -9,9 +9,9 @@
  */
 public class NumberNode extends SyntaxTreeNode
     {
-        public double Value;
+        public int Value;
 
-        public double Evaluate()
+        public int Evaluate()
         {
             return Value;
         }

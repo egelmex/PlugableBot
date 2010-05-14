@@ -12,9 +12,30 @@ public class OperatorNode extends SyntaxTreeNode {
         public int Type;
         public SyntaxTreeNode Left;
         public SyntaxTreeNode Right;
+        private boolean isValid = false;
 
-        public double Evaluate()
+        @Override
+        public boolean IsValid()
         {
+            return isValid;
+        }
+
+        public int Evaluate()
+        {
+            int left = Left.Evaluate();
+            int right = Right.Evaluate();
+
+            isValid = Left.IsValid() && Right.IsValid();
+            if (!isValid) return 0;
+
+            if (Type == 3)
+            {
+                isValid &= right != 0;
+                if (!isValid) return 0;
+                isValid &= left % right == 0;
+                if (!isValid) return 0;
+            } 
+
             switch (Type)
             {
                 case 0:

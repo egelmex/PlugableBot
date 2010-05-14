@@ -26,7 +26,7 @@ public class Countdown extends DefaultPlugin {
     private Integer target;
     private final Timer tim = new Timer();
     private String channel;
-    private Thread runningThread;
+    private AbstractSolver runningThread;
     private String lastPuzzle = null;
 
     private final TimerTask task = new TimerTask() {
@@ -35,130 +35,7 @@ public class Countdown extends DefaultPlugin {
         public void run() {
             GameRunning = false;
             bot.Message(channel, "Time's Up!");
-        }
-    };
-
-    private final Runnable calculate = new Runnable()
-    {
-        private ArrayList<NumberNode> GetLeaves(SyntaxTreeNode rootNode)
-        {
-            ArrayList<NumberNode> ret = new ArrayList<NumberNode>();
-            if (rootNode instanceof NumberNode)
-            {
-                ret.add((NumberNode)rootNode);
-            }
-            else
-            {
-                OperatorNode n = (OperatorNode)rootNode;
-
-                if (n.Left instanceof NumberNode)
-                    ret.add((NumberNode)n.Left);
-                else
-                    ret.addAll(GetLeaves(n.Left));
-
-                if (n.Right instanceof NumberNode)
-                    ret.add((NumberNode)n.Right);
-                else
-                    ret.addAll(GetLeaves(n.Right));
-            }
-
-            return ret;
-        }
-
-        public void run() {
-            LinkedList<SyntaxTreeNode> stateQueue = new LinkedList<SyntaxTreeNode>();
-
-            for (int num : numbersToUse)
-            {
-                NumberNode n = new NumberNode();
-                n.Parent = null;
-                n.Value = num;
-                stateQueue.addLast(n);
-            }
-            
-            int testCount = 1;
-
-            while (stateQueue.size() > 0)
-            {
-                SyntaxTreeNode currentResult = stateQueue.removeFirst();
-                
-                try
-                {
-                    if (currentResult.Evaluate() == target)
-                    {
-                        // ToDo
-                        lastResult = lastPuzzle + " : " + currentResult.toString();
-                        return;
-                    }
-                }
-                catch (Exception ex) { }
-
-                // Generate child states
-                ArrayList<NumberNode> leaves = GetLeaves(currentResult);
-
-                ArrayList<Integer> possibleNumbers = new ArrayList<Integer>(numbersToUse);
-
-                for (NumberNode leaf : leaves)
-                    possibleNumbers.remove((int)leaf.Value);
-
-                for (int i = 0; i < leaves.size(); i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        for (int k = 0; k < 2; k++)
-                        {
-                            for (int num : possibleNumbers)
-                            {
-                                SyntaxTreeNode tempSolution = currentResult.DeepCopy();
-                                ArrayList<NumberNode> tempLeaves = GetLeaves(tempSolution);
-
-                                NumberNode leafToReplace = tempLeaves.get(i);
-
-                                OperatorNode replacement = new OperatorNode();
-                                replacement.Type = j;
-
-                                if (leafToReplace.Parent == null)
-                                {
-                                    tempSolution = replacement;
-                                }
-                                else
-                                {
-                                    // parent left or right?
-                                    if (leafToReplace.Parent.Left == leafToReplace)
-                                    {
-                                        leafToReplace.Parent.Left = replacement;
-                                    }
-                                    else
-                                    {
-                                        leafToReplace.Parent.Right = replacement;
-                                    }
-                                }
-
-                                leafToReplace.Parent = replacement;
-                                if (k == 0)
-                                {
-                                    replacement.Left = leafToReplace;
-                                    replacement.Right = new NumberNode();
-                                    replacement.Right.Parent = null;
-                                    ((NumberNode)replacement.Right).Value = num;
-                                }
-                                else
-                                {
-                                    replacement.Right = leafToReplace;
-                                    replacement.Left = new NumberNode();
-                                    replacement.Left.Parent = null;
-                                    ((NumberNode)replacement.Left).Value = num;
-                                }
-
-                                stateQueue.addLast(tempSolution);
-                            }
-                        }
-                    }
-
-                }
-
-                testCount++;
-            }
+            tim.cancel();
         }
     };
 
@@ -207,8 +84,8 @@ public class Countdown extends DefaultPlugin {
 
                 tim.schedule(task, 30000);
 
-                runningThread = new Thread(calculate);
-                runningThread.start();
+                runningThread = new IterativeSolver();
+                runningThread.Solve(numbersToUse, target);
             }
         }
         else if (message.startsWith("!solution"))
