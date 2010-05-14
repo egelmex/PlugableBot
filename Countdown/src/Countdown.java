@@ -93,7 +93,7 @@ public class Countdown extends DefaultPlugin {
             {
                 super.bot.Message(channel, "A game is currently in progress.");
             }
-            else if (runningThread.GetResult() == null)
+            else if (runningThread == null || runningThread.GetResult() == null)
             {
                 super.bot.Message(channel, "No games played.");
             }
