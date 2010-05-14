@@ -84,7 +84,7 @@ public class Countdown extends DefaultPlugin {
 
                 tim.schedule(task, 30000);
 
-                runningThread = new IterativeSolver();
+                runningThread = new RandomiserSolver();
                 runningThread.Solve(numbersToUse, target);
             }
         }
