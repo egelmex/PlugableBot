@@ -19,7 +19,7 @@ public class NumberNode extends SyntaxTreeNode
     @Override
         public String toString()
         {
-            return Double.toString(Value);
+            return Integer.toString(Value);
         }
 
         public boolean SubTreeSearch(SyntaxTreeNode node)
