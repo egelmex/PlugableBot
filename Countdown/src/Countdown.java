@@ -19,25 +19,14 @@ import java.util.TimerTask;
 public class Countdown extends DefaultPlugin {
 
     private boolean GameRunning = false;
-    private String lastResult = null;
     private static final Random rng = new Random();
     private Integer[] numbers = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75, 100};
     private ArrayList<Integer> numbersToUse;
     private Integer target;
-    private final Timer tim = new Timer();
+    private Timer tim = new Timer();
     private String channel;
     private AbstractSolver runningThread;
     private String lastPuzzle = null;
-
-    private final TimerTask task = new TimerTask() {
-
-        @Override
-        public void run() {
-            GameRunning = false;
-            bot.Message(channel, "Time's Up!");
-            tim.cancel();
-        }
-    };
 
     @Override
     public String getHelp() {
@@ -82,6 +71,17 @@ public class Countdown extends DefaultPlugin {
 
                 bot.Message(channel, lastPuzzle);
 
+                final String channame = channel;
+
+                TimerTask task = new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        GameRunning = false;
+                        bot.Message(channame, "Time's Up!");
+                    }
+                };
+                
                 tim.schedule(task, 30000);
 
                 runningThread = new RandomiserSolver();
@@ -94,13 +94,13 @@ public class Countdown extends DefaultPlugin {
             {
                 super.bot.Message(channel, "A game is currently in progress.");
             }
-            else if (lastResult == null)
+            else if (runningThread.GetResult() == null)
             {
                 super.bot.Message(channel, "No games played.");
             }
             else
             {
-                super.bot.Message(channel, lastResult);
+                super.bot.Message(channel, runningThread.GetResult().Solution);
             }
         }
     }
