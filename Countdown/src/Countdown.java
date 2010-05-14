@@ -100,7 +100,7 @@ public class Countdown extends DefaultPlugin {
             else
             {
                 SolverResult res = runningThread.GetResult();
-                super.bot.Message(channel, res.Solution + " Tested " + res.SolutionsTested + " solutions and took " + res.TimeTaken + "ms");
+                super.bot.Message(channel, res.Solution + " Tested " + res.SolutionsTested + " candidate solutions and took " + res.TimeTaken + "ms");
             }
         }
     }
