@@ -5,8 +5,8 @@
 <target name="build" depends="setup">
 	<javac srcdir="src" destdir="build">
 		<classpath>
-			<pathelement location="../../lib/pircbot.jar" /> 
-			<pathelement location="../../MainBot/trunk/jar/PluggableBot.jar" />
+			<pathelement location="../lib/pircbot.jar" /> 
+			<pathelement location="../MainBot/trunk/jar/PluggableBot.jar" />
 		</classpath>
 	</javac>
 </target>
