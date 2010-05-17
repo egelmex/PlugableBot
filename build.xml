@@ -24,6 +24,9 @@
 
 		<ant dir="Choose/trunk" target="jar" />
 		<copy file="Choose/trunk/jar/Choose.jar" todir="output/plugins" />
+		
+    <ant dir="Countdown" target="jar" />
+    <copy file="Countdown/jar/Choose.jar" todir="output/plugins" />
 
 		<ant dir="Dns/trunk" target="jar" />
 		<copy file="Dns/trunk/jar/Dns.jar" todir="output/plugins" />
