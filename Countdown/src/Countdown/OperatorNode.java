@@ -29,7 +29,7 @@ public class OperatorNode extends SyntaxTreeNode {
 		if (!isValid)
 			return 0;
 
-		if (Type == OperatorType.Devide) {
+		if (Type == OperatorType.Divide) {
 			isValid &= right != 0;
 			if (!isValid)
 				return 0;
@@ -45,7 +45,7 @@ public class OperatorNode extends SyntaxTreeNode {
 			return Left.Evaluate() - Right.Evaluate();
 		case Times:
 			return Left.Evaluate() * Right.Evaluate();
-		case Devide:
+		case Divide:
 			return Left.Evaluate() / Right.Evaluate();
 		default:
 			return Left.Evaluate() + Right.Evaluate();
@@ -93,7 +93,7 @@ public class OperatorNode extends SyntaxTreeNode {
 		} else if (Type == OperatorType.Times && Left instanceof NumberNode
 				&& ((NumberNode) Left).Value == 1) {
 			return Right;
-		} else if ((Type == OperatorType.Devide)
+		} else if ((Type == OperatorType.Divide)
 				&& (Right instanceof NumberNode)
 				&& (((NumberNode) Right).Value == 1)) {
 			return Left;

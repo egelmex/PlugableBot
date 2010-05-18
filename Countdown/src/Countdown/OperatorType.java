@@ -10,7 +10,7 @@ import java.util.Random;
  * 
  */
 public enum OperatorType {
-	Plus, Minus, Times, Devide;
+	Plus, Minus, Times, Divide;
 
 	private static final Random rng = new Random();
 
@@ -23,7 +23,7 @@ public enum OperatorType {
 			return " - ";
 		case Times:
 			return " * ";
-		case Devide:
+		case Divide:
 			return " / ";
 		}
 		return null;
@@ -43,7 +43,7 @@ public enum OperatorType {
 		case 2:
 			return Times;
 		case 3:
-			return Devide;
+			return Divide;
 		default:
 			return Plus;
 		}
