@@ -48,6 +48,12 @@ public class Countdown extends DefaultPlugin {
             }
             else
             {
+                // store the last solution if it exists
+                if (runningThread != null || runningThread.GetResult() != null)
+                {
+                    lastResult = runningThread.GetResult();
+                }
+
                 GameRunning = true;
 //                this.channel = channel;
 
@@ -58,7 +64,7 @@ public class Countdown extends DefaultPlugin {
                 {
                     try {
                         bigNums = Integer.parseInt(messageParts[1]);
-                        if (bigNums > 4) throw new Exception();
+                        if (bigNums > 4 || bigNums < 0) throw new Exception();
                     }
                     catch (Exception e) {
                         bigNums = -1;
