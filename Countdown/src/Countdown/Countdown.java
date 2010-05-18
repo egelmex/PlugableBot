@@ -49,7 +49,7 @@ public class Countdown extends DefaultPlugin {
             else
             {
                 // store the last solution if it exists
-                if (runningThread != null || runningThread.GetResult() != null)
+                if (runningThread != null && runningThread.GetResult() != null)
                 {
                     lastResult = runningThread.GetResult();
                 }
