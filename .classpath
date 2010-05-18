@@ -32,6 +32,7 @@
 	<classpathentry kind="lib" path="lib/mailapi.jar"/>
 	<classpathentry kind="lib" path="lib/pop3.jar"/>
 	<classpathentry kind="lib" path="lib/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/JMathLib.jar"/>
 	<classpathentry kind="lib" path="lib/ooweb-0.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/pygmy-core-ooweb.jar"/>
 	<classpathentry kind="lib" path="lib/pygmy-handlers.jar"/>
