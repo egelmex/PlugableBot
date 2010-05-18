@@ -62,7 +62,7 @@ public class OperatorNode extends SyntaxTreeNode {
 		if (node instanceof OperatorNode) {
 			OperatorNode opNode = (OperatorNode) node;
 			
-		return "(" + opNode.Left.toString() + " " + opNode.OperatorString() + " "
+		return "(" + opNode.Left.toString() + opNode.OperatorString()
 				+ opNode.Right.toString() + ")";
 		}
 		else return node.toString();
