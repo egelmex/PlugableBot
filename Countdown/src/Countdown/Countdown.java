@@ -30,6 +30,8 @@ public class Countdown extends DefaultPlugin {
     private AbstractSolver runningThread;
     private String lastPuzzle = null;
     private SolverResult lastResult = null;
+    
+    private int rountTime = 30;
 
     @Override
     public String getHelp() {
@@ -130,7 +132,7 @@ public class Countdown extends DefaultPlugin {
                     }
                 };
                 
-                tim.schedule(task, 30000);
+                tim.schedule(task, rountTime * 1000);
 
                 runningThread = new RandomiserSolver();
                 runningThread.Solve(numbersToUse, target);
@@ -157,4 +159,18 @@ public class Countdown extends DefaultPlugin {
             }
         }
     }
+
+	@Override
+	public void onAdminMessage(String sender, String login, String hostname,
+			String message) {
+		String command = "!countdowntime ";
+		if (message.toLowerCase().startsWith(command)) {
+			try {
+				rountTime = Integer.parseInt(message.substring(command.length()));
+			} catch (NumberFormatException e) {
+			}
+		}
+	}
+    
+    
 }
