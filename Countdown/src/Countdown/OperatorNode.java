@@ -58,14 +58,48 @@ public class OperatorNode extends SyntaxTreeNode {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	public boolean needsBrackets(OperatorNode parentNode, OperatorNode subNode) {
+		return (parentNode.Type.getValue() <= subNode.Type.getValue())
+				&& (subNode.Type == parentNode.Type)
+				&& (parentNode.Type == OperatorType.Plus || parentNode.Type == OperatorType.Times);
+	}
+
+	public String toString(boolean bracket) {
 		SyntaxTreeNode node = simplify();
 		if (node instanceof OperatorNode) {
 			OperatorNode opNode = (OperatorNode) node;
-			
-		return "(" + opNode.Left.toString() + opNode.OperatorString()
-				+ opNode.Right.toString() + ")";
-		}
-		else return node.toString();
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(bracket ? "(" : "");
+
+			if (opNode.Left instanceof OperatorNode)
+				if (needsBrackets(opNode, (OperatorNode) opNode.Left))
+					sb.append(((OperatorNode) opNode.Left).toString(false));
+				else
+					sb.append(((OperatorNode) opNode.Left).toString(true));
+			else
+				sb.append(opNode.Left.toString());
+
+			sb.append(opNode.OperatorString());
+
+			if (opNode.Right instanceof OperatorNode)
+				if (needsBrackets(opNode, (OperatorNode) opNode.Right))
+					sb.append(((OperatorNode) opNode.Right).toString(false));
+				else
+					sb.append(((OperatorNode) opNode.Right).toString(true));
+			else
+				sb.append(opNode.Right.toString());
+
+			sb.append(bracket ? ")" : "");
+
+			return sb.toString();
+
+		} else
+			return node.toString();
 	}
 
 	public boolean SubTreeSearch(SyntaxTreeNode node) {
@@ -88,14 +122,14 @@ public class OperatorNode extends SyntaxTreeNode {
 	public SyntaxTreeNode simplify() {
 
 		if (Type == OperatorType.Times && Right instanceof NumberNode
-				&& ((NumberNode) Right).Value == 1) {
+				&& ((NumberNode) Right).Value() == 1) {
 			return Left;
 		} else if (Type == OperatorType.Times && Left instanceof NumberNode
-				&& ((NumberNode) Left).Value == 1) {
+				&& ((NumberNode) Left).Value() == 1) {
 			return Right;
 		} else if ((Type == OperatorType.Divide)
 				&& (Right instanceof NumberNode)
-				&& (((NumberNode) Right).Value == 1)) {
+				&& (((NumberNode) Right).Value() == 1)) {
 			return Left;
 		}
 

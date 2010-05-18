@@ -24,7 +24,7 @@ public class IterativeSolver extends AbstractSolver {
         {
             NumberNode n = new NumberNode();
             n.Parent = null;
-            n.Value = num;
+            n.setValue(num);
             stateQueue.addLast(n);
         }
 
@@ -54,7 +54,7 @@ public class IterativeSolver extends AbstractSolver {
 
             for (NumberNode leaf : leaves)
             {
-                int index = possibleNumbers.indexOf((Integer)(int)leaf.Value);
+                int index = possibleNumbers.indexOf((Integer)(int)leaf.Value());
                 possibleNumbers.remove(index);
             }
 
@@ -97,14 +97,14 @@ public class IterativeSolver extends AbstractSolver {
                                 replacement.Left = leafToReplace;
                                 replacement.Right = new NumberNode();
                                 replacement.Right.Parent = null;
-                                ((NumberNode)replacement.Right).Value = num;
+                                ((NumberNode)replacement.Right).setValue( num );
                             }
                             else
                             {
                                 replacement.Right = leafToReplace;
                                 replacement.Left = new NumberNode();
                                 replacement.Left.Parent = null;
-                                ((NumberNode)replacement.Left).Value = num;
+                                ((NumberNode)replacement.Left).setValue( num );
                             }
 
                             stateQueue.addLast(tempSolution);

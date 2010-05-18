@@ -106,7 +106,7 @@ public class RandomiserSolver extends AbstractSolver {
         for (int num : inputNumbers)
         {
             NumberNode n = new NumberNode();
-            n.Value = num;
+            n.setValue ( num );
             nums.add(n);
         }
 

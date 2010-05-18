@@ -10,10 +10,21 @@ import java.util.Random;
  * 
  */
 public enum OperatorType {
-	Plus, Minus, Times, Divide;
+		
+	Plus(3), Minus(4), Times(2), Divide(1);
 
+	private final int value;
+	
 	private static final Random rng = new Random();
 
+	OperatorType(int value) {
+		this.value = value;
+	}
+	
+	public int getValue() {
+		return value;
+	}
+	
 	@Override
 	public String toString() {
 		switch (this) {
