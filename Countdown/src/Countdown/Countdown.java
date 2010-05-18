@@ -167,6 +167,7 @@ public class Countdown extends DefaultPlugin {
 		if (message.toLowerCase().startsWith(command)) {
 			try {
 				rountTime = Integer.parseInt(message.substring(command.length()));
+				bot.Message(sender, "changed round length to " + rountTime);
 			} catch (NumberFormatException e) {
 			}
 		}
