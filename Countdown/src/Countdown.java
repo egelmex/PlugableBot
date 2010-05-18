@@ -19,13 +19,16 @@ public class Countdown extends DefaultPlugin {
 
     private boolean GameRunning = false;
     private static final Random rng = new Random();
-    private Integer[] numbers = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75, 100};
+    private static final Integer[] numbers = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75, 100 };
+    private static final Integer[] bigNumbers = { 25, 50, 75, 100 };
+    private static final Integer[] smallNumbers = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10 };
     private ArrayList<Integer> numbersToUse;
     private Integer target;
     private Timer tim = new Timer();
     private String channel;
     private AbstractSolver runningThread;
     private String lastPuzzle = null;
+    private SolverResult lastResult = null;
 
     @Override
     public String getHelp() {
@@ -34,7 +37,8 @@ public class Countdown extends DefaultPlugin {
 
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
-        if (message.startsWith("!countdown"))
+        String[] messageParts = message.split(" ", 2);
+        if (messageParts[0] == null ? "!countdown" == null : messageParts[0].equals("!countdown"))
         {
             // game running? decline request
             if (GameRunning)
@@ -47,18 +51,56 @@ public class Countdown extends DefaultPlugin {
                 this.channel = channel;
 
                 // start a new game
-                ArrayList<Integer> list = new ArrayList<Integer>(Arrays.asList(numbers));
-                numbersToUse = new ArrayList<Integer>(6);
+
+                int bigNums = -1;
+                if (messageParts.length == 2)
+                {
+                    try {
+                        bigNums = Integer.parseInt(messageParts[1]);
+                        if (bigNums > 4) throw new Exception();
+                    }
+                    catch (Exception e) {
+                        bigNums = -1;
+                        bot.Message(channel, "Invalid number of big numbers, must be between 0 and 4 inclusive. Using default random selection.");
+                    }
+                }
 
                 StringBuffer buffer = new StringBuffer();
+                numbersToUse = new ArrayList<Integer>(6);
 
-                for (int i = 0; i < 6; i++)
+                if (messageParts.length == 1 || bigNums == -1)
                 {
-                    numbersToUse.add(list.remove(rng.nextInt(list.size())));
-                    buffer.append(numbersToUse.get(i));
+                    ArrayList<Integer> list = new ArrayList<Integer>(Arrays.asList(numbers));
 
-                    if (i < 5)
-                        buffer.append(", ");
+                    for (int i = 0; i < 6; i++)
+                    {
+                        numbersToUse.add(list.remove(rng.nextInt(list.size())));
+                        buffer.append(numbersToUse.get(i));
+
+                        if (i < 5)
+                            buffer.append(", ");
+                    }
+                }
+
+                // otherwise number of big numbers to use
+
+                else
+                {
+                    ArrayList<Integer> bigList = new ArrayList<Integer>(Arrays.asList(bigNumbers));
+                    ArrayList<Integer> smallList = new ArrayList<Integer>(Arrays.asList(smallNumbers));
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (i < bigNums)
+                            numbersToUse.add(bigList.remove(rng.nextInt(bigList.size())));
+                        else numbersToUse.add(smallList.remove(rng.nextInt(smallList.size())));
+                        buffer.append(numbersToUse.get(i));
+
+                        if (i < 5)
+                            buffer.append(", ");
+                    }
+
+
                 }
 
                 target = rng.nextInt(900) + 100;
@@ -87,20 +129,24 @@ public class Countdown extends DefaultPlugin {
                 runningThread.Solve(numbersToUse, target);
             }
         }
-        else if (message.startsWith("!solution"))
+        else if (messageParts[0] == null ? "!solution" == null : messageParts[0].equals("!solution"))
         {
-            if (GameRunning)
-            {
-                super.bot.Message(channel, "A game is currently in progress.");
-            }
-            else if (runningThread == null || runningThread.GetResult() == null)
+            if (runningThread == null || runningThread.GetResult() == null)
             {
                 super.bot.Message(channel, "No games played.");
             }
+            else if (GameRunning && lastResult == null)
+            {
+                super.bot.Message(channel, "No games played.");
+            }
+            else if (GameRunning)
+            {
+                super.bot.Message(channel, "Solution to the last game: " + lastResult.Solution + " Tested " + lastResult.SolutionsTested + " candidate solutions and took " + lastResult.TimeTaken + "ms");
+            }
             else
             {
-                SolverResult res = runningThread.GetResult();
-                super.bot.Message(channel, res.Solution + " Tested " + res.SolutionsTested + " candidate solutions and took " + res.TimeTaken + "ms");
+                lastResult = runningThread.GetResult();
+                super.bot.Message(channel, "Solution to the last game: " + lastResult.Solution + " Tested " + lastResult.SolutionsTested + " candidate solutions and took " + lastResult.TimeTaken + "ms");
             }
         }
     }
