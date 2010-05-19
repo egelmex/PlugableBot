@@ -25,8 +25,8 @@
 		<ant dir="Choose/trunk" target="jar" />
 		<copy file="Choose/trunk/jar/Choose.jar" todir="output/plugins" />
 		
-    <ant dir="Countdown" target="jar" />
-    <copy file="Countdown/jar/Countdown.jar" todir="output/plugins" />
+    	<ant dir="Countdown" target="jar" />
+    	<copy file="Countdown/jar/Countdown.jar" todir="output/plugins" />
 
 		<ant dir="Dns/trunk" target="jar" />
 		<copy file="Dns/trunk/jar/Dns.jar" todir="output/plugins" />
@@ -61,6 +61,8 @@
 		<ant dir="Google" target="jar" />
 		<copy file="Google/jar/Google.jar" todir="output/plugins" />
 
+		<ant dir="Eval/trunk" target="jar" />
+		<copy file="Eval/trunk/jar/Google.jar" todir="output/plugins" />
 		
 		<copy file="lib/pircbot.jar" todir="output/lib" />
 		<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
@@ -72,6 +74,7 @@
 		<copy file="lib/commons-logging-1.1.1.jar" todir="output/lib" />
 		<copy file="lib/JMathLib.jar" todir="output/lib" />
 		<copy file="lib/json.jar" todir="output/lib" />
+		<copy file="lib/JMathLib.jar" todir="output/lib" />
 		
 		<copy file="lib/imap.jar" todir="output/lib" />
 		<copy file="lib/mailapi.jar" todir="output/lib" />
