@@ -52,20 +52,10 @@ public class OperatorNode extends SyntaxTreeNode {
 		}
 	}
 
-	private String OperatorString() {
-		return Type.toString();
-	}
-
 	@Override
 	public String toString() {
 		return toString(false);
 	}
-
-//	public boolean needsBrackets(OperatorNode parentNode, OperatorNode subNode) {
-//		return (parentNode.Type.getValue() <= subNode.Type.getValue())
-//				&& (subNode.Type == parentNode.Type)
-//				&& (parentNode.Type == OperatorType.Plus || parentNode.Type == OperatorType.Times);
-//	}
 
 	public String toString(boolean bracket) {
 		SyntaxTreeNode node = simplify();
@@ -81,19 +71,13 @@ public class OperatorNode extends SyntaxTreeNode {
                                     && opNode.Parent.Right == opNode &&
                                     opNode.Parent.Type.getPrecedence() == opNode.Type.getPrecedence());
 
-                            needsBrackets |= opNode.Parent.Type.getPrecedence() < opNode.Type.getPrecedence();
-                            
-                            //needsBrackets |= needsInversion;
                             if (needsInversion)
-                            {
-                                // we can invert to change the brackets;
-                                needsBrackets = bracket;
                                 opNode.Type = opNode.Type.invert();
-                            }
+                            else
+                                needsBrackets |= opNode.Parent.Type.getPrecedence() < opNode.Type.getPrecedence();
                         }
 
-                        StringBuffer returnString = new StringBuffer();
-                        returnString.append(opNode.Left.toString());
+                        StringBuffer returnString = new StringBuffer(opNode.Left.toString());
                         returnString.append(opNode.Type.toString());
                         returnString.append(opNode.Right.toString());
 
@@ -142,35 +126,4 @@ public class OperatorNode extends SyntaxTreeNode {
 
 		return this;
 	}
-
-        public String Test()
-        {
-            OperatorNode mult = new OperatorNode();
-            mult.Type = OperatorType.Times;
-
-            OperatorNode div = new OperatorNode();
-            div.Type = OperatorType.Divide;
-
-            div.Right = mult;
-            mult.Parent = div;
-
-            NumberNode node1 = new NumberNode();
-            NumberNode node2 = new NumberNode();
-            NumberNode node3 = new NumberNode();
-            node1.setValue(50);
-            node2.setValue(5);
-            node3.setValue(2);
-
-            node1.Parent = div;
-            div.Left = node1;
-
-            node2.Parent = mult;
-            mult.Left = node2;
-
-            node3.Parent = mult;
-            mult.Right = node3;
-
-            return div.toString();
-        }
-
 }
