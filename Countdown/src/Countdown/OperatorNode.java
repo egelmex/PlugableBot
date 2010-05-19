@@ -78,10 +78,15 @@ public class OperatorNode extends SyntaxTreeNode {
                         returnString.append(opNode.Type.toString());
                         returnString.append(opNode.Right.toString());
 
+
                         // parent higher?
-                        boolean needsBrackets = opNode.Parent.Type.getPrecedence() > opNode.Type.getPrecedence();
-                        // are we on rhs of a non-cumutative operator?
-                        needsBrackets |= (!opNode.Parent.Type.isComutative() && opNode.Parent.Right == opNode);
+                        boolean needsBrackets = bracket;
+                        if (opNode.Parent != null)
+                        {
+                            needsBrackets |= opNode.Parent.Type.getPrecedence() > opNode.Type.getPrecedence();
+                            // are we on rhs of a non-cumutative operator?
+                            needsBrackets |= (!opNode.Parent.Type.isComutative() && opNode.Parent.Right == opNode);
+                        }
 
                         if (needsBrackets)
                         {
