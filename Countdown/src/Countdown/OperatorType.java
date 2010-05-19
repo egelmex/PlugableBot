@@ -24,7 +24,35 @@ public enum OperatorType {
 	public int getValue() {
 		return value;
 	}
-	
+
+        public int getPrecedence()
+        {
+                switch (this) {
+		case Plus:
+		case Minus:
+			return 1;
+		case Times:
+		case Divide:
+			return 0;
+                    default:
+                        return 0;
+		}
+        }
+
+        public boolean isComutative()
+        {
+            switch (this) {
+		case Plus:
+		case Times:
+			return true;
+		case Minus:
+		case Divide:
+			return false;
+                    default:
+                        return false;
+		}
+        }
+
 	@Override
 	public String toString() {
 		switch (this) {

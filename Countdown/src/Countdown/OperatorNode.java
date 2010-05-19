@@ -61,42 +61,34 @@ public class OperatorNode extends SyntaxTreeNode {
 		return toString(false);
 	}
 
-	public boolean needsBrackets(OperatorNode parentNode, OperatorNode subNode) {
-		return (parentNode.Type.getValue() <= subNode.Type.getValue())
-				&& (subNode.Type == parentNode.Type)
-				&& (parentNode.Type == OperatorType.Plus || parentNode.Type == OperatorType.Times);
-	}
+//	public boolean needsBrackets(OperatorNode parentNode, OperatorNode subNode) {
+//		return (parentNode.Type.getValue() <= subNode.Type.getValue())
+//				&& (subNode.Type == parentNode.Type)
+//				&& (parentNode.Type == OperatorType.Plus || parentNode.Type == OperatorType.Times);
+//	}
 
 	public String toString(boolean bracket) {
 		SyntaxTreeNode node = simplify();
 		if (node instanceof OperatorNode) {
 			OperatorNode opNode = (OperatorNode) node;
 
-			StringBuilder sb = new StringBuilder();
 
-			sb.append(bracket ? "(" : "");
+                        StringBuffer returnString = new StringBuffer();
+                        returnString.append(Left.toString());
+                        returnString.append(Type.toString());
+                        returnString.append(Right.toString());
 
-			if (opNode.Left instanceof OperatorNode)
-				if (needsBrackets(opNode, (OperatorNode) opNode.Left))
-					sb.append(((OperatorNode) opNode.Left).toString(false));
-				else
-					sb.append(((OperatorNode) opNode.Left).toString(true));
-			else
-				sb.append(opNode.Left.toString());
+                        //parent higher?
+                        boolean needsBrackets = opNode.Parent.Type.getPrecedence() > opNode.Type.getPrecedence();
+                        needsBrackets |= (!opNode.Parent.Type.isComutative() && opNode.Parent.Right == opNode);
 
-			sb.append(opNode.OperatorString());
+                        if (needsBrackets)
+                        {
+                            returnString.append(")");
+                            returnString.insert(0, "(");
+                        }
 
-			if (opNode.Right instanceof OperatorNode)
-				if (needsBrackets(opNode, (OperatorNode) opNode.Right))
-					sb.append(((OperatorNode) opNode.Right).toString(false));
-				else
-					sb.append(((OperatorNode) opNode.Right).toString(true));
-			else
-				sb.append(opNode.Right.toString());
-
-			sb.append(bracket ? ")" : "");
-
-			return sb.toString();
+                        return returnString.toString();
 
 		} else
 			return node.toString();
