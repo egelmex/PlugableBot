@@ -76,13 +76,15 @@ public class OperatorNode extends SyntaxTreeNode {
                         boolean needsBrackets = bracket;
                         if (opNode.Parent != null)
                         {
-                            needsBrackets |= opNode.Parent.Type.getPrecedence() < opNode.Type.getPrecedence();
                             // are we on rhs of a non-cumutative operator?
-                            needsBrackets |= (!opNode.Parent.Type.isComutative()
+                            boolean needsInversion = (!opNode.Parent.Type.isComutative()
                                     && opNode.Parent.Right == opNode &&
                                     opNode.Parent.Type.getPrecedence() == opNode.Type.getPrecedence());
 
-                            if (needsBrackets && opNode.Parent.Type == opNode.Type)
+                            needsBrackets |= opNode.Parent.Type.getPrecedence() < opNode.Type.getPrecedence();
+                            
+                            //needsBrackets |= needsInversion;
+                            if (needsInversion)
                             {
                                 // we can invert to change the brackets;
                                 needsBrackets = bracket;
@@ -140,5 +142,35 @@ public class OperatorNode extends SyntaxTreeNode {
 
 		return this;
 	}
+
+        public String Test()
+        {
+            OperatorNode mult = new OperatorNode();
+            mult.Type = OperatorType.Times;
+
+            OperatorNode div = new OperatorNode();
+            div.Type = OperatorType.Divide;
+
+            div.Right = mult;
+            mult.Parent = div;
+
+            NumberNode node1 = new NumberNode();
+            NumberNode node2 = new NumberNode();
+            NumberNode node3 = new NumberNode();
+            node1.setValue(50);
+            node2.setValue(5);
+            node3.setValue(2);
+
+            node1.Parent = div;
+            div.Left = node1;
+
+            node2.Parent = mult;
+            mult.Left = node2;
+
+            node3.Parent = mult;
+            mult.Right = node3;
+
+            return div.toString();
+        }
 
 }
