@@ -85,7 +85,9 @@ public class OperatorNode extends SyntaxTreeNode {
                         {
                             needsBrackets |= opNode.Parent.Type.getPrecedence() < opNode.Type.getPrecedence();
                             // are we on rhs of a non-cumutative operator?
-                            needsBrackets |= (!opNode.Parent.Type.isComutative() && opNode.Parent.Right == opNode);
+                            needsBrackets |= (!opNode.Parent.Type.isComutative()
+                                    && opNode.Parent.Right == opNode &&
+                                    opNode.Parent.Type.getPrecedence() == opNode.Type.getPrecedence());
                         }
 
                         if (needsBrackets)
