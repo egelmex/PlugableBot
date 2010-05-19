@@ -62,7 +62,7 @@
 		<copy file="Google/jar/Google.jar" todir="output/plugins" />
 
 		<ant dir="Eval/trunk" target="jar" />
-		<copy file="Eval/trunk/jar/Google.jar" todir="output/plugins" />
+		<copy file="Eval/trunk/jar/Eval.jar" todir="output/plugins" />
 		
 		<copy file="lib/pircbot.jar" todir="output/lib" />
 		<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
