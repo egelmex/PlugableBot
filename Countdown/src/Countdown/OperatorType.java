@@ -53,6 +53,22 @@ public enum OperatorType {
 		}
         }
 
+        public OperatorType invert()
+        {
+            switch (this) {
+		case Plus:
+                    return OperatorType.Minus;
+		case Times:
+			return OperatorType.Divide;
+		case Minus:
+                    return OperatorType.Plus;
+		case Divide:
+			return OperatorType.Times;
+                    default:
+                        return this;
+		}
+        }
+
 	@Override
 	public String toString() {
 		switch (this) {
