@@ -61,7 +61,7 @@ public class OperatorNode extends SyntaxTreeNode {
 		SyntaxTreeNode node = simplify();
 		if (node instanceof OperatorNode) {
 			OperatorNode opNode = (OperatorNode) node;
-
+                        OperatorType opType = opNode.Type;
                         // parent higher?
                         boolean needsBrackets = bracket;
                         if (opNode.Parent != null)
@@ -72,13 +72,13 @@ public class OperatorNode extends SyntaxTreeNode {
                                     opNode.Parent.Type.getPrecedence() == opNode.Type.getPrecedence());
 
                             if (needsInversion)
-                                opNode.Type = opNode.Type.invert();
+                                opType = opType.invert();
                             else
                                 needsBrackets |= opNode.Parent.Type.getPrecedence() < opNode.Type.getPrecedence();
                         }
 
                         StringBuffer returnString = new StringBuffer(opNode.Left.toString());
-                        returnString.append(opNode.Type.toString());
+                        returnString.append(opType.toString());
                         returnString.append(opNode.Right.toString());
 
                         if (needsBrackets)

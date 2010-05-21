@@ -33,14 +33,15 @@ public class RandomiserSolver extends AbstractSolver {
         for (i = 0; i < 1000000; i++)
         {
             Mutate();
-            int score = Math.abs(rootNode.Evaluate() - target);
+            int res = rootNode.Evaluate();
+            int score = Math.abs(res - target);
             if (!rootNode.IsValid()) continue;
 
 
             if (score < bestscore)
             {
                 bestscore = score;
-                bestString = rootNode.toString() + " = " + rootNode.Evaluate();
+                bestString = rootNode.toString() + " = " + res;
             }
             if (score == 0)
             {
