@@ -45,7 +45,6 @@ public class PluggableBot extends PircBot {
 	private ConcurrentHashMap<String, Plugin> loadedPlugins = new ConcurrentHashMap<String, Plugin>();
 	private static Settings settings;
 	private static PluggableBot b = new PluggableBot();
-	private static ArrayList<String> channels = new ArrayList<String>();
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 100,
 			TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100));
 	private static String admin = "";
@@ -71,9 +70,11 @@ public class PluggableBot extends PircBot {
 		});
 		b.setVerbose(true);
 		b.loadPlugins(settings.getPlugins());
-		channels.addAll(Arrays.asList(settings.getChannels()));
 
 		b.connect();
+		
+		b.
+		
 		b.identify(settings.getNickservPassword());
 	}
 
@@ -156,7 +157,7 @@ public class PluggableBot extends PircBot {
 		try {
 			b.setName(settings.getNick());
 			b.connect(settings.getServer());
-			for (String s : channels)
+			for (String s : settings.getChannels())
 				b.joinChannel(s);
 		} catch (Exception e) {
 			System.err
