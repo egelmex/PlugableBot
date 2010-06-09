@@ -26,8 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
+
+import com.PluggableBot.PluggableBot;
+import com.PluggableBot.plugin.DefaultPlugin;
+
 
 
 public class EmailReader extends DefaultPlugin {

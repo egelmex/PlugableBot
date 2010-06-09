@@ -7,7 +7,10 @@ package Mailinfo;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
+
 
 /**
  * 

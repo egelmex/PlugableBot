@@ -17,7 +17,10 @@ import org.jibble.socnet.Configuration;
 import org.jibble.socnet.Graph;
 import org.jibble.socnet.Node;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
+
 
 public class PieSpy extends DefaultPlugin {
 

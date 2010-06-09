@@ -1,4 +1,4 @@
-package AndrewCassidy.PluggableBot;
+package com.PluggableBot;
 /**
  * @author mex
  */

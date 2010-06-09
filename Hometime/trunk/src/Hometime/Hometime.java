@@ -27,7 +27,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
+
 
 /**
  * Hometime plugin.., Simply tells you how long till you have to go home

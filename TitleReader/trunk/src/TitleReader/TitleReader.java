@@ -37,7 +37,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
+
 
 public class TitleReader extends DefaultPlugin {
 

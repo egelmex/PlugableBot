@@ -1,11 +1,13 @@
 package Countdown;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.PluggableBot.plugin.DefaultPlugin;
+
 
 /*
  * To change this template, choose Tools | Templates

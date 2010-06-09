@@ -1,6 +1,9 @@
-package AndrewCassidy.PluggableBot;
+package com.PluggableBot.plugin;
 
 import org.jibble.pircbot.User;
+
+import com.PluggableBot.PluggableBot;
+
 
 public abstract class DefaultPlugin implements Plugin {
 

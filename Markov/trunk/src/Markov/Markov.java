@@ -9,8 +9,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.IgnoreLib;
+
+import com.PluggableBot.IgnoreLib;
+import com.PluggableBot.plugin.DefaultPlugin;
+
 
 /*
  * Markov.java

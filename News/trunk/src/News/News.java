@@ -22,8 +22,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
+
+import com.PluggableBot.PluggableBot;
+import com.PluggableBot.plugin.DefaultPlugin;
+
 
 /**
  * Plugin to provide times style headlines.

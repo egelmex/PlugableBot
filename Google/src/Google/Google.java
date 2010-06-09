@@ -26,7 +26,9 @@ import java.net.URLEncoder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
 
 public class Google extends DefaultPlugin{
 	private final String HTTP_REFERER = "http://www.example.com/";

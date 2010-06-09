@@ -24,7 +24,10 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
+
 
 /**
  * 

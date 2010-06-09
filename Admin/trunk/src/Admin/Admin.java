@@ -17,7 +17,7 @@
 
 package Admin;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * 

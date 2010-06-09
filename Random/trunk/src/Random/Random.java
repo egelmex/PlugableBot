@@ -17,8 +17,9 @@
  */
 package Random;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
-import AndrewCassidy.PluggableBot.PluggableBot;
+
+import com.PluggableBot.PluggableBot;
+import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * RNG plugin for Plugable Bot

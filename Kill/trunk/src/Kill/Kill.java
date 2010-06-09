@@ -28,8 +28,9 @@ package Kill;
  */
 import java.util.List;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
 
+
+import com.PluggableBot.plugin.DefaultPlugin;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;

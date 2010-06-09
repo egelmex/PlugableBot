@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package AndrewCassidy.PluggableBot;
+package com.PluggableBot;
 
 import java.io.File;
 import java.net.URL;
@@ -30,6 +30,9 @@ import java.util.logging.Logger;
 
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
+
+import com.PluggableBot.plugin.Plugin;
+
 
 /**
  * An implementation of a PircBot with loadable module support.

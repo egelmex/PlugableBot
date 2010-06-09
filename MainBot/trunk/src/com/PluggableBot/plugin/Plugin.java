@@ -7,9 +7,11 @@
  * and open the template in the editor.
  */
 
-package AndrewCassidy.PluggableBot;
+package com.PluggableBot.plugin;
 
 import org.jibble.pircbot.User;
+
+import com.PluggableBot.PluggableBot;
 
 /**
  * 

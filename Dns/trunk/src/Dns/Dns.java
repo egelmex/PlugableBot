@@ -8,8 +8,11 @@ package Dns;
  * and open the template in the editor.
  */
 
-import AndrewCassidy.PluggableBot.*;
 import java.net.InetAddress;
+
+
+import com.PluggableBot.*;
+import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * 

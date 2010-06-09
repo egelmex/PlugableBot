@@ -4,7 +4,10 @@ import java.util.Random;
 
 import org.jibble.pircbot.Colors;
 
-import AndrewCassidy.PluggableBot.DefaultPlugin;
+import com.PluggableBot.plugin.DefaultPlugin;
+
+
+
 
 /*
  * To change this template, choose Tools | Templates

@@ -16,8 +16,11 @@
  */
 package Chooose;
 
-import AndrewCassidy.PluggableBot.*;
 import java.util.Random;
+
+
+import com.PluggableBot.*;
+import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * Choose plugin. Allows the user to make a random choice between a list of
