@@ -19,7 +19,7 @@
 	<jar destfile="jar/${module.name}.jar" basedir="build" >
 		<manifest>
 	    		<attribute name="Built-By" value="${user.name}"/>
-	    		<attribute name="Main-Class" value="AndrewCassidy.PluggableBot.PluggableBot" />
+	    		<attribute name="Main-Class" value="com.PluggableBot.PluggableBot" />
 			<attribute name="Class-Path" value="lib/pircbot.jar" />
 	  	</manifest>
 
