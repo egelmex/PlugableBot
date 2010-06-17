@@ -24,9 +24,9 @@
 
 		<ant dir="Choose/trunk" target="jar" />
 		<copy file="Choose/trunk/jar/Choose.jar" todir="output/plugins" />
-		
-    	<ant dir="Countdown" target="jar" />
-    	<copy file="Countdown/jar/Countdown.jar" todir="output/plugins" />
+
+		<ant dir="Countdown" target="jar" />
+		<copy file="Countdown/jar/Countdown.jar" todir="output/plugins" />
 
 		<ant dir="Dns/trunk" target="jar" />
 		<copy file="Dns/trunk/jar/Dns.jar" todir="output/plugins" />
@@ -74,6 +74,7 @@
 		<copy file="lib/commons-logging-1.1.1.jar" todir="output/lib" />
 		<copy file="lib/JMathLib.jar" todir="output/lib" />
 		<copy file="lib/json.jar" todir="output/lib" />
+
 		<copy file="lib/JMathLib.jar" todir="output/lib" />
 		
 		<copy file="lib/imap.jar" todir="output/lib" />
@@ -85,5 +86,30 @@
 	<target name="run">
 		<java jar="output/PluggableBot.jar" fork="true" dir="output" />
 	</target>
-	
+
+
+	<target name="clean">
+		<ant dir="MainBot/trunk" target="clean" />
+		<ant dir="Markov/trunk" target="clean" />
+		<ant dir="Admin/trunk" target="clean" />
+		<ant dir="TitleReader/trunk" target="clean" />
+		<ant dir="Actions/trunk" target="clean" />
+		<ant dir="Choose/trunk" target="clean" />
+		<ant dir="Countdown" target="clean" />
+		<ant dir="Dns/trunk" target="clean" />
+		<ant dir="Hometime/trunk" target="clean" />
+		<ant dir="Kill/trunk" target="clean" />
+		<ant dir="Mafiozi/trunk" target="clean" />
+		<ant dir="Mailinfo/trunk" target="clean" />
+		<ant dir="News/trunk" target="clean" />
+		<ant dir="Pounce/trunk" target="clean" />
+		<ant dir="Random/trunk" target="clean" />
+		<ant dir="EmailReader/trunk" target="clean" />
+		<ant dir="PieSpy/trunk" target="clean" />
+		<ant dir="Google" target="clean" />
+
+		<delete>
+			<fileset dir="output" includes="**/*.jar"/>
+		</delete>
+	</target>
 </project>
