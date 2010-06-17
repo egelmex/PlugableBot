@@ -1,5 +1,4 @@
 /*	
- * Copyright 2010 Murmew
  * Copyright 2010 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -19,6 +18,7 @@
 package EmailReader;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.mail.Flags;
 import javax.mail.Folder;
@@ -26,10 +26,14 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
+import com.sun.net.ssl.internal.ssl.Provider;
+
 public class Connection implements Runnable {
 
+	
 	java.util.Properties props;
 	EmailReader reader;
+	Logger log = Logger.getLogger(Connection.class.getName());
 
 	private boolean running = true;
 	private static final int MAX_RETRIES = 3;
@@ -70,6 +74,8 @@ public class Connection implements Runnable {
 
 					javax.mail.Session session = javax.mail.Session
 							.getInstance(props);
+					for (javax.mail.Provider p : session.getProviders())
+						log.info(p.getProtocol());
 					store = session.getStore(new javax.mail.URLName("imap://"
 							+ username + ":" + password + "@" + server + "/"));
 					store.connect();
