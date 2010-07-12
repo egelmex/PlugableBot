@@ -22,6 +22,7 @@
 
 <target name="jar" depends="build">
 	<jar destfile="jar/${module.name}.jar" basedir="build" />
+	<property name="classpath" value="../lib/imap.jat" />
 </target>
 
 <target name="clean">

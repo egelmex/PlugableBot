@@ -1,5 +1,6 @@
 package Markov;
 import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -8,6 +9,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.sf.ooweb.http.Server;
+import net.sf.ooweb.http.pygmy.OowebServer;
+import net.sf.ooweb.objectmapping.Controller;
 
 
 import com.PluggableBot.IgnoreLib;
@@ -26,11 +31,12 @@ import com.PluggableBot.plugin.DefaultPlugin;
  * 
  * @author Administrator
  */
+
 public class Markov extends DefaultPlugin {
 
-	private static final LinkedBlockingQueue<String> learnQueue = new LinkedBlockingQueue<String>();
-	private static final MarkovDatabase db = new MarkovDatabase();
-	private static final MarkovString m = new MarkovString(learnQueue, db);
+	private final LinkedBlockingQueue<String> learnQueue = new LinkedBlockingQueue<String>();
+	private final MarkovDatabase db = new MarkovDatabase();
+	private final MarkovString m = new MarkovString(learnQueue, db);
 	private IgnoreLib ignore = new IgnoreLib(this, "ignore");
 	private IgnoreLib ignoreLearn = new IgnoreLib(this, "learn");
 	private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
@@ -41,6 +47,8 @@ public class Markov extends DefaultPlugin {
 	private Timer timer;
 	private Integer spamCount = 0;
 	private int maxSpamPerMin = 10; // 0==unmimited spam
+	
+	private Server web_server;
 
 	public Markov() {
 		log.info("Marokv Loaded, staring threads.");
@@ -61,6 +69,28 @@ public class Markov extends DefaultPlugin {
 			}
 		};
 		(timer = new Timer(true)).schedule(spamControl, 10000, 10000);
+		
+		try {
+			log.info("initialising OOserver");
+			web_server = new OowebServer(new File("web.properties"));
+			log.info("adding controler to OOserver");
+			web_server.addController(new MarkovExplorer(db));
+			log.info("OOserver start");
+			Runnable webStarter = new Runnable() {
+				@Override
+				public void run() {
+					try {
+						web_server.start();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			};
+			executor.execute(webStarter);//web_server.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	public void onMessage(String channel, String sender, String login,

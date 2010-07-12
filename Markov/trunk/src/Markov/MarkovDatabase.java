@@ -23,7 +23,6 @@ public class MarkovDatabase implements Runnable {
 	private ObjectContainer database;
 	private static final int MAX_SENTANCE_LENGTH = 30;
 
-
 	public MarkovDatabase() {
 
 		Db4o.configure().automaticShutDown(false);
@@ -59,8 +58,8 @@ public class MarkovDatabase implements Runnable {
 			MarkovNode end = new MarkovNode("]");
 			database.set(start);
 			database.set(end);
-//			MarkovLink link = new MarkovLink(start, end);
-//			database.set(link);
+			// MarkovLink link = new MarkovLink(start, end);
+			// database.set(link);
 		} else {
 		}
 		Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO,
@@ -79,10 +78,9 @@ public class MarkovDatabase implements Runnable {
 				&& !current.getWord().equals("]"); i++) {
 			// get a random next node
 			MarkovNode newNode = getRandomNode(current);
-			
+
 			if (newNode == null)
 				return "";
-			
 
 			current = newNode;
 			// append the word at the new nodes
@@ -114,10 +112,10 @@ public class MarkovDatabase implements Runnable {
 		ObjectSet<MarkovNode> result = database.get(MarkovNode.class);
 
 		ret[0] = result.size();
-		
+
 		ObjectSet<MarkovNode> result2 = database.get(MarkovLink.class);
 		ret[1] = result2.size();
-		
+
 		return ret;
 	}
 
@@ -161,5 +159,16 @@ public class MarkovDatabase implements Runnable {
 
 	public void unload() {
 		database.close();
+	}
+
+	public ObjectSet<MarkovLink> getLinks(String parent) {
+		MarkovNode current = getNode(parent);
+		ObjectSet<MarkovLink> links = database
+				.get(new MarkovLink(current, null));
+		if (links.size() == 0) {
+			return null;
+		} else {
+			return links;
+		}
 	}
 }

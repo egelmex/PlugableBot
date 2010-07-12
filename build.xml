@@ -63,7 +63,7 @@
 
 		<ant dir="Eval/trunk" target="jar" />
 		<copy file="Eval/trunk/jar/Eval.jar" todir="output/plugins" />
-		
+
 		<copy file="lib/pircbot.jar" todir="output/lib" />
 		<copy file="lib/db4o-6.4.54.11278-java5.jar" todir="output/lib" />
 		<copy file="lib/httpclient-4.0.1.jar" todir="output/lib" />
@@ -75,15 +75,21 @@
 		<copy file="lib/JMathLib.jar" todir="output/lib" />
 		<copy file="lib/json.jar" todir="output/lib" />
 
+
+		<copy file="lib/ooweb-0.8.0.jar" todir="output/lib" />
+		<copy file="lib/pygmy-core-ooweb.jar" todir="output/lib" />
+		<copy file="lib/pygmy-handlers.jar" todir="output/lib" />
+
+
 		<copy file="lib/JMathLib.jar" todir="output/lib" />
-		
+
 		<copy file="lib/imap.jar" todir="output/lib" />
 		<copy file="lib/mailapi.jar" todir="output/lib" />
 		<copy file="lib/dsn.jar" todir="output/lib" />
 
 	</target>
 
-	<target name="run">
+	<target name="run" depends="build">
 		<java jar="output/PluggableBot.jar" fork="true" dir="output" />
 	</target>
 
@@ -109,7 +115,7 @@
 		<ant dir="Google" target="clean" />
 
 		<delete>
-			<fileset dir="output" includes="**/*.jar"/>
+			<fileset dir="output" includes="**/*.jar" />
 		</delete>
 	</target>
 </project>
