@@ -20,18 +20,24 @@ public class MarkovExplorer {
 	}
 
 	public String index() {
-		return getNode("[");
+		return getNode("[", "1");
 
 	}
 
 	@Exclude
-	public String getNode(String id) {
-		log.info("Getting children of " + id);
+	public String getNode(String id, String level) {
+		log.info("Getting children of " + id + " at level " + level);
+		int i_level = Integer.parseInt(level);
 		String output = "";
 		output += "{id:\"";
-		output += id.equals("[")?"root":id;
-		output += "\",name:\"root\",data:{},children:[";
-
+		output += (i_level) + "_";
+		output += id.equals("[") ? "root" : id;
+		output += "\",name:\"";
+		output += id.equals("[") ? "root" : id;
+		output += "\",";
+		output += "data:{level:\"";
+		output += (i_level);
+		output += "\"}, children:[";
 		try {
 			ObjectSet<MarkovLink> links = db.getLinks(id);
 			if (links == null) {
@@ -42,9 +48,14 @@ public class MarkovExplorer {
 
 					} else {
 						String word = link.getTo().getWord();
-						output += "{id:\"" + word
-								+ "\", name:\"" + word
-								+ "\", data:{}, children:[]}";
+						output += "{id:\"";
+						output += (i_level + 1) + "_";
+						output += word + "\", name:\"" + word;
+						output += "\",";
+						
+						output += "data:{level:\"";
+						output += (i_level + 1);
+						output += "\"}, children:[]}";
 						if (links.hasNext()) {
 							output += ",";
 						}
@@ -57,12 +68,14 @@ public class MarkovExplorer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		log.info("output: " + output);
 		return output;
 	}
-	
+
 	public String get(RequestState state) {
-		
-		return getNode((String) state.getRequestArgs().get("word"));
+
+		return getNode((String) state.getRequestArgs().get("word"),
+				(String) state.getRequestArgs().get("level"));
 	}
 
 }

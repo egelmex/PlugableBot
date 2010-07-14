@@ -121,7 +121,8 @@ function init(){
             {// code for IE6, IE5
               xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
             }
-            xmlhttp.open("GET","/get?word=" + nodeId ,false);
+            xmlhttp.open("GET","/get?word=" + st.graph.getNode(nodeId).name + "&level=" + st.graph.getNode(nodeId).data.level ,false);
+            //alert( st.graph.getNode(nodeId).toSource());
             xmlhttp.send();
             tmp_json = xmlhttp.responseText;
             
