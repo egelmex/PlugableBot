@@ -43,6 +43,7 @@ public class MarkovExplorer {
 			if (links == null) {
 
 			} else {
+				int i = 0;
 				for (MarkovLink link : links) {
 					if (link.getTo().getWord().equals("]")) {
 
@@ -60,6 +61,7 @@ public class MarkovExplorer {
 							output += ",";
 						}
 					}
+					if (i++ == 20) break;
 				}
 
 			}
