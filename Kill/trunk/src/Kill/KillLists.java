@@ -65,7 +65,7 @@ public class KillLists {
 	}
 
 	public List<String> getKills() {
-		return kills;
+		return new ArrayList<String>(kills);
 	}
 
 	public void setKills(List<String> kills) {

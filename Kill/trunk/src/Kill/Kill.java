@@ -52,6 +52,7 @@ public class Kill extends DefaultPlugin {
 	public Kill() {
 		log.info("Kill: loading database");
 		database = Db4o.openFile("Kill.db4o");
+		Db4o.configure().objectClass(KillLists.class).cascadeOnUpdate(true);
 		log.info("Kill: database open");
 	}
 
@@ -89,6 +90,7 @@ public class Kill extends DefaultPlugin {
 		List<String> listOfUserKills = killer.getKills();
 		if (!listOfUserKills.contains(message.substring(9))) {
 			listOfUserKills.add(message.substring(9));
+			killer.setKills(listOfUserKills);
 			database.set(killer);
 			database.commit();
 			bot.Message(sender, "Added kill: " + message.substring(9));
