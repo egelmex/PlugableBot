@@ -1,5 +1,5 @@
 /*	
- * Copyright 2007 Andee
+ * Copyright 2007 Murmew
  * Copyright 2010 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-
-import com.PluggableBot.PluggableBot;
 import com.PluggableBot.plugin.DefaultPlugin;
 
 
@@ -35,7 +33,6 @@ import com.PluggableBot.plugin.DefaultPlugin;
  */
 public class News extends DefaultPlugin {
 
-	public PluggableBot bot;
 	private java.util.Random random = new java.util.Random();
 
 	private ArrayList<Verb> verbs = new ArrayList<Verb>();
@@ -154,6 +151,7 @@ public class News extends DefaultPlugin {
 	@Override
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
+		
 		if (message.startsWith("!news")) {
 			bot.Message(channel, sender + ": " + getHeadline());
 		}
