@@ -1,5 +1,4 @@
 /*	
- * Copyright 2007 andee
  * Copyright 2009 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -33,6 +32,7 @@ public class KillLists {
 	private String owner;
 	private List<String> kills;
 	private static Random rng = new Random();
+	private static final String DEFAULT_KILL = "stabs %NAME with a elongated frozen eel";
 
 	/**
 	 * Default constuctor for a kill list. Creates a kill list with no kill
@@ -77,7 +77,7 @@ public class KillLists {
 			int random = rng.nextInt(kills.size());
 			return kills.get(random);
 		} else {
-			return null;
+			return DEFAULT_KILL;
 		}
 	}
 

@@ -27,8 +27,7 @@ package Kill;
  * and open the template in the editor.
  */
 import java.util.List;
-
-
+import java.util.logging.Logger;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 import com.db4o.Db4o;
@@ -44,14 +43,23 @@ import com.db4o.ObjectSet;
 public class Kill extends DefaultPlugin {
 
 	private ObjectContainer database;
-	private String def = "stabs %NAME with a elongated frozen eel";
 	
+	private static Logger log = Logger.getLogger(Kill.class.getName());
 
-	/** Creates a new instance of KillPlugin */
+	/** 
+	 * Creates a new instance of KillPlugin 
+	 */
 	public Kill() {
-		load();
+		log.info("Kill: loading database");
+		database = Db4o.openFile("Kill.db4o");
+		log.info("Kill: database open");
 	}
 
+	/**
+	 * 
+	 * @param sender
+	 * @return
+	 */
 	private KillLists getKillList(String sender) {
 		KillLists proto = new KillLists(sender);
 		ObjectSet<KillLists> killsContainer = database.get(proto);
@@ -63,16 +71,19 @@ public class Kill extends DefaultPlugin {
 	}
 
 	private void kill(String sender, String message, String channel) {
-		String killString = def;
 
 		String randomKill = getKillList(sender).getRandomKill();
-		def = randomKill == null ? def : randomKill;
 		String target = message.substring(6).trim();
 		if (target.toLowerCase().equals(bot.Nick().toLowerCase()))
 			target = sender;
-		bot.Action(channel, killString.replaceAll("%NAME", target));
+		bot.Action(channel, randomKill.replaceAll("%NAME", target));
 	}
 
+	/**
+	 * 
+	 * @param sender
+	 * @param message
+	 */
 	private void addKill(String sender, String message) {
 		KillLists killer = getKillList(sender);
 		List<String> listOfUserKills = killer.getKills();
@@ -87,6 +98,10 @@ public class Kill extends DefaultPlugin {
 		}
 	}
 
+	/**
+	 * List a users kills
+	 * @param sender
+	 */
 	private void listKills(String sender) {
 		KillLists killer = getKillList(sender);
 		List<String> listOfUserKills = killer.getKills();
@@ -96,6 +111,11 @@ public class Kill extends DefaultPlugin {
 		}
 	}
 
+	/**
+	 * Remove a kill for a users kill list.
+	 * @param sender
+	 * @param message
+	 */
 	private void removeKill(String sender, String message) {
 		try {
 			int remove = Integer.parseInt(message.substring(11).trim());
@@ -132,10 +152,6 @@ public class Kill extends DefaultPlugin {
 	@Override
 	public String getHelp() {
 		return "This allows users to order me to kill other users, by using !kill <username>. To customise your kill message, use !addkill, followed by the attack. use %NAME as a placeholder for a user's nick. !listkills, !removekill <number>";
-	}
-
-	private void load() {
-		database = Db4o.openFile("Kill.db4o");
 	}
 
 	@Override
