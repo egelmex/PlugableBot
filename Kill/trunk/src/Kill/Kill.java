@@ -109,7 +109,7 @@ public class Kill extends DefaultPlugin {
 		List<String> listOfUserKills = killer.getKills();
 		if (listOfUserKills.size() > 0) {
 		
-		bot.Message(sender, "You kills are :");
+		bot.Message(sender, "You kills are : ");
 		for (int i = 0; i < listOfUserKills.size(); ++i) {
 			bot.Message(sender, i + ": " + listOfUserKills.get(i));
 		}
@@ -135,6 +135,7 @@ public class Kill extends DefaultPlugin {
 				if (listOfUserKills.size() > remove) {
 					String removed = listOfUserKills.remove(remove);
 					bot.Message(sender, "kill '" + removed + "' was removed");
+					killer.setKills(listOfUserKills);
 					database.set(killer);
 					database.commit();
 				}
