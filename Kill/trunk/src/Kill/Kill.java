@@ -105,9 +105,15 @@ public class Kill extends DefaultPlugin {
 	private void listKills(String sender) {
 		KillLists killer = getKillList(sender);
 		List<String> listOfUserKills = killer.getKills();
+		if (listOfUserKills.size() > 0) {
+		
 		bot.Message(sender, "You kills are :");
 		for (int i = 0; i < listOfUserKills.size(); ++i) {
 			bot.Message(sender, i + ": " + listOfUserKills.get(i));
+		}
+		} else {
+			bot.Message(sender, "You have not saved a custom kill yet...");
+			bot.Message(sender, "Save one with !addkill");
 		}
 	}
 
