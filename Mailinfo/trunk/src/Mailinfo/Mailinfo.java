@@ -14,7 +14,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * 
- * @author AndyC
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 public class Mailinfo extends DefaultPlugin {
 

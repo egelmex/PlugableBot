@@ -9,7 +9,7 @@ import java.security.InvalidParameterException;
 
 /**
  *
- * @author Andrew Cassidy
+ * @author A.Cassidy (andrew.cassidy@bytz.co.uk)
  */
 public class NumberNode extends SyntaxTreeNode
     {

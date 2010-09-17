@@ -1,6 +1,6 @@
 /*
  * Copyright	Mex (ellism88@gmail.com)	2010
- * Copyright	Andee 		2007
+ * Copyright	Andee (andee@bytz.co.uk)	2007
  * 
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import com.PluggableBot.plugin.Plugin;
 /**
  * 
  * @author m.ellis (ellism88@gmail.com)
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 class PluggableBotLoader implements Runnable {
 	private String name;

@@ -1,5 +1,5 @@
 /*	
- * Copyright 2007 andee
+ * Copyright 2007 Andee (andee@bytz.co.uk)
  * Copyright 2010 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
 /**
  * Hometime plugin.., Simply tells you how long till you have to go home
  * 
- * @author Andee 11 November 2007
+ * @author A.Cassidy (a.cassidy@bytz.co.uk) 11 November 2007
  * @author Mex 2010
  */
 public class Hometime extends DefaultPlugin {

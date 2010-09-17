@@ -1,5 +1,5 @@
 /*	
- * Copyright 2007 andee
+ * Copyright 2007 Andee (andee@bytz.co.uk)
  * Copyright 2009 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -37,7 +37,7 @@ import com.db4o.ObjectSet;
 /**
  * Plugin to let you !kill people
  * 
- * @author AndyC 2007
+ * @author A.Cassidy (a.cassidy@bytz.co.uk) 2007
  * @author Martin Ellis (ellism88@gmail.com) 2009
  */
 public class Kill extends DefaultPlugin {

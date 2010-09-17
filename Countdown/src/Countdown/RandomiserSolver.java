@@ -10,7 +10,7 @@ import java.util.Random;
 
 /**
  *
- * @author Andrew Cassidy
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 public class RandomiserSolver extends AbstractSolver {
 

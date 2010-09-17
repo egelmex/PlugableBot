@@ -6,7 +6,7 @@ package Countdown;
 
 /**
  *
- * @author Andrew Cassidy
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 public class SolverResult {
         public String Solution;

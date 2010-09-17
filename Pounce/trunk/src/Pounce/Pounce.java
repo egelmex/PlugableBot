@@ -1,5 +1,5 @@
 /*	
- * Copyright 2007 Andee
+ * Copyright 2007 A.Cassidy (a.cassidy@bytz.co.uk)
  * Copywrite 2010 Mex
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * 
- * @author AndyC & Mex
+ * @author A.Cassidy (a.cassidy@bytz.co.uk) & Mex
  */
 public class Pounce extends DefaultPlugin {
 

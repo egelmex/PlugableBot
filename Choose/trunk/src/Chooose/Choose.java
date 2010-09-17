@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Andee
+ * Copyright 2007 A.Cassidy (andrew.cassidy@bytz.co.uk)
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
  * Choose plugin. Allows the user to make a random choice between a list of
  * options. !choose yes or no for example
  * 
- * @author AndyC 31 October 2007
+ * @author A.Cassidy (andrew.cassidy@bytz.co.uk) 31 October 2007
  */
 public class Choose extends DefaultPlugin {
 

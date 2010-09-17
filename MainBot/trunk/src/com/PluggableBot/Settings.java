@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * @author M.Ellis
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
+ */
+
 public class Settings {
 	Properties properties;
 	Logger log = Logger.getLogger(Settings.class.getName());

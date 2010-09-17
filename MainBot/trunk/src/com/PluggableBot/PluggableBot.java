@@ -1,7 +1,7 @@
 /*
  * Copyright	Mex (ellism88@gmail.com)	2010
- * Copyright	Andee 		2007
- * 
+ * Copyright	A.Cassidy (a.cassidy@bytz.co.uk)        2007
+ *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -36,7 +36,7 @@ import com.PluggableBot.plugin.Plugin;
 /**
  * An implementation of a PircBot with loadable module support.
  * 
- * @author AndyC 09 October 2007
+ * @author A.Cassidy (a.cassidy@bytz.co.uk) 09 October 2007
  * @author M.Ellis (ellism88@gmail.com)
  */
 public class PluggableBot extends PircBot {

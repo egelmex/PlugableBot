@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Andrew Cassidy
+ * @author A.Cassidy (andrew.cassidy@bytz.co.uk)
  */
 public abstract class AbstractSolver extends Thread
 {

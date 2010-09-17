@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Administrator
+ * @author A.Cassidy (andrew.cassidy@bytz.co.uk)
  */
 public class IterativeSolver extends AbstractSolver {
 

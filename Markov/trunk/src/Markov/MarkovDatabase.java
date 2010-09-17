@@ -16,7 +16,7 @@ import com.db4o.query.Predicate;
 
 /**
  * 
- * @author ajc39
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 public class MarkovDatabase implements Runnable {
 

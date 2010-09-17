@@ -16,7 +16,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * 
- * @author Andrew
+ * A.Cassidy (a.cassidy@bytz.co.uk)
  */
 public class Mafiozi extends DefaultPlugin {
 

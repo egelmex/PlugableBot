@@ -15,7 +15,7 @@ import com.PluggableBot.PluggableBot;
 
 /**
  * 
- * @author AndyC
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  * @author Mex (ellism88@gmail.com)
  */
 public interface Plugin {

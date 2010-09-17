@@ -1,5 +1,5 @@
 /*	
- * Copyright 2007 andee
+ * Copyright 2007 A.Cassidy (andrew.cassidy@bytz.co.uk)
  * Copyright 2010 Mex (ellism88@gmail.com)
  * 
  *   This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
  * Actions plugin. This plugin provides retorts to users when the Action the
  * bot.
  * 
- * @author andee 09 October 2007
+ * @author A.Cassidy (andrew.cassidy@bytz.co.uk) 09 October 2007
  * @author Mex (ellism88@gmail.com)
  */
 public class Actions extends DefaultPlugin {

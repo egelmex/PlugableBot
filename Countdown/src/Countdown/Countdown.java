@@ -16,7 +16,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  *
- * @author Andrew Cassidy
+ * @author A.Cassidy (andrew.cassidy@bytz.co.uk)
  */
 public class Countdown extends DefaultPlugin {
 

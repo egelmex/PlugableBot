@@ -7,6 +7,7 @@ import java.util.Random;
 
 /**
  * @author me92
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  * 
  */
 public enum OperatorType {

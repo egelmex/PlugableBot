@@ -29,7 +29,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
  */
 /**
  * 
- * @author Administrator
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 
 public class Markov extends DefaultPlugin {

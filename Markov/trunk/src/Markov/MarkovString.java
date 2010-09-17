@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 
- * @author Andrew
+ * @author A.Cassidy (a.cassidy@bytz.co.uk)
  */
 public class MarkovString implements Runnable {
 
