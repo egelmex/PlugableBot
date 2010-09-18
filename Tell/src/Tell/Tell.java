@@ -25,6 +25,16 @@ public class Tell extends DefaultPlugin {
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 
+		Message proto = new Message(null, null, sender, null, channel);
+
+		ObjectSet<Message> set = database.get(proto);
+		for (Message m : set) {
+			bot.sendMessage(channel, m.target + ": " + m.message + " [sent: "
+					+ m.date.toLocaleString() + ", from: " + m.sender + "]");
+			database.delete(m);
+		}
+		database.commit();
+		
 		if (message.toLowerCase().startsWith("!" + command)) {
 
 			message = message.substring(("!" + command).length() + 1);
@@ -41,16 +51,6 @@ public class Tell extends DefaultPlugin {
 						+ target + " that.");
 			}
 		}
-
-		Message proto = new Message(null, null, sender, null, channel);
-
-		ObjectSet<Message> set = database.get(proto);
-		for (Message m : set) {
-			bot.sendMessage(channel, m.target + ": " + m.message + " [sent: "
-					+ m.date.toLocaleString() + ", from: " + m.sender + "]");
-			database.delete(m);
-		}
-		database.commit();
 	}
 
 	@Override
