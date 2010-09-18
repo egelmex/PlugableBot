@@ -1,19 +1,28 @@
 package Tell;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+
+import Kill.KillLists;
 
 import com.PluggableBot.plugin.DefaultPlugin;
+import com.db4o.Db4o;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
 
 public class Tell extends DefaultPlugin {
 
 	private static final String command = "tell";
-	Map<String, Map<String, List<Message>>> messages = new HashMap<String, Map<String, List<Message>>>();
+	Logger log = Logger.getLogger(this.getClass());
+	ObjectContainer database;
+
+	public Tell() {
+		log.info("Kill: loading database");
+		database = Db4o.openFile("Kill.db4o");
+		Db4o.configure().objectClass(KillLists.class).cascadeOnUpdate(true);
+		log.info("Kill: database open");
+	}
 
 	@Override
 	public void onMessage(String channel, String sender, String login,
@@ -25,30 +34,31 @@ public class Tell extends DefaultPlugin {
 			if (split.length > 2) {
 				String target = split[0];
 				message = message.substring(split[0].length() + 1);
-				Map<String, List<Message>> ls = messages.get(channel);
-				if (ls == null)
-					ls = new HashMap<String, List<Message>>();
-				List<Message> ms = ls.get(target);
-				if (ms == null)
-					ms = new ArrayList<Message>();
-				ms.add(new Message(sender, new Date(), target, message));
+				Message m = new Message(sender, new Date(), target, message,
+						channel);
+				database.set(m);
+				database.commit();
 			}
 		}
-		Map<String, List<Message>> chls = messages.get(channel);
-		if (chls != null) {
-			List<Message> toSend = chls.get(sender);
-			if (toSend != null)
-				for (Message m : toSend) {
-					bot.sendMessage(channel, m.target+ ":" + m + " [sent: " + m.date.toGMTString() + ", from: " + m.sender );
-				}
-		}
 
+		Message proto = new Message(null, null, sender, null, channel);
+		ObjectSet<Message> set = database.get(proto);
+		for (Message m : set) {
+			bot.sendMessage(channel, m.target + ": " + m.message + " [sent: "
+					+ m.date.toLocaleString() + ", from: " + m.sender + "]");
+			database.delete(m);
+		}
+		database.commit();
 	}
-	
+
 	@Override
 	public void onNickChange(String oldNick, String login, String hostname,
 			String newNick) {
-		
+		Message proto = new Message(null, null, oldNick, null, null);
+		ObjectSet<Message> set = database.get(proto);
+		for (Message m : set) {
+			m.target = newNick;
+		}
 	}
 
 	@Override

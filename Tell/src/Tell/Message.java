@@ -7,8 +7,9 @@ public class Message {
 	Date date;
 	String target;
 	String message;
+	String channel;
 	
-	public Message(String sender, Date date, String target, String message) {
+	public Message(String sender, Date date, String target, String message, String channel) {
 		super();
 		this.sender = sender;
 		this.date = date;
