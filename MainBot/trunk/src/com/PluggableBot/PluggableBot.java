@@ -245,7 +245,7 @@ public class PluggableBot extends PircBot {
 	protected void onPrivateMessage(String sender, String login,
 			String hostname, String message) {
 
-		if (message.startsWith("identify")) {
+		if (message.startsWith("!identify")) {
 			if (settings.getPassword() != null) {
 				if (message.substring(9).equals(settings.getPassword())) {
 					admin = sender;
@@ -254,6 +254,9 @@ public class PluggableBot extends PircBot {
 			} else {
 				log.info("Password was not Set, Admin is disabled.");
 			}
+		}else if (message.startsWith("logout") && sender == admin) {
+			admin = null;
+			b.Message(sender, "You are no longer admin.");
 		} else if (admin.equals(sender)) {
 			for (Plugin p : loadedPlugins.values())
 				p.onAdminMessage(sender, login, hostname, message);

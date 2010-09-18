@@ -25,32 +25,59 @@ import com.PluggableBot.plugin.DefaultPlugin;
  *
  */
 public class Admin extends DefaultPlugin {
-
+	
+	public static final String ACTION_STRING = "!";
+	public static final String ACTION_UNLOAD = "unload";
+	public static final String ACTION_LOAD = "load";
+	public static final String ACTION_RELOAD = "reload";
+	public static final String ACTION_PART = "part";
+	public static final String ACTION_JOIN = "join";
+	
 	@Override
 	public String getHelp() {
 		return "Like I would tell you!";
 	}
+	
+
+	/* (non-Javadoc)
+	 * @see com.PluggableBot.plugin.DefaultPlugin#getAdminHelp()
+	 */
+	@Override
+	public String getAdminHelp() {
+		return ("Admin Commands are: " + ACTION_STRING + ACTION_UNLOAD  + ", " + ACTION_STRING + ACTION_LOAD  + ", " + ACTION_STRING + ACTION_RELOAD  + ", " + ACTION_STRING + ACTION_JOIN  + ", " + ACTION_STRING + ACTION_PART );
+	}
+
+
 
 	@Override
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
-		if (message.startsWith("unload")) {
+		if (message.startsWith(ACTION_STRING + ACTION_UNLOAD)) {
 			bot.unloadPlugin(message.substring(7));
-			bot.Message(sender, "unloaded");
-		} else if (message.startsWith("reload")) {
+			bot.Message(sender, "unloaded " + message.substring(7));
+		} 
+		else if (message.startsWith(ACTION_STRING + ACTION_RELOAD)) {
 			bot.unloadPlugin(message.substring(7));
 			bot.loadPlugin(message.substring(7));
-			bot.Message(sender, "reloaded");
-		} else if (message.startsWith("join")) {
+			bot.Message(sender, "reloaded " + message.substring(7));
+		} 
+		else if (message.startsWith(ACTION_STRING + ACTION_JOIN)) {
 			bot.joinChannel(message.substring(5));
-			bot.Message(sender, "joined");
-		} else if (message.startsWith("part")) {
+			bot.Message(sender, "joined " + message.substring(5));
+		} 
+		else if (message.startsWith(ACTION_STRING + ACTION_PART)) {
 			bot.partChannel(message.substring(5));
-			bot.Message(sender, "left");
-		} else if (message.startsWith("load")) {
+			bot.Message(sender, "left channel " + message.substring(5));
+		} 
+		else if (message.startsWith(ACTION_STRING + ACTION_LOAD)) {
 			bot.loadPlugin(message.substring(5));
+			bot.Message(sender, "Tried to load " + message.substring(5));
+		}
+		else if (message.startsWith("!help admin")) {
+			bot.Message(sender, getAdminHelp());
 		}
 
 	}
+	
 
 }
