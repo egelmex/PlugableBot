@@ -18,8 +18,8 @@ public class Tell extends DefaultPlugin {
 
 	public Tell() {
 		log.info("Kill: loading database");
-		database = Db4o.openFile("Kill.db4o");
-		Db4o.configure().objectClass(KillLists.class).cascadeOnUpdate(true);
+		database = Db4o.openFile("Tell.db4o");
+		Db4o.configure().objectClass(Message.class).cascadeOnUpdate(true);
 		log.info("Kill: database open");
 	}
 
