@@ -26,9 +26,6 @@ import java.util.Random;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
-
-
-
 /**
  * 
  * @author A.Cassidy (a.cassidy@bytz.co.uk) & Mex
@@ -52,6 +49,7 @@ public class Pounce extends DefaultPlugin {
 		}
 	}
 
+	@Override
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
 		if (sender.equals(bot.Nick()))
@@ -63,6 +61,7 @@ public class Pounce extends DefaultPlugin {
 		}
 	}
 
+	@Override
 	public void onKick(String channel, String kickerNick, String kickerLogin,
 			String kickerHostname, String recipientNick, String reason) {
 		bot.Message(channel, "haha " + recipientNick + " was a dick anyway.");

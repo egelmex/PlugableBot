@@ -12,10 +12,8 @@ import java.util.logging.Logger;
 
 import net.sf.ooweb.http.Server;
 import net.sf.ooweb.http.pygmy.OowebServer;
-import net.sf.ooweb.objectmapping.Controller;
 
-
-import com.PluggableBot.IgnoreLib;
+import com.PluggableBot.ignorelib.IgnoreLib;
 import com.PluggableBot.plugin.DefaultPlugin;
 
 

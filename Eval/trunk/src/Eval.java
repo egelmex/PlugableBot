@@ -4,10 +4,9 @@
  */
 
 
-import com.PluggableBot.PluggableBot;
-import com.PluggableBot.plugin.DefaultPlugin;
-
 import jmathlib.core.interpreter.Interpreter;
+
+import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
  * 

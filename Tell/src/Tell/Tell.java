@@ -39,7 +39,7 @@ public class Tell extends DefaultPlugin {
 			List<Message> toSend = chls.get(sender);
 			if (toSend != null)
 				for (Message m : toSend) {
-					bot.sendMessage(channel, m.target+ ":" + m + " [send: " + m.date.toGMTString() + ", from: " + m.sender );
+					bot.sendMessage(channel, m.target+ ":" + m + " [sent: " + m.date.toGMTString() + ", from: " + m.sender );
 				}
 		}
 

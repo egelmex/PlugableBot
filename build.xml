@@ -10,6 +10,9 @@
 		<ant dir="MainBot/trunk" target="jar" />
 		<copy file="MainBot/trunk/jar/PluggableBot.jar" todir="output" />
 
+		<ant dir="Tell" target="jar" />
+		<copy file="Tell/jar/Tell.jar" todir="output" />
+
 		<ant dir="Markov/trunk" target="jar" />
 		<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />
 

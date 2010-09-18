@@ -18,8 +18,6 @@ package Chooose;
 
 import java.util.Random;
 
-
-import com.PluggableBot.*;
 import com.PluggableBot.plugin.DefaultPlugin;
 
 /**

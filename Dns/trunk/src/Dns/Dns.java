@@ -10,8 +10,6 @@ package Dns;
 
 import java.net.InetAddress;
 
-
-import com.PluggableBot.*;
 import com.PluggableBot.plugin.DefaultPlugin;
 
 /**

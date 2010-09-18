@@ -26,8 +26,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
-import com.sun.net.ssl.internal.ssl.Provider;
-
 public class Connection implements Runnable {
 
 	
