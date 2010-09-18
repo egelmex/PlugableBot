@@ -3,8 +3,6 @@ package Tell;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import Kill.KillLists;
-
 import com.PluggableBot.plugin.DefaultPlugin;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
