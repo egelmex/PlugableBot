@@ -72,8 +72,6 @@ public class PluggableBot extends PircBot {
 
 		b.connect();
 		
-		b.
-		
 		b.identify(settings.getNickservPassword());
 	}
 

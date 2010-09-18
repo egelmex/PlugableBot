@@ -1,4 +1,4 @@
-package com.PluggableBot;
+package com.PluggableBot.ignorelib;
 /**
  * @author mex
  */
