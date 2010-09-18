@@ -1,8 +1,7 @@
 package Tell;
 
 import java.util.Date;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import Kill.KillLists;
 
@@ -14,7 +13,7 @@ import com.db4o.ObjectSet;
 public class Tell extends DefaultPlugin {
 
 	private static final String command = "tell";
-	Logger log = Logger.getLogger(this.getClass());
+	Logger log = Logger.getLogger(this.getClass().toString());
 	ObjectContainer database;
 
 	public Tell() {
