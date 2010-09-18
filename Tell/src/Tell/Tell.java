@@ -30,7 +30,7 @@ public class Tell extends DefaultPlugin {
 			message = message.substring(("!" + command).length() + 1);
 			log.info("Tell:Saving new message " + message);
 			String[] split = message.split(" ");
-			if (split.length > 2) {
+			if (split.length > 1) {
 				String target = split[0];
 				message = message.substring(split[0].length() + 1);
 				Message m = new Message(sender, new Date(), target, message,
@@ -80,4 +80,16 @@ public class Tell extends DefaultPlugin {
 		return "";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.PluggableBot.plugin.DefaultPlugin#unload()
+	 */
+	@Override
+	public void unload() {
+		if (database != null) {
+			database.close();
+		}
+		
+	}
+
+	
 }
