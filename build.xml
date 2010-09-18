@@ -13,7 +13,7 @@
 
 		<echo>Tell</echo>
 		<ant dir="Tell" target="jar" />
-		<copy file="Tell/jar/Tell.jar" todir="output" />
+		<copy file="Tell/jar/Tell.jar" todir="output/plugins" />
 
 		<echo>Markov</echo>
 		<ant dir="Markov/trunk" target="jar" />
