@@ -35,7 +35,7 @@ public class Stats extends DefaultPlugin{
 		    long diffSeconds = diff / 1000;
 		    
 		   
-		    String uptime = "";
+		    String uptime = "uptime: ";
 		    uptime += (diffDays == 0) ? "" : (diffDays + " days " + ((diffHours == 0) ? "" : "and "));
 		    uptime += (diffHours == 0) ? "" : (diffHours + " hours " + ((diffMinutes == 0) ? "" : "and "));
 		    uptime += (diffMinutes == 0) ? "" : (diffMinutes + " mins " + ((diffSeconds == 0) ? "" : "and "));
