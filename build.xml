@@ -16,7 +16,7 @@
 		<copy file="Tell/jar/Tell.jar" todir="output/plugins" />
 
     <echo>Stats</echo>
-    <ant dir="Tell" target="jar" />
+    <ant dir="Stats" target="jar" />
     <copy file="Stats/jar/Stats.jar" todir="output/plugins" />
 
 		
