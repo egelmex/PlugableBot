@@ -48,8 +48,7 @@ public class Stats extends DefaultPlugin{
 	
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
+		return "!uptime will tell you how long this bot has been running";
 	}
 
 }
