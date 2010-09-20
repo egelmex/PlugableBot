@@ -20,6 +20,7 @@
 	<classpathentry kind="src" path="Countdown/src"/>
 	<classpathentry kind="src" path="Eval/trunk/src"/>
 	<classpathentry kind="src" path="Tell/src"/>
+	<classpathentry kind="src" path="Stats/src"/>
 	<classpathentry kind="lib" path="lib/db4o-6.4.54.11278-java5.jar"/>
 	<classpathentry kind="lib" path="lib/pircbot.jar"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-0.6.jar"/>

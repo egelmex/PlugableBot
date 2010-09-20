@@ -15,6 +15,11 @@
 		<ant dir="Tell" target="jar" />
 		<copy file="Tell/jar/Tell.jar" todir="output/plugins" />
 
+    <echo>Stats</echo>
+    <ant dir="Tell" target="jar" />
+    <copy file="Stats/jar/Stats.jar" todir="output/plugins" />
+
+		
 		<echo>Markov</echo>
 		<ant dir="Markov/trunk" target="jar" />
 		<copy file="Markov/trunk/jar/Markov.jar" todir="output/plugins" />

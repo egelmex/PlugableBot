@@ -1,5 +1,23 @@
+/*	
+ * Copyright 2010 Mex (ellism88@gmail.com)
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package Tell;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -11,9 +29,12 @@ import com.db4o.ObjectSet;
 public class Tell extends DefaultPlugin {
 
 	private static final String command = "tell";
-	Logger log = Logger.getLogger(this.getClass().toString());
-	ObjectContainer database;
+	private static final Logger log = Logger.getLogger(Tell.class.toString());
+	private final ObjectContainer database;
 
+	/**
+	 * Default constructor.
+	 */
 	public Tell() {
 		log.info("Tell: loading database");
 		database = Db4o.openFile("Tell.db4o");
@@ -30,7 +51,7 @@ public class Tell extends DefaultPlugin {
 		ObjectSet<Message> set = database.get(proto);
 		for (Message m : set) {
 			bot.sendMessage(channel, m.target + ": " + m.message + " [sent: "
-					+ m.date.toLocaleString() + ", from: " + m.sender + "]");
+					+ DateFormat.getDateInstance().format(m.date) + ", from: " + m.sender + "]");
 			database.delete(m);
 		}
 		database.commit();
@@ -71,7 +92,7 @@ public class Tell extends DefaultPlugin {
 		ObjectSet<Message> set = database.get(proto);
 		if (!set.isEmpty()) {
 			bot.Message(channel, sender, "You have " + set.size() + " message"
-					+ (set.size() > 1 ? "s" : "") + "waiting.");
+					+ (set.size() > 1 ? "s" : "") + " waiting.");
 		}
 	}
 
