@@ -37,9 +37,9 @@ public class Stats extends DefaultPlugin{
 		   
 		    String uptime = "";
 		    uptime += (diffDays == 0) ? "" : (diffDays + " days " + ((diffHours == 0) ? "" : "and "));
-		    uptime += (diffHours == 0) ? "" : (diffDays + " hours " + ((diffMinutes == 0) ? "" : "and "));
-		    uptime += (diffMinutes == 0) ? "" : (diffDays + " mins " + ((diffSeconds == 0) ? "" : "and "));
-		    uptime += (diffSeconds == 0) ? "" : (diffDays + " seconds ");
+		    uptime += (diffHours == 0) ? "" : (diffHours + " hours " + ((diffMinutes == 0) ? "" : "and "));
+		    uptime += (diffMinutes == 0) ? "" : (diffMinutes + " mins " + ((diffSeconds == 0) ? "" : "and "));
+		    uptime += (diffSeconds == 0) ? "" : (diffSeconds + " seconds ");
 		    
 		    bot.sendMessage(channel, uptime);
 		}
