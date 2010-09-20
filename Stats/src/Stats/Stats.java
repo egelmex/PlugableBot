@@ -40,6 +40,8 @@ public class Stats extends DefaultPlugin{
 		    uptime += (diffHours == 0) ? "" : (diffDays + " hours " + ((diffMinutes == 0) ? "" : "and "));
 		    uptime += (diffMinutes == 0) ? "" : (diffDays + " mins " + ((diffSeconds == 0) ? "" : "and "));
 		    uptime += (diffSeconds == 0) ? "" : (diffDays + " seconds ");
+		    
+		    bot.sendMessage(channel, uptime);
 		}
 	}
 	
