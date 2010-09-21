@@ -3,8 +3,10 @@ package Remind;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import com.PluggableBot.PluggableBot;
 import com.PluggableBot.plugin.DefaultPlugin;
 
 public class Remind extends DefaultPlugin {
@@ -86,8 +88,11 @@ public class Remind extends DefaultPlugin {
 					bot.sendMessage(channel, sender
 							+ ": I will remind you of that at "
 							+ DateFormat.getDateTimeInstance().format(date));
-					Reminder r = new Reminder(sender, target, message, date);
-					timer.schedule(r, date);
+					if (sender.equals(target)) sender = "you";
+					Reminder r = new Reminder(sender, target, message, date, channel);
+					TimerTask t = new Action(bot, r);
+						
+					timer.schedule(t, r.date);
 				}
 			}
 
@@ -100,4 +105,15 @@ public class Remind extends DefaultPlugin {
 		return null;
 	}
 
+	private class Action extends TimerTask {
+		Reminder r;
+		public Action(PluggableBot b, Reminder r) {
+		}
+		@Override
+		public void run() {
+			bot.sendMessage(r.getChannel(), r.getTo() + ": " + r.getFrom() + " asked me to remind you " + r.getMessage());
+			
+		}
+		
+	}
 }
