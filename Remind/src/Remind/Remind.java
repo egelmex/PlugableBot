@@ -34,6 +34,7 @@ public class Remind extends DefaultPlugin {
 			if (r.getDate().before(now)) {
 				log.info("dropped message" + r);
 			} else {
+				log.info("resceduled message" + r);
 				timer.schedule(new Action(bot, r), r.date);
 			}
 		}
