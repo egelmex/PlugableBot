@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 
 import com.PluggableBot.PluggableBot;
 import com.PluggableBot.plugin.DefaultPlugin;
+import com.db4o.Db4o;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
 
 public class Remind extends DefaultPlugin {
 
@@ -15,10 +18,25 @@ public class Remind extends DefaultPlugin {
 
 	private Timer timer;
 	private static final Logger log = Logger.getLogger(Remind.class.getName());
-
+	private final ObjectContainer database;
+	
+	
 	public Remind() {
 		timer = new Timer();
-
+		log.info("Tell: loading database");
+		database = Db4o.openFile("Reminders.db4o");
+		log.info("Tell: database open");
+		
+		ObjectSet<Reminder> storedreminders = database.get(Reminder.class);
+		Date now = new Date();
+		log.info("resceduling missed remidners");
+		for (Reminder r : storedreminders) {
+			if (r.getDate().after(now)) {
+				log.info("dropped message" + r);
+			} else {
+				timer.schedule(new Action(bot, r), r.date);
+			}
+		}
 	}
 
 	@Override
@@ -108,6 +126,8 @@ public class Remind extends DefaultPlugin {
 					TimerTask t = new Action(bot, r);
 						
 					timer.schedule(t, r.date);
+					database.set(r);
+					database.commit();
 				}
 			}
 
@@ -116,8 +136,7 @@ public class Remind extends DefaultPlugin {
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
+		return "!remind me in XXX to YYY";
 	}
 
 	private class Action extends TimerTask {
@@ -130,8 +149,15 @@ public class Remind extends DefaultPlugin {
 		@Override
 		public void run() {
 			b.sendMessage(r.getChannel(), r.getTo() + ": " + r.getFrom() + " asked me to remind you " + r.getMessage());
-			
+			database.delete(r);
+			database.commit();
 		}
 		
+	}
+	
+	@Override
+	public void unload() {
+		timer.cancel();
+		database.close();
 	}
 }
