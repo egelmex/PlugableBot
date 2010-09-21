@@ -36,7 +36,7 @@ public class Remind extends DefaultPlugin {
 
 				int delay = 0;
 				int i;
-				for (i = 3; i < messageSplit.length; i++) {
+				for (i = 3; i < (messageSplit.length - 1) ; i++) {
 					try {
 						int val = Integer.parseInt(messageSplit[i]);
 						i++;
