@@ -3,10 +3,7 @@ package Remind;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Logger;
-
-import org.apache.log4j.jmx.LoggerDynamicMBean;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
