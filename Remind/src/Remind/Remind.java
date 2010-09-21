@@ -31,7 +31,7 @@ public class Remind extends DefaultPlugin {
 		Date now = new Date();
 		log.info("resceduling missed remidners");
 		for (Reminder r : storedreminders) {
-			if (r.getDate().after(now)) {
+			if (r.getDate().before(now)) {
 				log.info("dropped message" + r);
 			} else {
 				timer.schedule(new Action(bot, r), r.date);
