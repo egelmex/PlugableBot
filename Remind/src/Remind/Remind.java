@@ -13,7 +13,7 @@ public class Remind extends DefaultPlugin {
 
 	private Timer timer;
 	private static final Logger log = Logger.getLogger(Remind.class.getName());
-	
+
 	public Remind() {
 		timer = new Timer();
 
@@ -23,16 +23,17 @@ public class Remind extends DefaultPlugin {
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
 		String target;
-		
+
 		if (message.toLowerCase().startsWith(COMMAND)) {
 			log.info("got !remind");
 			String[] messageSplit = message.toLowerCase().split(" ");
 			target = messageSplit[1];
-			if (target.equals("me"))target = sender;
-			log.info( "target = " + target);
+			if (target.equals("me"))
+				target = sender;
+			log.info("target = " + target);
 
 			if (messageSplit[2].equals("in")) {
-			
+
 				int delay = 0;
 				int i;
 				for (i = 3; i < messageSplit.length; i++) {
@@ -58,18 +59,27 @@ public class Remind extends DefaultPlugin {
 						} else {
 							break;
 						}
-						log.info("delay is now " + delay );
+						log.info("delay is now " + delay);
+					} catch (java.lang.NumberFormatException e) {
+						log.severe(e.toString());
+						break;
+
 					} catch (Exception e) {
 						log.severe(e.toString());
 						break;
-						
+
 					}
 
 				}
 				if (delay > 0) {
-					message = message.substring(message.indexOf(messageSplit[i]), message.length() -message.indexOf(messageSplit[i]) );
-					Date date = new Date((new Date().getTime() + (delay * 1000)));
-					bot.sendMessage(channel, sender + ": I will remind you of that at " + DateFormat.getDateTimeInstance().format(date) );
+					message = message.substring(message
+							.indexOf(messageSplit[i]), message.length()
+							- message.indexOf(messageSplit[i]));
+					Date date = new Date(
+							(new Date().getTime() + (delay * 1000)));
+					bot.sendMessage(channel, sender
+							+ ": I will remind you of that at "
+							+ DateFormat.getDateTimeInstance().format(date));
 					Reminder r = new Reminder(sender, target, message, date);
 					timer.schedule(r, date);
 				}
