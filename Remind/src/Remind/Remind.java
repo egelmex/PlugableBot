@@ -50,18 +50,30 @@ public class Remind extends DefaultPlugin {
 						if (messageSplit[i].equals("min")
 								|| messageSplit[i].equals("mins")
 								|| messageSplit[i].equals("minute")
-								|| messageSplit[i].equals("minutes")) {
+								|| messageSplit[i].equals("minutes")||
+								messageSplit[i].equals("min,")
+								|| messageSplit[i].equals("mins,")
+								|| messageSplit[i].equals("minute,")
+								|| messageSplit[i].equals("minutes,")) {
 							delay += val * 60;
 						} else if (messageSplit[i].equals("sec")
 								|| messageSplit[i].equals("secs")
 								|| messageSplit[i].equals("seconds")
-								|| messageSplit[i].equals("second")) {
+								|| messageSplit[i].equals("second")||
+								messageSplit[i].equals("sec,")
+								|| messageSplit[i].equals("secs,")
+								|| messageSplit[i].equals("seconds,")
+								|| messageSplit[i].equals("second,")) {
 							delay += val;
 						} else if (messageSplit[i].equals("hour")
-								|| messageSplit[i].equals("hours")) {
+								|| messageSplit[i].equals("hours")||
+								messageSplit[i].equals("hour,")
+								|| messageSplit[i].equals("hours,")) {
 							delay += val * 60 * 60;
 						} else if (messageSplit[i].equals("day")
-								|| messageSplit[i].equals("days")) {
+								|| messageSplit[i].equals("days") ||
+								messageSplit[i].equals("day,")
+								|| messageSplit[i].equals("days,")) {
 							delay += val * 60 * 60 * 24;
 						} else {
 							break;
