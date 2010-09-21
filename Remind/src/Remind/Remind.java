@@ -32,24 +32,25 @@ public class Remind extends DefaultPlugin {
 			
 				int delay = 0;
 				int i;
-				for (i = 3; i < messageSplit.length; i = i + 2) {
+				for (i = 3; i < messageSplit.length; i++) {
 					try {
 						int val = Integer.parseInt(messageSplit[i]);
-						if (messageSplit[i + 1] == "min"
-								|| messageSplit[i + 1] == "mins"
-								|| messageSplit[i + 1] == "minute"
-								|| messageSplit[i + 1] == "minutes") {
+						i++;
+						if (messageSplit[i] == "min"
+								|| messageSplit[i] == "mins"
+								|| messageSplit[i] == "minute"
+								|| messageSplit[i] == "minutes") {
 							delay += val * 60;
-						} else if (messageSplit[i + 1] == "sec"
-								|| messageSplit[i + 1] == "secs"
-								|| messageSplit[i + 1] == "seconds"
-								|| messageSplit[i + 1] == "second") {
+						} else if (messageSplit[i] == "sec"
+								|| messageSplit[i] == "secs"
+								|| messageSplit[i] == "seconds"
+								|| messageSplit[i] == "second") {
 							delay += val;
-						} else if (messageSplit[i + 1] == "hour"
-								|| messageSplit[i + 1] == "hours") {
+						} else if (messageSplit[i] == "hour"
+								|| messageSplit[i] == "hours") {
 							delay += val * 60 * 60;
-						} else if (messageSplit[i + 1] == "day"
-								|| messageSplit[i + 1] == "days") {
+						} else if (messageSplit[i] == "day"
+								|| messageSplit[i] == "days") {
 							delay += val * 60 * 60 * 24;
 						} else {
 							break;

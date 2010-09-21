@@ -17,6 +17,8 @@
 
 package Admin;
 
+import java.io.File;
+
 import com.PluggableBot.plugin.DefaultPlugin;
 
 /**
@@ -32,6 +34,7 @@ public class Admin extends DefaultPlugin {
 	public static final String ACTION_RELOAD = "reload";
 	public static final String ACTION_PART = "part";
 	public static final String ACTION_JOIN = "join";
+	public static final String ACTION_LIST = "list";
 	
 	@Override
 	public String getHelp() {
@@ -52,29 +55,37 @@ public class Admin extends DefaultPlugin {
 	@Override
 	public void onAdminMessage(String sender, String login, String hostname,
 			String message) {
-		if (message.startsWith(ACTION_STRING + ACTION_UNLOAD)) {
+		if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_UNLOAD)) {
 			bot.unloadPlugin(message.substring(7));
 			bot.Message(sender, "unloaded " + message.substring(7));
 		} 
-		else if (message.startsWith(ACTION_STRING + ACTION_RELOAD)) {
+		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_RELOAD)) {
 			bot.unloadPlugin(message.substring(7));
 			bot.loadPlugin(message.substring(7));
 			bot.Message(sender, "reloaded " + message.substring(7));
 		} 
-		else if (message.startsWith(ACTION_STRING + ACTION_JOIN)) {
+		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_JOIN)) {
 			bot.joinChannel(message.substring(5));
 			bot.Message(sender, "joined " + message.substring(5));
 		} 
-		else if (message.startsWith(ACTION_STRING + ACTION_PART)) {
+		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_PART)) {
 			bot.partChannel(message.substring(5));
 			bot.Message(sender, "left channel " + message.substring(5));
 		} 
-		else if (message.startsWith(ACTION_STRING + ACTION_LOAD)) {
+		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_LOAD)) {
 			bot.loadPlugin(message.substring(5));
 			bot.Message(sender, "Tried to load " + message.substring(5));
 		}
-		else if (message.startsWith("!help admin")) {
+		else if (message.toLowerCase().startsWith("!help admin")) {
 			bot.Message(sender, getAdminHelp());
+		}
+		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_LIST)) {
+			File pluginsFolder = new File("./plugins") ;
+			for (String f : pluginsFolder.list()) {
+				if (f.endsWith(".jar")) {
+					bot.Message(sender, f.substring(0, f.length() - 4));
+				}
+			}
 		}
 
 	}
