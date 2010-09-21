@@ -6,8 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
-import jmathlib.toolbox.jmathlib.graphics.graph3d.coneplot;
-
 import com.PluggableBot.PluggableBot;
 import com.PluggableBot.plugin.DefaultPlugin;
 
