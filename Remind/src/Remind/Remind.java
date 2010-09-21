@@ -6,6 +6,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import jmathlib.toolbox.jmathlib.graphics.graph3d.coneplot;
+
 import com.PluggableBot.PluggableBot;
 import com.PluggableBot.plugin.DefaultPlugin;
 
@@ -38,8 +40,11 @@ public class Remind extends DefaultPlugin {
 
 				int delay = 0;
 				int i;
-				for (i = 3; i < (messageSplit.length - 1) ; i++) {
+				for (i = 3; i < (messageSplit.length) ; i++) {
 					try {
+						if (messageSplit[ i].equals("and")|| messageSplit[i] == "," ) {
+							continue;
+						}
 						log.info("parsing " + messageSplit[i]);
 						int val = Integer.parseInt(messageSplit[i]);
 						i++;
@@ -108,6 +113,7 @@ public class Remind extends DefaultPlugin {
 	private class Action extends TimerTask {
 		Reminder r;
 		public Action(PluggableBot b, Reminder r) {
+			this.r = r;
 		}
 		@Override
 		public void run() {
