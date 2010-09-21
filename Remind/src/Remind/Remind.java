@@ -101,7 +101,7 @@ public class Remind extends DefaultPlugin {
 					Date date = new Date(
 							(new Date().getTime() + (delay * 1000)));
 					bot.sendMessage(channel, sender
-							+ ": I will remind you of that at "
+							+ ": I will remind " + target + " of that at "
 							+ DateFormat.getDateTimeInstance().format(date));
 					if (sender.equals(target)) sender = "you";
 					Reminder r = new Reminder(sender, target, message, date, channel);
