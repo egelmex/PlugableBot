@@ -112,12 +112,14 @@ public class Remind extends DefaultPlugin {
 
 	private class Action extends TimerTask {
 		Reminder r;
+		PluggableBot b;
 		public Action(PluggableBot b, Reminder r) {
 			this.r = r;
+			this.b = b;
 		}
 		@Override
 		public void run() {
-			bot.sendMessage(r.getChannel(), r.getTo() + ": " + r.getFrom() + " asked me to remind you " + r.getMessage());
+			b.sendMessage(r.getChannel(), r.getTo() + ": " + r.getFrom() + " asked me to remind you " + r.getMessage());
 			
 		}
 		
