@@ -74,12 +74,13 @@ public class Remind extends DefaultPlugin {
 
 				}
 				if (delay > 0) {
-					int indexOfMessage = message
-					.indexOf(messageSplit[i]);
-					int length = message.length() - indexOfMessage;
-					log.info ("iof = " + indexOfMessage + ", l = " + length);
+					String[] m = new String[messageSplit.length - i];
+					System.arraycopy(messageSplit, i, m, 0, messageSplit.length - i);
+					message = "";
+					for (String ms: m) {
+						message += ms + " ";
+					}
 					
-					message = message.substring(indexOfMessage,length);
 					Date date = new Date(
 							(new Date().getTime() + (delay * 1000)));
 					bot.sendMessage(channel, sender
