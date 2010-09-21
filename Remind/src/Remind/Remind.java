@@ -4,6 +4,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
+
+import org.apache.log4j.jmx.LoggerDynamicMBean;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
@@ -12,7 +15,8 @@ public class Remind extends DefaultPlugin {
 	private static final String COMMAND = "!remind";
 
 	private Timer timer;
-
+	private static final Logger log = Logger.getLogger(Remind.class.getName());
+	
 	public Remind() {
 		timer = new Timer();
 
@@ -24,9 +28,11 @@ public class Remind extends DefaultPlugin {
 		String target;
 		
 		if (message.toLowerCase().startsWith(COMMAND)) {
+			log.info("got !remind");
 			String[] messageSplit = message.toLowerCase().split(" ");
 			target = messageSplit[1];
-			
+			if (target == "me") target = sender;
+			log.info( "target = " + target);
 
 			if (messageSplit[2] == "in") {
 			
@@ -55,8 +61,11 @@ public class Remind extends DefaultPlugin {
 						} else {
 							break;
 						}
+						log.info("delay is now " + delay );
 					} catch (Exception e) {
+						log.severe(e.toString());
 						break;
+						
 					}
 
 				}
