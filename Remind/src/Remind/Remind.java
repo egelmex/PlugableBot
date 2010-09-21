@@ -38,8 +38,10 @@ public class Remind extends DefaultPlugin {
 				int i;
 				for (i = 3; i < (messageSplit.length - 1) ; i++) {
 					try {
+						log.info("parsing " + messageSplit[i]);
 						int val = Integer.parseInt(messageSplit[i]);
 						i++;
+						log.info("parsing " + messageSplit[i]);
 						if (messageSplit[i].equals("min")
 								|| messageSplit[i].equals("mins")
 								|| messageSplit[i].equals("minute")
