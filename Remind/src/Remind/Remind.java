@@ -44,7 +44,7 @@ public class Remind extends DefaultPlugin {
 							continue;
 						}
 						log.info("parsing " + messageSplit[i]);
-						int val = Integer.parseInt(messageSplit[i]);
+						Double val = Double.parseDouble(messageSplit[i]);
 						i++;
 						log.info("parsing " + messageSplit[i]);
 						if (messageSplit[i].equals("min")
