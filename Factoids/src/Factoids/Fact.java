@@ -56,4 +56,9 @@ public class Fact {
 	public void setOld() {
 		this.current = false;
 	}
+	
+	@Override
+	public String toString() {
+		return getMessage();
+	}
 }
