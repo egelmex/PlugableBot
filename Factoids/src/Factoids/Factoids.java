@@ -83,7 +83,9 @@ public class Factoids extends DefaultPlugin {
 			ObjectSet<Fact> set = database.get(proto);
 			for (Fact old : set) {
 				old.setOld();
+				database.set(old);
 			}
+			
 
 			database.set(fact);
 			database.commit();
