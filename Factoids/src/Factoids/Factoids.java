@@ -17,7 +17,7 @@ public class Factoids extends DefaultPlugin {
 	private static final String COMMAND_SET = "!setfact";
 
 	public Factoids() {
-		database = Db4o.openFile("Tell.db4o");
+		database = Db4o.openFile("Facts.db4o");
 	}
 
 	@Override
