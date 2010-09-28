@@ -37,8 +37,10 @@ public class Factoids extends DefaultPlugin {
 			String tmpMessage = message.substring(messageSplit[0].length()
 					+ messageSplit[1].length() + 1);
 			log.info("tmpMessage =\"" + tmpMessage + "\"" );
-
-			if (tmpMessage.trim().startsWith("is ")) {
+			String trimmedTmpMessage = tmpMessage.trim();
+			log.info("trimmedtmpMessage =\"" + trimmedTmpMessage + "\"" );
+			
+			if (trimmedTmpMessage.startsWith("is ")) {
 				factMessage += " " + tmpMessage.trim();
 			} else {
 				factMessage += " is " + tmpMessage.trim();
