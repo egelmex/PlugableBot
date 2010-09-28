@@ -29,7 +29,11 @@ public class Factoids extends DefaultPlugin {
 			Fact proto = new Fact(message.toLowerCase().substring(1), null,
 					null, null, true);
 			ObjectSet<Fact> facts = database.get(proto);
-			bot.Message(channel, sender + ": " + facts.get(0));
+			if (facts.size() > 0) {
+				bot.Message(channel, sender + ": " + facts.get(0));
+			} else {
+				bot.Message(channel, sender + ": Sorry I do not know about that");
+			}
 		} else if (messageSplit.length >= 3
 				&& messageSplit[0].equals(COMMAND_ADD)) {
 			String factString = messageSplit[1].toLowerCase();
