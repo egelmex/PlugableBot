@@ -50,6 +50,8 @@ public class PluggableBot extends PircBot {
 	private static Logger log = Logger.getLogger(PluggableBot.class.getName());
 
 	private static final String PLUGIN_DIR = "plugins";
+	
+	private static final String COMMAND_IDENTIFY = "!identify";
 
 	/**
 	 * Main method. Used to star up the plugin
@@ -245,9 +247,9 @@ public class PluggableBot extends PircBot {
 	protected void onPrivateMessage(String sender, String login,
 			String hostname, String message) {
 
-		if (message.startsWith("!identify")) {
+		if (message.startsWith(COMMAND_IDENTIFY)) {
 			if (settings.getPassword() != null) {
-				if (message.substring(9).equals(settings.getPassword())) {
+				if (message.substring(COMMAND_IDENTIFY.length()).equals(settings.getPassword())) {
 					admin = sender;
 					b.sendMessage(sender, "identified");
 					log.info("User " + sender + " is not admin");

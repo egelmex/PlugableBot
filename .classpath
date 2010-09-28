@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="MainBot/trunk/src"/>
 	<classpathentry kind="src" path="Actions/trunk/src"/>
+	<classpathentry kind="src" path="Admin/trunk/src"/>
 	<classpathentry kind="src" path="Choose/trunk/src"/>
 	<classpathentry kind="src" path="Dns/trunk/src"/>
 	<classpathentry kind="src" path="Hometime/trunk/src"/>
 	<classpathentry kind="src" path="Kill/trunk/src"/>
 	<classpathentry kind="src" path="Mafiozi/trunk/src"/>
 	<classpathentry kind="src" path="Mailinfo/trunk/src"/>
-	<classpathentry kind="src" path="MainBot/trunk/src"/>
 	<classpathentry kind="src" path="Markov/trunk/src"/>
 	<classpathentry kind="src" path="Pounce/trunk/src"/>
 	<classpathentry kind="src" path="TitleReader/trunk/src"/>
 	<classpathentry kind="src" path="EmailReader/trunk/src"/>
 	<classpathentry kind="src" path="PieSpy/trunk/src"/>
-	<classpathentry kind="src" path="Admin/trunk/src"/>
 	<classpathentry kind="src" path="News/trunk/src"/>
 	<classpathentry kind="src" path="Random/trunk/src"/>
 	<classpathentry kind="src" path="Google/src"/>
 	<classpathentry kind="src" path="Countdown/src"/>
 	<classpathentry kind="src" path="Eval/trunk/src"/>
 	<classpathentry kind="src" path="Tell/src"/>
-	<classpathentry kind="src" path="Remind/src"/>
+	<classpathentry kind="src" path="Stats/src"/>
+	<classpathentry kind="src" path="Factiods/src"/>
+	<classpathentry kind="src" path="Factoids/src"/>
 	<classpathentry kind="lib" path="lib/db4o-6.4.54.11278-java5.jar"/>
 	<classpathentry kind="lib" path="lib/pircbot.jar"/>
 	<classpathentry kind="lib" path="lib/apache-mime4j-0.6.jar"/>
