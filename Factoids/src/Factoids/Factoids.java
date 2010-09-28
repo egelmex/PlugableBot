@@ -41,8 +41,10 @@ public class Factoids extends DefaultPlugin {
 			log.info("trimmedtmpMessage =\"" + trimmedTmpMessage + "\"" );
 			
 			if (trimmedTmpMessage.startsWith("is ")) {
+				log.info("message already has is so not adding one");
 				factMessage += " " + tmpMessage.trim();
 			} else {
+				log.info("message doesn't have an in so adding one!");
 				factMessage += " is " + tmpMessage.trim();
 			}
 			String factSetBy = sender;
