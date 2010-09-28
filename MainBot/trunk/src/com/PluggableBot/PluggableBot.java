@@ -52,7 +52,8 @@ public class PluggableBot extends PircBot {
 	private static final String PLUGIN_DIR = "plugins";
 	
 	private static final String COMMAND_IDENTIFY = "!identify";
-
+	private static final String COMMAND_LOGOUT = "!logout";
+	
 	/**
 	 * Main method. Used to star up the plugin
 	 * 
@@ -249,7 +250,7 @@ public class PluggableBot extends PircBot {
 
 		if (message.startsWith(COMMAND_IDENTIFY)) {
 			if (settings.getPassword() != null) {
-				String password = message.substring(COMMAND_IDENTIFY.length());
+				String password = message.substring(COMMAND_IDENTIFY.length()).trim();
 				if (password.equals(settings.getPassword())) {
 					admin = sender;
 					b.sendMessage(sender, "identified");
@@ -260,7 +261,7 @@ public class PluggableBot extends PircBot {
 			} else {
 				log.info("Password was not Set, Admin is disabled.");
 			}
-		}else if (message.startsWith("logout") && sender == admin) {
+		}else if (message.startsWith(COMMAND_LOGOUT) && sender == admin) {
 			admin = null;
 			b.Message(sender, "You are no longer admin.");
 		} else if (admin.equals(sender)) {
