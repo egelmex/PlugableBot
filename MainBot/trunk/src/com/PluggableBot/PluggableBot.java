@@ -249,12 +249,13 @@ public class PluggableBot extends PircBot {
 
 		if (message.startsWith(COMMAND_IDENTIFY)) {
 			if (settings.getPassword() != null) {
-				if (message.substring(COMMAND_IDENTIFY.length()).equals(settings.getPassword())) {
+				String password = message.substring(COMMAND_IDENTIFY.length());
+				if (password.equals(settings.getPassword())) {
 					admin = sender;
 					b.sendMessage(sender, "identified");
 					log.info("User " + sender + " is not admin");
 				} else {
-					log.info("User " + sender + " tried to become admin!");
+					log.info("User " + sender + " tried to become admin ussing password '" + password + "'");
 				}
 			} else {
 				log.info("Password was not Set, Admin is disabled.");
