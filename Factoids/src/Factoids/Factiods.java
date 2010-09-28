@@ -1,4 +1,4 @@
-package Factiods;
+package Factoids;
 
 import java.util.Date;
 import java.util.logging.Logger;
