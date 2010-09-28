@@ -65,15 +65,9 @@ public class Factoids extends DefaultPlugin {
 		} else if (messageSplit.length >= 3
 				&& messageSplit[0].equals(COMMAND_SET)) {
 			String factString = messageSplit[1];
-			String factMessage = messageSplit[2];
-			String tmpMessage = message.substring(messageSplit[0].length()
+			String factMessage = message.substring(messageSplit[0].length()
 					+ messageSplit[1].length() + 1);
 
-			if (tmpMessage.trim().startsWith("is ")) {
-				factMessage += " " + tmpMessage.trim();
-			} else {
-				factMessage += " is " + tmpMessage.trim();
-			}
 			String factSetBy = sender;
 			Date factDate = new Date();
 			Fact fact = new Fact(factString, factMessage, factSetBy, factDate,
