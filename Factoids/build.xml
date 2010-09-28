@@ -1,6 +1,6 @@
-<project name="Factiods" basedir="." default="build">
+<project name="Factoids" basedir="." default="build">
 
-<property name="module.name" value="Factiods"/>
+<property name="module.name" value="Factoids"/>
 
 <target name="build" depends="setup">
 	<javac srcdir="src" destdir="build">
