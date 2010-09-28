@@ -8,15 +8,15 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
-public class Factiods extends DefaultPlugin {
+public class Factoids extends DefaultPlugin {
 
-	private static final Logger log = Logger.getLogger(Factiods.class.toString());
+	private static final Logger log = Logger.getLogger(Factoids.class.toString());
 	private final ObjectContainer database;
 
 	private static final String COMMAND_ADD = "!addfact";
 	private static final String COMMAND_SET = "!setfact";
 
-	public Factiods() {
+	public Factoids() {
 		database = Db4o.openFile("Tell.db4o");
 	}
 
