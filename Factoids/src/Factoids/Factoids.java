@@ -32,7 +32,7 @@ public class Factoids extends DefaultPlugin {
 			bot.Message(channel, sender + ": " + facts.get(0));
 		} else if (messageSplit.length >= 3
 				&& messageSplit[0].equals(COMMAND_ADD)) {
-			String factString = messageSplit[1];
+			String factString = messageSplit[1].toLowerCase();
 			String factMessage = factString;
 			String tmpMessage = message.substring(messageSplit[0].length()
 					+ messageSplit[1].length() + 1);
@@ -64,7 +64,7 @@ public class Factoids extends DefaultPlugin {
 
 		} else if (messageSplit.length >= 3
 				&& messageSplit[0].equals(COMMAND_SET)) {
-			String factString = messageSplit[1];
+			String factString = messageSplit[1].toLowerCase();
 			String factMessage = message.substring(messageSplit[0].length()
 					+ messageSplit[1].length() + 1);
 
