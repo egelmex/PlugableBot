@@ -14,10 +14,10 @@
 		<echo>Tell</echo>
 		<ant dir="Tell" target="jar" />
 		<copy file="Tell/jar/Tell.jar" todir="output/plugins" />
-
-		<echo>Remind</echo>
-		<ant dir="Remind" target="jar" />
-		<copy file="Remind/jar/Remind.jar" todir="output/plugins" />
+		
+    <echo>Factoids</echo>
+    <ant dir="Factoids" target="jar" />
+    <copy file="Factoids/jar/Factoids.jar" todir="output/plugins" />
 
 		<echo>Stats</echo>
 		<ant dir="Stats" target="jar" />
