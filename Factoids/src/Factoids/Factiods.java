@@ -3,8 +3,6 @@ package Factoids;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import Tell.Tell;
-
 import com.PluggableBot.plugin.DefaultPlugin;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
@@ -12,7 +10,7 @@ import com.db4o.ObjectSet;
 
 public class Factiods extends DefaultPlugin {
 
-	private static final Logger log = Logger.getLogger(Tell.class.toString());
+	private static final Logger log = Logger.getLogger(Factiods.class.toString());
 	private final ObjectContainer database;
 
 	private static final String COMMAND_ADD = "!addfact";
