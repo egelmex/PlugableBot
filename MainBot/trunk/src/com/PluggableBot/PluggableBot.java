@@ -43,7 +43,7 @@ import com.PluggableBot.plugin.PluginInternal;
 public class PluggableBot extends PircBot {
 
 	private ConcurrentHashMap<String, PluginInternal> loadedPlugins = new ConcurrentHashMap<String, PluginInternal>();
-	private ConcurrentHashMap<String, PluginCommand> commands;
+	private ConcurrentHashMap<String, PluginCommand> commands = new ConcurrentHashMap<String, PluginCommand>();
 	private static Settings settings;
 	private static PluggableBot b = new PluggableBot();
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 100,
