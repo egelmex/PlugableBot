@@ -64,5 +64,34 @@ public abstract class DefaultPlugin implements Plugin {
 		return "There is no Admin Help for this plugin... :(";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.PluggableBot.plugin.Plugin#onCommand(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void onCommand(String command, String channel, String sender,
+			String login, String hostname, String message) {	}
+
+	@Override
+	public void onAdminCommand(String command, String channel, String sender,
+			String login, String hostname, String message) {
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.PluggableBot.plugin.Plugin#onPrivateAdminCommand(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void onPrivateAdminCommand(String command, String sender,
+			String login, String hostname, String message) {
+	}
+
+	/* (non-Javadoc)
+	 * @see com.PluggableBot.plugin.Plugin#onPrivateCommand(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void onPrivateCommand(String command, String sender, String login,
+			String hostname, String message) {
+	}
+	
 	
 }

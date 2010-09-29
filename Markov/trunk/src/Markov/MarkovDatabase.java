@@ -42,11 +42,13 @@ public class MarkovDatabase implements Runnable {
 		// ex = new MarkovExplorer(cache);
 	}
 
+	@SuppressWarnings("serial")
 	public void populate() {
 		// busy = true;
 		Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO,
 				"Loading data");
 		// get a list of all nodes
+		
 		List<MarkovNode> set = database.query(new Predicate<MarkovNode>() {
 			@Override
 			public boolean match(MarkovNode node) {

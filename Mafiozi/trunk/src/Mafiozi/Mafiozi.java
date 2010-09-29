@@ -18,6 +18,7 @@ import com.PluggableBot.plugin.DefaultPlugin;
  * 
  * A.Cassidy (a.cassidy@bytz.co.uk)
  */
+@Deprecated
 public class Mafiozi extends DefaultPlugin {
 
 	private Boolean inGame = false, voted = false;

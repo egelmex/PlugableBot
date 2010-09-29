@@ -29,11 +29,8 @@ import java.util.Map;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
-
-
-
 /**
- * Hometime plugin.., Simply tells you how long till you have to go home
+ * Hometime plugin, Simply tells you how long till you have to go home
  * 
  * @author A.Cassidy (a.cassidy@bytz.co.uk) 11 November 2007
  * @author Mex 2010
@@ -42,10 +39,16 @@ public class Hometime extends DefaultPlugin {
 
 	private HashMap<String, String> hometimes = new HashMap<String, String>();
 
+	private static final String COMMAND_HOMETIME = "!hometime";
+	private static final String COMMAND_SET_HOMETIME = "!sethometime";
+
 	/**
 	 * Creates a new instance of Hometime
 	 **/
 	public Hometime() {
+		bot.addCommand(COMMAND_HOMETIME, this);
+		bot.addCommand(COMMAND_SET_HOMETIME, this);
+
 		try {
 			FileReader fr = new FileReader("Hometime");
 			BufferedReader br = new BufferedReader(fr);
@@ -85,95 +88,103 @@ public class Hometime extends DefaultPlugin {
 	}
 
 	@Override
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		if (message.startsWith("!hometime")) {
-			String hometime;
-			// look up user's hometime
+	public void onCommand(String command, String channel, String sender,
+			String login, String hostname, String message) {
+		if (command.equals(COMMAND_HOMETIME)) {
+			doHometime(sender, channel);
+		} else if (command.equals(COMMAND_SET_HOMETIME)) {
+			doSetHometime(message, channel, sender);
+		}
+	}
 
-			if (hometimes.containsKey(sender)) {
-				hometime = hometimes.get(sender);
-			} else
-				hometime = "17:00";
+	private void doHometime(String sender, String channel) {
+		String hometime;
+		// look up user's hometime
 
-			Calendar now = Calendar.getInstance();
+		if (hometimes.containsKey(sender)) {
+			hometime = hometimes.get(sender);
+		} else
+			hometime = "17:00";
 
-			String[] p = hometime.split(":");
-			int hr = Integer.parseInt(p[0].replace('-', '0'));
-			int min = Integer.parseInt(p[1].replace('-', '0'));
+		Calendar now = Calendar.getInstance();
 
-			int chr = now.get(Calendar.HOUR_OF_DAY);
-			int cmin = now.get(Calendar.MINUTE);
+		String[] p = hometime.split(":");
+		int hr = Integer.parseInt(p[0].replace('-', '0'));
+		int min = Integer.parseInt(p[1].replace('-', '0'));
 
-			// has hometime past for the day?
-			if (chr > hr || (chr == hr && cmin > min)) {
-				hr += 24;
-			}
+		int chr = now.get(Calendar.HOUR_OF_DAY);
+		int cmin = now.get(Calendar.MINUTE);
 
-			/*
-			 * if (hr < chr) { hr += 24; }
-			 */
+		// has hometime past for the day?
+		if (chr > hr || (chr == hr && cmin > min)) {
+			hr += 24;
+		}
 
-			if (min < cmin) {
-				min += 60;
-				hr--;
-			}
+		/*
+		 * if (hr < chr) { hr += 24; }
+		 */
 
-			int hrs = hr - chr;
-			int mins = min - cmin;
+		if (min < cmin) {
+			min += 60;
+			hr--;
+		}
 
-			String m = "Hometime is at " + hometime + ", which is ";
+		int hrs = hr - chr;
+		int mins = min - cmin;
 
-			if (hrs == 0 && mins == 0) {
-				m += "now!";
+		String m = "Hometime is at " + hometime + ", which is ";
+
+		if (hrs == 0 && mins == 0) {
+			m += "now!";
+		} else {
+			if (hrs == 0) {
+				m += "only ";
+			} else if (hrs == 1) {
+				m += "1 hour ";
 			} else {
-				if (hrs == 0) {
-					m += "only ";
-				} else if (hrs == 1) {
-					m += "1 hour ";
+				m += hrs + " hours ";
+			}
+
+			if (hrs > 0 && mins > 0)
+				m += "and ";
+
+			if (mins == 1) {
+				m += "1 minute ";
+			} else if (mins > 1) {
+				m += mins + " minutes ";
+			}
+
+			m += "away!";
+		}
+
+		bot.Message(channel, m);
+
+		// System.out.println("Hometime is at " + hometime + ", which is "
+		// + hrs + " hours and " + mins + " minutes away!");
+	}
+
+	private void doSetHometime(String message, String channel, String sender) {
+		String newtime = message.trim();
+		if (newtime.length() == 5 && newtime.charAt(2) == ':') {
+			String[] p = newtime.split(":");
+
+			try {
+				int hr = Integer.parseInt(p[0].replace('-', '0'));
+				int min = Integer.parseInt(p[1].replace('-', '0'));
+
+				if (hr > 23 || hr < 0 || min < 0 || min > 59) {
+					bot.Message(channel, "Invalid time : " + newtime);
 				} else {
-					m += hrs + " hours ";
+
+					hometimes.put(sender, newtime);
+					save();
 				}
-
-				if (hrs > 0 && mins > 0)
-					m += "and ";
-
-				if (mins == 1) {
-					m += "1 minute ";
-				} else if (mins > 1) {
-					m += mins + " minutes ";
-				}
-
-				m += "away!";
+			} catch (NumberFormatException e) {
+				bot.Message(channel, "Generic error saving hometime : "
+						+ newtime);
 			}
-
-			bot.Message(channel, m);
-
-			// System.out.println("Hometime is at " + hometime + ", which is "
-			// + hrs + " hours and " + mins + " minutes away!");
-		} else if (message.startsWith("!sethometime")) {
-			String newtime = message.substring(13).trim();
-			if (newtime.length() == 5 && newtime.charAt(2) == ':') {
-				String[] p = newtime.split(":");
-
-				try {
-					int hr = Integer.parseInt(p[0].replace('-', '0'));
-					int min = Integer.parseInt(p[1].replace('-', '0'));
-
-					if (hr > 23 || hr < 0 || min < 0 || min > 59) {
-						bot.Message(channel, "Invalid time : " + newtime);
-					} else {
-
-						hometimes.put(sender, newtime);
-						save();
-					}
-				} catch (NumberFormatException e) {
-					bot.Message(channel, "Generic error saving hometime : "
-							+ newtime);
-				}
-			} else {
-				bot.Message(channel, "Time must be in the format HH:MM");
-			}
+		} else {
+			bot.Message(channel, "Time must be in the format HH:MM");
 		}
 	}
 

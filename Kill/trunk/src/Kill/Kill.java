@@ -43,13 +43,22 @@ import com.db4o.ObjectSet;
 public class Kill extends DefaultPlugin {
 
 	private ObjectContainer database;
-	
-	private static Logger log = Logger.getLogger(Kill.class.getName());
 
-	/** 
-	 * Creates a new instance of KillPlugin 
+	private static final Logger log = Logger.getLogger(Kill.class.getName());
+	private static final String COMMAND_KILL = "!kill";
+	private static final String COMMAND_ADD_KILL = "!addkill";
+	private static final String COMMAND_LIST_KILLS = "!listkills";
+	private static final String COMMAND_REMOVE_KILL = "!removekill";
+
+	/**
+	 * Creates a new instance of KillPlugin
 	 */
 	public Kill() {
+		bot.addCommand(COMMAND_KILL, this);
+		bot.addCommand(COMMAND_ADD_KILL, this);
+		bot.addCommand(COMMAND_LIST_KILLS, this);
+		bot.addCommand(COMMAND_REMOVE_KILL, this);
+
 		log.info("Kill: loading database");
 		database = Db4o.openFile("Kill.db4o");
 		Db4o.configure().objectClass(KillLists.class).cascadeOnUpdate(true);
@@ -74,26 +83,26 @@ public class Kill extends DefaultPlugin {
 	private void kill(String sender, String message, String channel) {
 
 		String randomKill = getKillList(sender).getRandomKill();
-		String target = message.substring(6).trim();
+		String target = message.trim();
 		if (target.toLowerCase().equals(bot.Nick().toLowerCase()))
 			target = sender;
 		bot.Action(channel, randomKill.replaceAll("%NAME", target));
 	}
 
-	/**
-	 * 
+	 /* 
 	 * @param sender
 	 * @param message
 	 */
 	private void addKill(String sender, String message) {
 		KillLists killer = getKillList(sender);
+		String killMessage = message.trim();
 		List<String> listOfUserKills = killer.getKills();
-		if (!listOfUserKills.contains(message.substring(9))) {
-			listOfUserKills.add(message.substring(9));
+		if (!listOfUserKills.contains(killMessage)) {
+			listOfUserKills.add(killMessage);
 			killer.setKills(listOfUserKills);
 			database.set(killer);
 			database.commit();
-			bot.Message(sender, "Added kill: " + message.substring(9));
+			bot.Message(sender, "Added kill: " + killMessage);
 		} else {
 			bot.Message(sender, "Kill '" + message.substring(9)
 					+ "' already exosists");
@@ -102,17 +111,18 @@ public class Kill extends DefaultPlugin {
 
 	/**
 	 * List a users kills
+	 * 
 	 * @param sender
 	 */
 	private void listKills(String sender) {
 		KillLists killer = getKillList(sender);
 		List<String> listOfUserKills = killer.getKills();
 		if (listOfUserKills.size() > 0) {
-		
-		bot.Message(sender, "You kills are : ");
-		for (int i = 0; i < listOfUserKills.size(); ++i) {
-			bot.Message(sender, i + ": " + listOfUserKills.get(i));
-		}
+
+			bot.Message(sender, "You kills are : ");
+			for (int i = 0; i < listOfUserKills.size(); ++i) {
+				bot.Message(sender, i + ": " + listOfUserKills.get(i));
+			}
 		} else {
 			bot.Message(sender, "You have not saved a custom kill yet...");
 			bot.Message(sender, "Save one with !addkill");
@@ -121,12 +131,13 @@ public class Kill extends DefaultPlugin {
 
 	/**
 	 * Remove a kill for a users kill list.
+	 * 
 	 * @param sender
 	 * @param message
 	 */
 	private void removeKill(String sender, String message) {
 		try {
-			int remove = Integer.parseInt(message.substring(11).trim());
+			int remove = Integer.parseInt(message.trim());
 			KillLists proto = new KillLists(sender);
 			ObjectSet<KillLists> killsContainer = database.get(proto);
 			if (killsContainer.size() == 1) {
@@ -145,13 +156,13 @@ public class Kill extends DefaultPlugin {
 	}
 
 	@Override
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		if (message.startsWith("!kill")) {
+	public void onCommand(String command, String channel, String sender,
+			String login, String hostname, String message) {
+		if (command.equals(COMMAND_KILL)) {
 			kill(sender, message, channel);
-		} else if (message.startsWith("!addkill")) {
+		} else if (command.equals(COMMAND_ADD_KILL)) {
 			addKill(sender, message);
-		} else if (message.startsWith("!listkills")) {
+		} else if (command.equals(COMMAND_LIST_KILLS)) {
 			listKills(sender);
 		} else if (message.startsWith("!removekill")) {
 			removeKill(sender, message);

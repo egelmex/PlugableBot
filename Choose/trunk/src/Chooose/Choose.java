@@ -1,5 +1,6 @@
 /*
  * Copyright 2007 A.Cassidy (andrew.cassidy@bytz.co.uk)
+ * Copyright 2010 Mex (me92@kent.ac.uk)
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -25,17 +26,23 @@ import com.PluggableBot.plugin.DefaultPlugin;
  * options. !choose yes or no for example
  * 
  * @author A.Cassidy (andrew.cassidy@bytz.co.uk) 31 October 2007
+ * @author Mex 2010
  */
 public class Choose extends DefaultPlugin {
 
 	private static Random r = new Random();
+	private static final String ACTION = "!choose";
+
+	public Choose() {
+		bot.addCommand(ACTION, this);
+	}
 
 	@Override
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		if (message.startsWith("!choose")) {
+	public void onCommand(String command, String channel, String sender,
+			String login, String hostname, String message) {
+		if (message.equals(ACTION)) {
 			try {
-				String[] opts = message.substring(8).split(" or ");
+				String[] opts = message.split(" or ");
 				bot.Message(channel, sender + ": "
 						+ opts[r.nextInt(opts.length)]);
 			} catch (Exception e) {

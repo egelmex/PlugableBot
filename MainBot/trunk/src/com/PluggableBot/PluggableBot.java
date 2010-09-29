@@ -19,6 +19,7 @@ package com.PluggableBot;
 
 import java.io.File;
 import java.net.URL;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,7 +32,7 @@ import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
 import com.PluggableBot.plugin.Plugin;
-
+import com.PluggableBot.plugin.PluginInternal;
 
 /**
  * An implementation of a PircBot with loadable module support.
@@ -41,7 +42,8 @@ import com.PluggableBot.plugin.Plugin;
  */
 public class PluggableBot extends PircBot {
 
-	private ConcurrentHashMap<String, Plugin> loadedPlugins = new ConcurrentHashMap<String, Plugin>();
+	private ConcurrentHashMap<String, PluginInternal> loadedPlugins = new ConcurrentHashMap<String, PluginInternal>();
+	private ConcurrentHashMap<String, PluginCommand> commands;
 	private static Settings settings;
 	private static PluggableBot b = new PluggableBot();
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 100,
@@ -50,10 +52,10 @@ public class PluggableBot extends PircBot {
 	private static Logger log = Logger.getLogger(PluggableBot.class.getName());
 
 	private static final String PLUGIN_DIR = "plugins";
-	
+
 	private static final String COMMAND_IDENTIFY = "!identify";
 	private static final String COMMAND_LOGOUT = "!logout";
-	
+
 	/**
 	 * Main method. Used to star up the plugin
 	 * 
@@ -74,7 +76,7 @@ public class PluggableBot extends PircBot {
 		b.loadPlugins(settings.getPlugins());
 
 		b.connect();
-		
+
 		b.identify(settings.getNickservPassword());
 	}
 
@@ -130,12 +132,14 @@ public class PluggableBot extends PircBot {
 	 *            The plugin that is being added
 	 */
 	protected void addPlugin(String name, Plugin p) {
-		loadedPlugins.put(name, p);
+		loadedPlugins.put(name, new PluginInternal(p));
 		p.setBot(b);
 	}
 
 	public void unloadPlugin(String name) {
-		loadedPlugins.get(name).unload();
+		Plugin plugin = loadedPlugins.get(name);
+		cleanUpCommands(plugin);
+		plugin.unload();
 		loadedPlugins.remove(name);
 	}
 
@@ -247,21 +251,24 @@ public class PluggableBot extends PircBot {
 	@Override
 	protected void onPrivateMessage(String sender, String login,
 			String hostname, String message) {
-
+		passCommand(null, sender, login, hostname, message);
 		if (message.startsWith(COMMAND_IDENTIFY)) {
 			if (settings.getPassword() != null) {
-				String password = message.substring(COMMAND_IDENTIFY.length()).trim();
+				String password = message.substring(COMMAND_IDENTIFY.length())
+						.trim();
 				if (password.equals(settings.getPassword())) {
 					admin = sender;
 					b.sendMessage(sender, "identified");
 					log.info("User " + sender + " is not admin");
 				} else {
-					log.info("User " + sender + " tried to become admin ussing password '" + password + "'");
+					log.info("User " + sender
+							+ " tried to become admin ussing password '"
+							+ password + "'");
 				}
 			} else {
 				log.info("Password was not Set, Admin is disabled.");
 			}
-		}else if (message.startsWith(COMMAND_LOGOUT) && sender == admin) {
+		} else if (message.startsWith(COMMAND_LOGOUT) && sender == admin) {
 			admin = null;
 			b.Message(sender, "You are no longer admin.");
 		} else if (admin.equals(sender)) {
@@ -328,7 +335,62 @@ public class PluggableBot extends PircBot {
 		return b.getUsers(channel);
 	}
 
-	public void getNicks() {
+	public void addCommand(String command, Plugin p) {
+		command = command.toLowerCase();
+		if (commands.containsKey(command)) {
+			throw new InvalidParameterException("Command already Exists");
+		} else {
+			commands.put(command, new PluginCommand(command, p, false));
+		}
+	}
+
+	public void addAdminCommand(String command, Plugin p) {
+		command = command.toLowerCase();
+		if (commands.containsKey(command)) {
+			throw new InvalidParameterException("Command already Exists");
+		} else {
+			commands.put(command, new PluginCommand(command, p, true));
+		}
+	}
+
+	public void passCommand(String channel, String sender, String login,
+			String hostname, String message) {
+		String[] messageParts = message.split(" ");
+		for (String command : commands.keySet()) {
+			if (messageParts[0].toLowerCase().equals(command)) {
+				PluginCommand c = commands.get(command);
+				if (c.isAdmin() && admin.equals(sender)) {
+					Plugin p = c.getPlugin();
+					if (channel == null) {
+						p.onPrivateAdminCommand(command, sender, login,
+								hostname, message);
+					} else {
+						p.onAdminCommand(command, channel, sender, login,
+								hostname, message.substring(command.length()));
+					}
+				} else {
+					Plugin p = c.getPlugin();
+					if (channel == null) {
+						p.onPrivateCommand(command, sender, login, hostname,
+								message);
+					} else {
+						p.onCommand(command, channel, sender, login, hostname,
+								message.substring(command.length()));
+					}
+				}
+				return;
+			}
+		}
+	}
+
+	public void cleanUpCommands(Plugin plugin) {
+		for (String command : commands.keySet()) {
+			Plugin p = commands.get(command).getPlugin();
+			if (p == plugin) {
+				commands.remove(command);
+			}
+		}
+
 	}
 
 }

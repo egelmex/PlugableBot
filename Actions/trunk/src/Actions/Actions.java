@@ -31,24 +31,31 @@ import java.util.concurrent.TimeUnit;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
-
-
-
 /**
  * Actions plugin. This plugin provides retorts to users when the Action the
  * bot.
  * 
  * @author A.Cassidy (andrew.cassidy@bytz.co.uk) 09 October 2007
- * @author Mex (ellism88@gmail.com)
+ * @author Mex (ellism88@gmail.com) 2010
  */
 public class Actions extends DefaultPlugin {
 
+	private static final String ACTION_ADD = "!addaction";
+	private static final String ACTION_LIST = "!listactions";
+
 	public Actions() {
 		reloadActions();
+		bot.addCommand(ACTION_ADD, this);
+		bot.addCommand(ACTION_LIST, this);
 	}
 
+	// List of known attacks
 	private ArrayList<String> attacks = new ArrayList<String>();
+
+	// RNG for picking attacks
 	private Random r = new Random();
+
+	// whether users can add new actions.
 	private boolean adminEnabled = false;
 
 	private ThreadPoolExecutor pool = new ThreadPoolExecutor(3, 5, 60,
@@ -70,7 +77,10 @@ public class Actions extends DefaultPlugin {
 		}
 	}
 
-	public void reloadActions() {
+	/**
+	 * Reload the Actions list
+	 */
+	private void reloadActions() {
 		attacks = new ArrayList<String>();
 		try {
 			FileReader fr = new FileReader("Action");
@@ -84,6 +94,11 @@ public class Actions extends DefaultPlugin {
 		}
 	}
 
+	/**
+	 * Save the Actions list
+	 * 
+	 * @return return true if save completed successfully.
+	 */
 	private boolean saveActions() {
 		boolean ok = true;
 		try {
@@ -101,37 +116,18 @@ public class Actions extends DefaultPlugin {
 		return ok;
 	}
 
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
-		if (message.startsWith("!addaction") && adminEnabled) {
-			String s = message.substring(11);
-			if (attacks.contains(s)) {
-				bot.Message(channel, sender
-						+ ": Stop feeding me the same junk!");
-			} else {
-				attacks.add(s);
-				boolean ok = saveActions();
-				if (ok) {
-					bot.Message(channel, sender + ": I will remeber that!");
-				} else {
-					bot.Message(channel, sender
-							+ ": Whoops I am being forgetful today!");
-					attacks.remove(s);
-				}
-			}
 
-		} else if (message.toLowerCase().startsWith("!listactions")
-				&& adminEnabled) {
-			pool.execute(new Runny(sender, attacks));
-		}
-	}
-
-	public class Runny implements Runnable {
+	/**
+	 * Used to print the actions list asyncronsly to stop long list crashing the bot.
+	 * @author me92
+	 *
+	 */
+	public class AsyncList implements Runnable {
 		String sender;
 		List<String> actions;
 
 		@SuppressWarnings("unchecked")
-		public Runny(String sender, ArrayList<String> actions) {
+		public AsyncList(String sender, ArrayList<String> actions) {
 			this.sender = sender;
 			this.actions = (List<String>) actions.clone();
 		}
@@ -147,6 +143,7 @@ public class Actions extends DefaultPlugin {
 
 	}
 
+	@Override
 	public String getHelp() {
 		if (adminEnabled) {
 			return "This plugin makes me retaliate to any action performed against me. Use !addaction followed by the action, using %NAME and %SENDER as placeholders to add a new one. !listactions";
@@ -174,5 +171,33 @@ public class Actions extends DefaultPlugin {
 							"Actions Admin Help: !actionenableadmin, !actiondisableadmin, !actionreload");
 		}
 
+	}
+
+	@Override
+	public void onCommand(String command, String channel, String sender,
+			String login, String hostname, String message) {
+
+		// ///// ADD ACTION
+		if (command.equals(ACTION_ADD) && adminEnabled) {
+			String s = message.trim();
+			if (attacks.contains(s)) {
+				bot.Message(channel, sender
+						+ ": Stop feeding me the same junk!");
+			} else {
+				attacks.add(s);
+				boolean ok = saveActions();
+				if (ok) {
+					bot.Message(channel, sender + ": I will remeber that!");
+				} else {
+					bot.Message(channel, sender
+							+ ": Whoops I am being forgetful today!");
+					attacks.remove(s);
+				}
+			}
+		}
+		////// LIST ACTIONS
+		else if (command.equals(ACTION_LIST) && adminEnabled) {
+			pool.execute(new AsyncList(sender, attacks));
+		}
 	}
 }

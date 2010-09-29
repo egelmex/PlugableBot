@@ -24,63 +24,72 @@ import com.PluggableBot.plugin.DefaultPlugin;
 /**
  * 
  * @author Mex (ellism88@gmail.com) 2010
- *
+ * 
  */
 public class Admin extends DefaultPlugin {
-	
+
 	public static final String ACTION_STRING = "!";
-	public static final String ACTION_UNLOAD = "unload";
-	public static final String ACTION_LOAD = "load";
-	public static final String ACTION_RELOAD = "reload";
-	public static final String ACTION_PART = "part";
-	public static final String ACTION_JOIN = "join";
-	public static final String ACTION_LIST = "list";
-	
+	public static final String ACTION_UNLOAD = ACTION_STRING + "unload";
+	public static final String ACTION_LOAD = ACTION_STRING + "load";
+	public static final String ACTION_RELOAD = ACTION_STRING + "reload";
+	public static final String ACTION_PART = ACTION_STRING + "part";
+	public static final String ACTION_JOIN = ACTION_STRING + "join";
+	public static final String ACTION_LIST = ACTION_STRING + "list";
+
+	public Admin() {
+		bot.addAdminCommand(ACTION_JOIN, this);
+		bot.addAdminCommand(ACTION_LOAD, this);
+		bot.addAdminCommand(ACTION_UNLOAD, this);
+		bot.addAdminCommand(ACTION_RELOAD, this);
+		bot.addAdminCommand(ACTION_PART, this);
+		bot.addAdminCommand(ACTION_LIST, this);
+	}
+
 	@Override
 	public String getHelp() {
 		return "Like I would tell you!";
 	}
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.PluggableBot.plugin.DefaultPlugin#getAdminHelp()
 	 */
 	@Override
 	public String getAdminHelp() {
-		return ("Admin Commands are: " + ACTION_STRING + ACTION_UNLOAD  + ", " + ACTION_STRING + ACTION_LOAD  + ", " + ACTION_STRING + ACTION_RELOAD  + ", " + ACTION_STRING + ACTION_JOIN  + ", " + ACTION_STRING + ACTION_PART );
+		return ("Admin Commands are: " + ACTION_STRING + ACTION_UNLOAD + ", "
+				+ ACTION_STRING + ACTION_LOAD + ", " + ACTION_STRING
+				+ ACTION_RELOAD + ", " + ACTION_STRING + ACTION_JOIN + ", "
+				+ ACTION_STRING + ACTION_PART);
 	}
 
-
-
+	
 	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
-		if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_UNLOAD)) {
-			bot.unloadPlugin(message.substring(7));
-			bot.Message(sender, "unloaded " + message.substring(7));
-		} 
-		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_RELOAD)) {
-			bot.unloadPlugin(message.substring(7));
-			bot.loadPlugin(message.substring(7));
-			bot.Message(sender, "reloaded " + message.substring(7));
-		} 
-		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_JOIN)) {
-			bot.joinChannel(message.substring(5));
-			bot.Message(sender, "joined " + message.substring(5));
-		} 
-		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_PART)) {
-			bot.partChannel(message.substring(5));
-			bot.Message(sender, "left channel " + message.substring(5));
-		} 
-		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_LOAD)) {
-			bot.loadPlugin(message.substring(5));
-			bot.Message(sender, "Tried to load " + message.substring(5));
-		}
-		else if (message.toLowerCase().startsWith("!help admin")) {
-			bot.Message(sender, getAdminHelp());
-		}
-		else if (message.toLowerCase().startsWith(ACTION_STRING + ACTION_LIST)) {
-			File pluginsFolder = new File("./plugins") ;
+	public void onPrivateAdminCommand(String command, String sender,
+			String login, String hostname, String message) {
+		message = message.trim();
+		if (command.equals(ACTION_UNLOAD)) {
+			bot.unloadPlugin(message);
+			bot.Message(sender, "unloaded " + message);
+		} else if (command.equals(ACTION_RELOAD)) {
+			bot.unloadPlugin(message);
+			bot.loadPlugin(message);
+			bot.Message(sender, "reloaded " + message);
+		} else if (command.equals(ACTION_LOAD)) {
+			bot.loadPlugin(message);
+			bot.Message(sender, "Tried to load " + message);
+		} else if (command.equals(ACTION_RELOAD)) {
+			bot.unloadPlugin(message.trim());
+			bot.loadPlugin(message.trim());
+			bot.Message(sender, "reloaded " + message.trim());
+		} else if (command.equals(ACTION_JOIN)) {
+			bot.joinChannel(message);
+			bot.Message(sender, "joined " + message);
+		}else if (command.equals(ACTION_PART)) {
+			bot.partChannel(message);
+			bot.Message(sender, "left channel " + message);
+		}else if (command.equals(ACTION_LIST)) {
+			File pluginsFolder = new File("./plugins");
 			for (String f : pluginsFolder.list()) {
 				if (f.endsWith(".jar")) {
 					bot.Message(sender, f.substring(0, f.length() - 4));
@@ -89,6 +98,5 @@ public class Admin extends DefaultPlugin {
 		}
 
 	}
-	
 
 }

@@ -186,4 +186,60 @@ public interface Plugin {
 	 * @return A help string for the Admin Users.
 	 */
 	String getAdminHelp();
+	
+	/**
+	 * TODO:
+	 * @param command
+	 * @param channel
+	 * @param sender
+	 * @param login
+	 * @param hostname
+	 * @param message
+	 */
+	void onCommand(String command, String channel, String sender, String login,
+			String hostname, String message);
+	
+	/**
+	 * TODO:
+	 * @param command
+	 * @param channel
+	 * @param sender
+	 * @param login
+	 * @param hostname
+	 * @param message
+	 */
+	void onAdminCommand(String command, String channel, String sender, String login,
+			String hostname, String message);
+	/**
+	 * This method will be called whenever a user private messages the bot
+	 * 
+	 * @param sender
+	 *            the nick of the user who sent the PM
+	 * @param login
+	 *            the login of the user who sent the PM
+	 * @param hostname
+	 *            the hostname of the user who sent the PM
+	 * @param message
+	 *            the message the user sent in the PM
+	 */
+	void onPrivateCommand(String command, String sender, String login, String hostname,
+			String message);
+	
+	/**
+	 * This method will be called whenever a user private messages the bot
+	 * 
+	 * @param sender
+	 *            the nick of the user who sent the PM
+	 * @param login
+	 *            the login of the user who sent the PM
+	 * @param hostname
+	 *            the hostname of the user who sent the PM
+	 * @param message
+	 *            the message the user sent in the PM
+	 */
+	void onPrivateAdminCommand(String command, String sender, String login, String hostname,
+			String message);
+
 }
+
+
