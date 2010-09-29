@@ -336,15 +336,22 @@ public class PluggableBot extends PircBot {
 	}
 
 	public void addCommand(String command, Plugin p) {
+		log.info("Trying to add command: '" + command + "'");
 		command = command.toLowerCase();
 		if (commands.containsKey(command)) {
 			throw new InvalidParameterException("Command already Exists");
 		} else {
 			commands.put(command, new PluginCommand(command, p, false));
 		}
+		String commandsMsg = "";
+		for (String cm : commands.keySet()) {
+			commandsMsg += cm + " ";
+		}
+		log.info("Commands are now:" + commandsMsg);
 	}
 
 	public void addAdminCommand(String command, Plugin p) {
+		log.info("Trying to add admin command: '" + command + "'");
 		command = command.toLowerCase();
 		if (commands.containsKey(command)) {
 			throw new InvalidParameterException("Command already Exists");
