@@ -41,6 +41,7 @@ public class Dns extends DefaultPlugin {
 	private static final String COMMAND = "!dns";
 
 	public Dns() {
+		super();
 		bot.addCommand(COMMAND, this);
 	}
 

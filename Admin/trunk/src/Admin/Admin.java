@@ -37,6 +37,7 @@ public class Admin extends DefaultPlugin {
 	public static final String ACTION_LIST = ACTION_STRING + "list";
 
 	public Admin() {
+		super();
 		bot.addAdminCommand(ACTION_JOIN, this);
 		bot.addAdminCommand(ACTION_LOAD, this);
 		bot.addAdminCommand(ACTION_UNLOAD, this);

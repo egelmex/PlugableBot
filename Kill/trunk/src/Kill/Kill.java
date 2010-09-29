@@ -54,6 +54,7 @@ public class Kill extends DefaultPlugin {
 	 * Creates a new instance of KillPlugin
 	 */
 	public Kill() {
+		super();
 		bot.addCommand(COMMAND_KILL, this);
 		bot.addCommand(COMMAND_ADD_KILL, this);
 		bot.addCommand(COMMAND_LIST_KILLS, this);

@@ -34,6 +34,7 @@ public class Choose extends DefaultPlugin {
 	private static final String ACTION = "!choose";
 
 	public Choose() {
+		super();
 		bot.addCommand(ACTION, this);
 	}
 

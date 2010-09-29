@@ -33,6 +33,7 @@ public class Mailinfo extends DefaultPlugin {
 	private static final String COMMAND_MAILINFO = "!mailinfo";
 
 	public Mailinfo() {
+		super();
 		bot.addCommand(COMMAND_MAILINFO, this);
 
 	}

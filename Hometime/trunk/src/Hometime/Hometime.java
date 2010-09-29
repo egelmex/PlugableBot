@@ -46,6 +46,7 @@ public class Hometime extends DefaultPlugin {
 	 * Creates a new instance of Hometime
 	 **/
 	public Hometime() {
+		super();
 		bot.addCommand(COMMAND_HOMETIME, this);
 		bot.addCommand(COMMAND_SET_HOMETIME, this);
 
