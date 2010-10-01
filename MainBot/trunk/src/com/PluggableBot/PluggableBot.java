@@ -401,4 +401,13 @@ public class PluggableBot extends PircBot {
 
 	}
 
+	@Override
+	protected void onInvite(String targetNick, String sourceNick,
+			String sourceLogin, String sourceHostname, String channel) {
+		// TODO Auto-generated method stub
+		super.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname, channel);
+		log.info("Joing " + channel + " because " + sourceNick + " invited me!");
+		joinChannel(channel);
+	}
+	
 }
