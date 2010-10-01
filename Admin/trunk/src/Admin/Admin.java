@@ -36,8 +36,8 @@ public class Admin extends DefaultPlugin {
 	public static final String ACTION_JOIN = ACTION_STRING + "join";
 	public static final String ACTION_LIST = ACTION_STRING + "list";
 
-	public Admin() {
-		super();
+	@Override
+	public void load() {
 		bot.addAdminCommand(ACTION_JOIN, this);
 		bot.addAdminCommand(ACTION_LOAD, this);
 		bot.addAdminCommand(ACTION_UNLOAD, this);
@@ -45,7 +45,7 @@ public class Admin extends DefaultPlugin {
 		bot.addAdminCommand(ACTION_PART, this);
 		bot.addAdminCommand(ACTION_LIST, this);
 	}
-
+	
 	@Override
 	public String getHelp() {
 		return "Like I would tell you!";
