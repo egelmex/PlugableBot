@@ -33,11 +33,12 @@ public class Choose extends DefaultPlugin {
 	private static Random r = new Random();
 	private static final String ACTION = "!choose";
 
-	public Choose() {
-		super();
+	@Override
+	public void load() {
+		super.load();
 		bot.addCommand(ACTION, this);
 	}
-
+	
 	@Override
 	public void onCommand(String command, String channel, String sender,
 			String login, String hostname, String message) {

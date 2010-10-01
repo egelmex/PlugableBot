@@ -32,10 +32,9 @@ public class Mailinfo extends DefaultPlugin {
 	private static final String COMMAND = "/usr/local/bin/mailinfo";
 	private static final String COMMAND_MAILINFO = "!mailinfo";
 
-	public Mailinfo() {
-		super();
+	@Override
+	public void load() {
 		bot.addCommand(COMMAND_MAILINFO, this);
-
 	}
 
 	@Override

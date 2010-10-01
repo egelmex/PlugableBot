@@ -43,12 +43,13 @@ public class Actions extends DefaultPlugin {
 	private static final String ACTION_ADD = "!addaction";
 	private static final String ACTION_LIST = "!listactions";
 
-	public Actions() {
+	@Override
+	public void load() {
+		super.load();
 		reloadActions();
 		bot.addCommand(ACTION_ADD, this);
 		bot.addCommand(ACTION_LIST, this);
 	}
-
 	// List of known attacks
 	private ArrayList<String> attacks = new ArrayList<String>();
 

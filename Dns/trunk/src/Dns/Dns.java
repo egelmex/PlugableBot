@@ -40,11 +40,11 @@ public class Dns extends DefaultPlugin {
 
 	private static final String COMMAND = "!dns";
 
-	public Dns() {
-		super();
+	@Override
+	public void load() {
 		bot.addCommand(COMMAND, this);
 	}
-
+	
 	@Override
 	public void onCommand(String command, String channel, String sender,
 			String login, String hostname, String message) {

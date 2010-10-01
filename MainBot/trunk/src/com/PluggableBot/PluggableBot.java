@@ -134,6 +134,7 @@ public class PluggableBot extends PircBot {
 	protected void addPlugin(String name, Plugin p) {
 		loadedPlugins.put(name, new PluginInternal(p));
 		p.setBot(b);
+		p.load();
 	}
 
 	public void unloadPlugin(String name) {

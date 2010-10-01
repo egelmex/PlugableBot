@@ -92,6 +92,11 @@ public abstract class DefaultPlugin implements Plugin {
 	public void onPrivateCommand(String command, String sender, String login,
 			String hostname, String message) {
 	}
+
+	@Override
+	public void load() {
+		
+	}
 	
 	
 }

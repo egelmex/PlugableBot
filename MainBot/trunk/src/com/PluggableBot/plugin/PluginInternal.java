@@ -170,4 +170,10 @@ public class PluginInternal implements Plugin {
 		
 	}
 
+	@Override
+	public void load() {
+		plugin.load();
+		
+	}
+
 }

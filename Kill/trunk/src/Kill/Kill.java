@@ -50,11 +50,8 @@ public class Kill extends DefaultPlugin {
 	private static final String COMMAND_LIST_KILLS = "!listkills";
 	private static final String COMMAND_REMOVE_KILL = "!removekill";
 
-	/**
-	 * Creates a new instance of KillPlugin
-	 */
-	public Kill() {
-		super();
+	@Override
+	public void load() {
 		bot.addCommand(COMMAND_KILL, this);
 		bot.addCommand(COMMAND_ADD_KILL, this);
 		bot.addCommand(COMMAND_LIST_KILLS, this);

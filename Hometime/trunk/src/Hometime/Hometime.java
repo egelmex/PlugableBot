@@ -42,11 +42,9 @@ public class Hometime extends DefaultPlugin {
 	private static final String COMMAND_HOMETIME = "!hometime";
 	private static final String COMMAND_SET_HOMETIME = "!sethometime";
 
-	/**
-	 * Creates a new instance of Hometime
-	 **/
-	public Hometime() {
-		super();
+
+	@Override
+	public void load() {
 		bot.addCommand(COMMAND_HOMETIME, this);
 		bot.addCommand(COMMAND_SET_HOMETIME, this);
 
@@ -68,6 +66,7 @@ public class Hometime extends DefaultPlugin {
 			ex.printStackTrace();
 		}
 	}
+	
 
 	private void save() {
 		FileWriter w;
