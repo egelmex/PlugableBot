@@ -70,8 +70,11 @@ public class PluggableBot extends PircBot {
 	 */
 	public static void main(String[] args) {
 		try {
+			System.out.println("loading logger config....");
 			LogManager.getLogManager().readConfiguration(new FileInputStream(new File("logging.properties")));
+			System.out.println(LogManager.getLogManager().toString());
 		} catch (Exception e){
+			e.printStackTrace();
 			System.exit(-1);
 		}
 		
