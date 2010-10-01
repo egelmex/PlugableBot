@@ -18,6 +18,9 @@
 package com.PluggableBot;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -26,7 +29,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
+import jmathlib.toolbox.io.systemcommand;
 
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
@@ -63,7 +69,12 @@ public class PluggableBot extends PircBot {
 	 *            takes no options.
 	 */
 	public static void main(String[] args) {
-
+		try {
+			LogManager.getLogManager().readConfiguration(new FileInputStream(new File("logging.properties")));
+		} catch (Exception e){
+			System.exit(-1);
+		}
+		
 		settings = new Settings();
 
 		// add the shutdown hook for cleaning up
@@ -78,6 +89,8 @@ public class PluggableBot extends PircBot {
 		b.connect();
 
 		b.identify(settings.getNickservPassword());
+		
+		
 	}
 
 	/**
@@ -367,6 +380,7 @@ public class PluggableBot extends PircBot {
 		for (String command : commands.keySet()) {
 			if (messageParts[0].toLowerCase().equals(command)) {
 				PluginCommand c = commands.get(command);
+				log.info("Command " + command + "matched" + (c.isAdmin() ? "(is admin)" : ""));
 				if (c.isAdmin() && admin.equals(sender)) {
 					Plugin p = c.getPlugin();
 					if (channel == null) {
