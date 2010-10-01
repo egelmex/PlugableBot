@@ -32,8 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import jmathlib.toolbox.io.systemcommand;
-
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
