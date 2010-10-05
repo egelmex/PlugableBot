@@ -1,12 +1,14 @@
 package Mafia;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 import org.jibble.pircbot.User;
 
@@ -27,6 +29,8 @@ public class Mafia extends DefaultPlugin {
 	private static final int TIMEOUT_HIT = 10 * 1000;
 	private static final int TIMEOUT_JAIL = 20 * 1000;
 	private static final int TIMEOUT_INVITE = 10 * 1000;
+	
+	private static final Logger LOG = Logger.getLogger(Mafia.class.getCanonicalName());
 
 	private Stage stage = Stage.loading;
 
@@ -42,30 +46,39 @@ public class Mafia extends DefaultPlugin {
 	@Override
 	public void load() {
 
-		bot.addCommand(COMMAND_START, this);
-		bot.addCommand(COMMAND_JOIN, this);
+		try {
+			bot.addCommand(COMMAND_START, this);
+			bot.addCommand(COMMAND_JOIN, this);
 
-		mafiaChannel = joinChannel("#mafiaboss");
-		bot.setTopic(mafiaChannel, "Mob Bosses hideout");
-		gameChannel = joinChannel("#mafia");
-		bot.setTopic(gameChannel, "Little Italy");
-		stage = Stage.noGame;
+			mafiaChannel = joinChannel("#mafiaboss", 10);
+			bot.setTopic(mafiaChannel, "Mob Bosses hideout");
+			gameChannel = joinChannel("#mafia", 10);
+			bot.setTopic(gameChannel, "Little Italy");
+			stage = Stage.noGame;
+		} catch (Exception e) {
+			bot.unloadPlugin("Mafia");
+		}
 
 	}
 
-	private String joinChannel(String prefix) {
+	private String joinChannel(String prefix, int maxTries) throws Exception {
+		if (maxTries == 0) {
+			throw new Exception("Could not find a channel");
+		}
+		
 		String chan = prefix;
 		Random rng = new Random();
 		int number = rng.nextInt(999999);
 		chan += number;
 		bot.joinChannel(chan);
 		User[] users = bot.getUsers(chan);
-		if (users.length == 1 && users[0].getNick() == bot.getNick() && users[0].isOp()) {
+		LOG.info( Arrays.toString(users));
+		if (users.length == 1 && users[0].getNick().equals(bot.getNick()) && users[0].isOp()) {
 			bot.setMode(chan, "ism");
 			return chan;
 		} else {
 			bot.partChannel(chan);
-			return joinChannel(prefix);
+			return joinChannel(prefix, maxTries--);
 		}
 	}
 
@@ -344,6 +357,8 @@ public class Mafia extends DefaultPlugin {
 		}, TIMEOUT_JAIL);
 
 	}
+	
+	
 
 	@Override
 	public void onJoin(String channel, String sender, String login, String hostname) {
