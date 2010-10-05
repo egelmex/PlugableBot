@@ -19,8 +19,6 @@ package com.PluggableBot;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -50,8 +48,8 @@ public class PluggableBot extends PircBot {
 	private ConcurrentHashMap<String, PluginCommand> commands = new ConcurrentHashMap<String, PluginCommand>();
 	private static Settings settings;
 	private static PluggableBot b = new PluggableBot();
-	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 100,
-			TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100));
+	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10, 100, TimeUnit.SECONDS,
+			new ArrayBlockingQueue<Runnable>(100));
 	private static String admin = "";
 	private static Logger log = Logger.getLogger(PluggableBot.class.getName());
 
@@ -69,13 +67,15 @@ public class PluggableBot extends PircBot {
 	public static void main(String[] args) {
 		try {
 			System.out.println("loading logger config....");
-			LogManager.getLogManager().readConfiguration(new FileInputStream(new File("logging.properties")));
+			LogManager.getLogManager().readConfiguration(
+															new FileInputStream(new File(
+																	"logging.properties")));
 			System.out.println(LogManager.getLogManager().toString());
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		settings = new Settings();
 
 		// add the shutdown hook for cleaning up
@@ -90,8 +90,7 @@ public class PluggableBot extends PircBot {
 		b.connect();
 
 		b.identify(settings.getNickservPassword());
-		
-		
+
 	}
 
 	/**
@@ -159,15 +158,14 @@ public class PluggableBot extends PircBot {
 	}
 
 	@Override
-	protected void onAction(String sender, String login, String hostname,
-			String target, String action) {
+	protected void onAction(String sender, String login, String hostname, String target,
+			String action) {
 		for (Plugin p : loadedPlugins.values())
 			p.onAction(sender, login, hostname, target, action);
 	}
 
 	@Override
-	protected void onJoin(String channel, String sender, String login,
-			String hostname) {
+	protected void onJoin(String channel, String sender, String login, String hostname) {
 		for (Plugin p : loadedPlugins.values())
 			p.onJoin(channel, sender, login, hostname);
 	}
@@ -179,8 +177,7 @@ public class PluggableBot extends PircBot {
 			for (String s : settings.getChannels())
 				b.joinChannel(s);
 		} catch (Exception e) {
-			System.err
-					.println("Could not connect to server: " + e.getMessage());
+			System.err.println("Could not connect to server: " + e.getMessage());
 			System.exit(0);
 		}
 	}
@@ -198,17 +195,15 @@ public class PluggableBot extends PircBot {
 	}
 
 	@Override
-	protected void onKick(String channel, String kickerNick,
-			String kickerLogin, String kickerHostname, String recipientNick,
-			String reason) {
+	protected void onKick(String channel, String kickerNick, String kickerLogin,
+			String kickerHostname, String recipientNick, String reason) {
 		for (Plugin p : loadedPlugins.values())
-			p.onKick(channel, kickerNick, kickerLogin, kickerHostname,
-					recipientNick, reason);
+			p.onKick(channel, kickerNick, kickerLogin, kickerHostname, recipientNick, reason);
 	}
 
 	@Override
-	protected void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
+	protected void onMessage(String channel, String sender, String login, String hostname,
+			String message) {
 		if (message.startsWith("!help")) {
 			if (message.trim().split(" ").length == 1) {
 				// loaded plugins
@@ -229,14 +224,12 @@ public class PluggableBot extends PircBot {
 				boolean flag = false;
 				for (String string : loadedPlugins.keySet()) {
 					if (string.toLowerCase().equals(s[1].toLowerCase())) {
-						sendMessage(channel, loadedPlugins.get(string)
-								.getHelp());
+						sendMessage(channel, loadedPlugins.get(string).getHelp());
 						flag = true;
 					}
 				}
 				if (!flag) {
-					sendMessage(channel,
-							"Could not find help for the specified plugin");
+					sendMessage(channel, "Could not find help for the specified plugin");
 				}
 
 			}
@@ -247,15 +240,14 @@ public class PluggableBot extends PircBot {
 	}
 
 	@Override
-	protected void onPart(String channel, String sender, String login,
-			String hostname) {
+	protected void onPart(String channel, String sender, String login, String hostname) {
 		for (Plugin p : loadedPlugins.values())
 			p.onPart(channel, sender, login, hostname);
 	}
 
 	@Override
-	protected void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) {
+	protected void onQuit(String sourceNick, String sourceLogin, String sourceHostname,
+			String reason) {
 		for (Plugin p : loadedPlugins.values())
 			p.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 
@@ -264,20 +256,17 @@ public class PluggableBot extends PircBot {
 	}
 
 	@Override
-	protected void onPrivateMessage(String sender, String login,
-			String hostname, String message) {
+	protected void onPrivateMessage(String sender, String login, String hostname, String message) {
 		passCommand(null, sender, login, hostname, message);
 		if (message.startsWith(COMMAND_IDENTIFY)) {
 			if (settings.getPassword() != null) {
-				String password = message.substring(COMMAND_IDENTIFY.length())
-						.trim();
+				String password = message.substring(COMMAND_IDENTIFY.length()).trim();
 				if (password.equals(settings.getPassword())) {
 					admin = sender;
 					b.sendMessage(sender, "identified");
-					log.info("User " + sender + " is not admin");
+					log.info("User " + sender + " is now admin");
 				} else {
-					log.info("User " + sender
-							+ " tried to become admin ussing password '"
+					log.info("User " + sender + " tried to become admin ussing password '"
 							+ password + "'");
 				}
 			} else {
@@ -297,8 +286,7 @@ public class PluggableBot extends PircBot {
 	}
 
 	@Override
-	protected void onNickChange(String oldNick, String login, String hostname,
-			String newNick) {
+	protected void onNickChange(String oldNick, String login, String hostname, String newNick) {
 		if (oldNick.equals(admin))
 			admin = newNick;
 	}
@@ -316,8 +304,8 @@ public class PluggableBot extends PircBot {
 	}
 
 	public void Message(String channel, String target, String message) {
-		b.sendMessage(channel, new StringBuilder().append(target).append(": ")
-				.append(message).toString());
+		b.sendMessage(channel, new StringBuilder().append(target).append(": ").append(message)
+				.toString());
 	}
 
 	private void cleanup() {
@@ -375,8 +363,8 @@ public class PluggableBot extends PircBot {
 		}
 	}
 
-	public void passCommand(String channel, String sender, String login,
-			String hostname, String message) {
+	public void passCommand(String channel, String sender, String login, String hostname,
+			String message) {
 		String[] messageParts = message.split(" ");
 		for (String command : commands.keySet()) {
 			if (messageParts[0].toLowerCase().equals(command)) {
@@ -385,20 +373,20 @@ public class PluggableBot extends PircBot {
 				if (c.isAdmin() && admin.equals(sender)) {
 					Plugin p = c.getPlugin();
 					if (channel == null) {
-						p.onPrivateAdminCommand(command, sender, login,
-								hostname, message);
+						p.onPrivateAdminCommand(command, sender, login, hostname, message
+								.substring(command.length()));
 					} else {
-						p.onAdminCommand(command, channel, sender, login,
-								hostname, message.substring(command.length()));
+						p.onAdminCommand(command, channel, sender, login, hostname, message
+								.substring(command.length()));
 					}
 				} else {
 					Plugin p = c.getPlugin();
 					if (channel == null) {
-						p.onPrivateCommand(command, sender, login, hostname,
-								message);
+						p.onPrivateCommand(command, sender, login, hostname, message
+								.substring(command.length()));
 					} else {
-						p.onCommand(command, channel, sender, login, hostname,
-								message.substring(command.length()));
+						p.onCommand(command, channel, sender, login, hostname, message
+								.substring(command.length()));
 					}
 				}
 				return;
@@ -417,12 +405,12 @@ public class PluggableBot extends PircBot {
 	}
 
 	@Override
-	protected void onInvite(String targetNick, String sourceNick,
-			String sourceLogin, String sourceHostname, String channel) {
+	protected void onInvite(String targetNick, String sourceNick, String sourceLogin,
+			String sourceHostname, String channel) {
 		// TODO Auto-generated method stub
 		super.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname, channel);
 		log.info("Joing " + channel + " because " + sourceNick + " invited me!");
 		joinChannel(channel);
 	}
-	
+
 }
