@@ -78,7 +78,7 @@ public class Mafia extends DefaultPlugin {
 			return chan;
 		} else {
 			bot.partChannel(chan);
-			return joinChannel(prefix, maxTries--);
+			return joinChannel(prefix, --maxTries);
 		}
 	}
 
