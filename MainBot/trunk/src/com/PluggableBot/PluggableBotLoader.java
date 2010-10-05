@@ -55,9 +55,7 @@ class PluggableBotLoader implements Runnable {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			log.warning("Could not find class " + name + "." + name + " looked in...");
-			for (URL url : urls)
-				log.warning("looked in:" + url);
+			log.warning("Could not find class " + name + "." + name + " looked in " + urls.length + " jars");
 			e.printStackTrace();
 			try {
 				Plugin p = (Plugin) newLoader.loadClass(name).newInstance();
