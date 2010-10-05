@@ -28,7 +28,6 @@ public class Mafia extends DefaultPlugin {
 	private static final int TIMEOUT_JOIN = 10 * 1000;
 	private static final int TIMEOUT_HIT = 10 * 1000;
 	private static final int TIMEOUT_INVITE = 10 * 1000;
-	
 
 	private Stage stage = Stage.loading;
 
@@ -63,8 +62,9 @@ public class Mafia extends DefaultPlugin {
 		if (users.length == 1 && users[0].getNick() == bot.getNick()
 				&& users[0].isOp()) {
 			bot.setTopic(mafiaChannel, "Mob Bosses hideout");
-			bot.setMode(mafiaChannel, "is");
+			bot.setMode(mafiaChannel, "ism");
 		} else {
+			bot.partChannel(mafiaChannel);
 			joinMafiaChannel();
 		}
 
@@ -82,8 +82,9 @@ public class Mafia extends DefaultPlugin {
 		if (users.length == 1 && users[0].getNick() == bot.getNick()
 				&& users[0].isOp()) {
 			bot.setTopic(mafiaChannel, "Down town Italy");
-			bot.setMode(mafiaChannel, "is");
+			bot.setMode(mafiaChannel, "ism");
 		} else {
+			bot.partChannel(gameChannel);
 			joinGameChannel();
 		}
 
@@ -131,6 +132,24 @@ public class Mafia extends DefaultPlugin {
 						+ ": You can not join a running game.");
 			}
 
+		} else if (command.equals(COMMAND_HIT) && channel.equals(mafiaChannel)) {
+			switch (stage) {
+			case mafiahit:
+				if (players.contains(message.trim())) {
+					hitMap.put(sender, message);
+					bot.sendMessage(channel, sender + ": OK.");
+				} else {
+					bot.sendMessage(channel, sender + ": Unknown target");
+				}
+				break;
+			default:
+				bot
+						.sendMessage(
+								channel,
+								sender
+										+ ": You can only plan your hits under the cover of darkness.");
+				break;
+			}
 		}
 	}
 
@@ -142,6 +161,7 @@ public class Mafia extends DefaultPlugin {
 			String nextMafia = players.get(rng.nextInt(players.size()));
 			if (!mafia.contains(nextMafia)) {
 				mafia.add(nextMafia);
+				bot.sendInvite(mafiaChannel, nextMafia);
 			}
 
 		}
@@ -149,17 +169,61 @@ public class Mafia extends DefaultPlugin {
 		bot.sendMessage(gameChannel,
 				"The mafia is loose, people are going to die");
 
-		for (String boss : mafia) {
-			bot.sendInvite(boss, mafiaChannel);
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				checkMafia();
+				
+			}
+		}, TIMEOUT_INVITE);
+
+	}
+	
+	public void checkMafia() {
+		User[] mafiaU = bot.getUsers(mafiaChannel);
+		if (mafiaU.length < 2) {
+			for (String player : players) {
+				bot.kick(gameChannel, player, "No Mafia turned up :(");
+				bot.kick(mafiaChannel, player, "Too late.");
+			}
+			stage = Stage.noGame;
+		} else {
+			stage = Stage.mafiahit;
+			bot.sendMessage(mafiaChannel, "Nightime falls, its time to plan your kill.");
+			String users = "";
+			for (String player : players) {
+				users += player + " ";
+			}
+			bot.sendMessage(mafiaChannel, "The following people are still alive:" + users);
+			bot.sendMessage(mafiaChannel, "Choose who to kill with "+ COMMAND_HIT +" <name>");
+			bot.sendMessage(mafiaChannel, "You have " + TIMEOUT_HIT / 1000 + " seconds to choose");
+			timer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+
+					
+				}
+			}, TIMEOUT_HIT);
 		}
-
-
+	}
+	
+	private void calculateHit() {
+		
 	}
 
 	@Override
 	public void onJoin(String channel, String sender, String login,
 			String hostname) {
-		if (channel == mafiaChannel) {
+		if (channel.equals(mafiaChannel)) {
+			if (mafia.contains(sender)) {
+				bot.voice(mafiaChannel, sender);
+			}
+		} else if (channel.equals(gameChannel)) {
+			if (players.contains(sender)) {
+				bot.voice(gameChannel, sender);
+			}
 		}
 	}
 
