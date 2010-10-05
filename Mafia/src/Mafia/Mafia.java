@@ -71,7 +71,7 @@ public class Mafia extends DefaultPlugin {
 		int number = rng.nextInt(999999);
 		chan += number;
 		bot.joinChannel(chan);
-		this.wait(1000);
+		Thread.currentThread().sleep(1000);
 		User[] users = bot.getUsers(chan);
 		LOG.info( Arrays.toString(users));
 		if (users.length == 1 && users[0].getNick().equals(bot.getNick()) && users[0].isOp()) {
