@@ -30,7 +30,7 @@
 		
 		<echo>Mafia</echo>
 		<ant dir="Mafia" target="jar" />
-		<copy file="Mafia/jar/Markov.jar" todir="output/plugins" />
+		<copy file="Mafia/jar/Mafia.jar" todir="output/plugins" />
 
 		<ant dir="Admin/trunk" target="jar" />
 		<copy file="Admin/trunk/jar/Admin.jar" todir="output/plugins" />
