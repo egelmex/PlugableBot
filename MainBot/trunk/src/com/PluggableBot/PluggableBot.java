@@ -144,10 +144,19 @@ public class PluggableBot extends PircBot {
 	 * @param p
 	 *            The plugin that is being added
 	 */
-	protected void addPlugin(String name, Plugin p) {
+	protected void addPlugin(String name, final Plugin p) {
 		loadedPlugins.put(name, new PluginInternal(p));
 		p.setBot(b);
-		p.load();
+		pool.execute(
+		new Runnable() {
+			
+			@Override
+			public void run() {
+				p.load();
+				
+			}
+		});
+		
 	}
 
 	public void unloadPlugin(String name) {
