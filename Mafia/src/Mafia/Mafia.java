@@ -65,19 +65,26 @@ public class Mafia extends DefaultPlugin {
 		if (maxTries == 0) {
 			throw new Exception("Could not find a channel");
 		}
-		
+		LOG.info("joining channel tries = " + maxTries);
 		String chan = prefix;
 		Random rng = new Random();
 		int number = rng.nextInt(999999);
 		chan += number;
+		LOG.info("trying to join channel " + chan);
 		bot.joinChannel(chan);
-		Thread.currentThread().sleep(1000);
+		LOG.info("going to sleep for 1000");
+		Thread.sleep(1000);
+		LOG.info("waking up.");
 		User[] users = bot.getUsers(chan);
+		LOG.info("Got users");
 		LOG.info( Arrays.toString(users));
+		
 		if (users.length == 1 && users[0].getNick().equals(bot.getNick()) && users[0].isOp()) {
+			LOG.info("This is a good channel");
 			bot.setMode(chan, "ism");
 			return chan;
 		} else {
+			LOG.info("bad channel");
 			bot.partChannel(chan);
 			return joinChannel(prefix, --maxTries);
 		}
