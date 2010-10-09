@@ -18,6 +18,7 @@
 package Admin;
 
 import java.io.File;
+import java.util.List;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
@@ -91,9 +92,11 @@ public class Admin extends DefaultPlugin {
 			bot.Message(sender, "left channel " + message);
 		}else if (command.equals(ACTION_LIST)) {
 			File pluginsFolder = new File("./plugins");
+			List<String> loadedPlugins = bot.listPlugins();
 			for (String f : pluginsFolder.list()) {
 				if (f.endsWith(".jar")) {
-					bot.Message(sender, f.substring(0, f.length() - 4));
+					String jarName = f.substring(0, f.length() - 4);
+					bot.Message(sender, jarName + (loadedPlugins.contains(jarName)?"*":""));
 				}
 			}
 		}

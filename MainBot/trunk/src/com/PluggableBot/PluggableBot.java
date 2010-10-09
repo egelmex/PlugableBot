@@ -22,6 +22,8 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -422,4 +424,8 @@ public class PluggableBot extends PircBot {
 		joinChannel(channel);
 	}
 
+	public List<String> listPlugins() {
+		return Collections.list(loadedPlugins.keys());
+	}
+	
 }
