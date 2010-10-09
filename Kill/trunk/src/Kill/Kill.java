@@ -82,13 +82,15 @@ public class Kill extends DefaultPlugin {
 
 		String randomKill = getKillList(sender).getRandomKill();
 		String target = message.trim();
-		if (target.toLowerCase().equals(bot.Nick().toLowerCase()))
+		if (target.toLowerCase().equals(bot.Nick().toLowerCase())) {
 			target = sender;
+		}
 		bot.Action(channel, randomKill.replaceAll("%NAME", target));
 	}
 
-	 /* 
+	/*
 	 * @param sender
+	 * 
 	 * @param message
 	 */
 	private void addKill(String sender, String message) {
@@ -157,12 +159,16 @@ public class Kill extends DefaultPlugin {
 	public void onCommand(String command, String channel, String sender,
 			String login, String hostname, String message) {
 		if (command.equals(COMMAND_KILL)) {
+			log.info("kill");
 			kill(sender, message, channel);
 		} else if (command.equals(COMMAND_ADD_KILL)) {
+			log.info("addKill");
 			addKill(sender, message);
 		} else if (command.equals(COMMAND_LIST_KILLS)) {
+			log.info("listKills");
 			listKills(sender);
-		} else if (message.startsWith("!removekill")) {
+		} else if (command.equals(COMMAND_REMOVE_KILL)) {
+			log.info("removeKill");
 			removeKill(sender, message);
 		}
 	}
@@ -171,15 +177,15 @@ public class Kill extends DefaultPlugin {
 	public String getHelp() {
 		return "This allows users to order me to kill other users, by using !kill <username>. To customise your kill message, use !addkill, followed by the attack. use %NAME as a placeholder for a user's nick. !listkills, !removekill <number>";
 	}
-
+	
 	@Override
-	public void onPrivateMessage(String sender, String login, String hostname,
-			String message) {
-		if (message.startsWith("!addkill")) {
+	public void onPrivateCommand(String command, String sender, String login,
+			String hostname, String message) {
+		if (command.equals(COMMAND_KILL)) {
 			addKill(sender, message);
-		} else if (message.startsWith("!listkills")) {
+		} else if (message.startsWith(COMMAND_LIST_KILLS)) {
 			listKills(sender);
-		} else if (message.startsWith("!removekill")) {
+		} else if (message.startsWith(COMMAND_REMOVE_KILL)) {
 			removeKill(sender, message);
 		}
 	}
