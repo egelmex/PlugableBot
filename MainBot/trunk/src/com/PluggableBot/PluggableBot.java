@@ -24,6 +24,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -402,6 +403,8 @@ public class PluggableBot extends PircBot {
 				}
 				return;
 			}
+			
+			
 		}
 	}
 
@@ -418,7 +421,6 @@ public class PluggableBot extends PircBot {
 	@Override
 	protected void onInvite(String targetNick, String sourceNick, String sourceLogin,
 			String sourceHostname, String channel) {
-		// TODO Auto-generated method stub
 		super.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname, channel);
 		log.info("Joing " + channel + " because " + sourceNick + " invited me!");
 		joinChannel(channel);
@@ -426,6 +428,10 @@ public class PluggableBot extends PircBot {
 
 	public List<String> listPlugins() {
 		return Collections.list(loadedPlugins.keys());
+	}
+	
+	public Set<String> listCommands() {
+		return commands.keySet();
 	}
 	
 }

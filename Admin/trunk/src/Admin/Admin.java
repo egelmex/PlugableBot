@@ -19,6 +19,7 @@ package Admin;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import com.PluggableBot.plugin.DefaultPlugin;
 
@@ -36,6 +37,8 @@ public class Admin extends DefaultPlugin {
 	public static final String ACTION_PART = ACTION_STRING + "part";
 	public static final String ACTION_JOIN = ACTION_STRING + "join";
 	public static final String ACTION_LIST = ACTION_STRING + "list";
+	public static final String ACTION_LIST_COMMANDS = ACTION_STRING
+			+ "listcommands";
 
 	@Override
 	public void load() {
@@ -45,8 +48,9 @@ public class Admin extends DefaultPlugin {
 		bot.addAdminCommand(ACTION_RELOAD, this);
 		bot.addAdminCommand(ACTION_PART, this);
 		bot.addAdminCommand(ACTION_LIST, this);
+		bot.addAdminCommand(ACTION_LIST_COMMANDS, this);
 	}
-	
+
 	@Override
 	public String getHelp() {
 		return "Like I would tell you!";
@@ -65,7 +69,6 @@ public class Admin extends DefaultPlugin {
 				+ ACTION_STRING + ACTION_PART);
 	}
 
-	
 	@Override
 	public void onPrivateAdminCommand(String command, String sender,
 			String login, String hostname, String message) {
@@ -87,20 +90,30 @@ public class Admin extends DefaultPlugin {
 		} else if (command.equals(ACTION_JOIN)) {
 			bot.joinChannel(message);
 			bot.Message(sender, "joined " + message);
-		}else if (command.equals(ACTION_PART)) {
+		} else if (command.equals(ACTION_PART)) {
 			bot.partChannel(message);
 			bot.Message(sender, "left channel " + message);
-		}else if (command.equals(ACTION_LIST)) {
+		} else if (command.equals(ACTION_LIST)) {
 			File pluginsFolder = new File("./plugins");
 			List<String> loadedPlugins = bot.listPlugins();
+			String pluginsStr = "Plugins: ";
 			for (String f : pluginsFolder.list()) {
 				if (f.endsWith(".jar")) {
+
 					String jarName = f.substring(0, f.length() - 4);
-					bot.Message(sender, jarName + (loadedPlugins.contains(jarName)?"*":""));
+					pluginsStr += jarName
+							+ (loadedPlugins.contains(jarName) ? "* " : " ");
 				}
 			}
+			bot.sendMessage(sender, pluginsStr);
+			bot.sendMessage(sender, "Items marked with '*' are already loaded");
+		} else if (command.equals(ACTION_LIST_COMMANDS)) {
+			Set<String> commands = bot.listCommands();
+			String commandString = "";
+			for (String x : commands) {
+				commandString += x + " ";
+			}
+			bot.sendMessage(sender, "command =  " + commandString);
 		}
-
 	}
-
 }
