@@ -23,7 +23,7 @@ public class DotTool {
 		
 		
 		for (MarkovLink link : links) {
-			System.out.println("\"_" + link.from.getWord() + "\" -> \"" + "_" + link.to.getWord() + "\";");
+			System.out.println("\"_" + link.from.getWord() + "\" -- \"" + "_" + link.to.getWord() + "\";");
 		}
 			
 		System.out.println("}");
