@@ -23,7 +23,7 @@
 	<target name="jar" depends="build">
 		<jar destfile="jar/${module.name}.jar" basedir="build">
 			<manifest>
-				<attribute name="Main-Class" value="Markov.DotTool" />
+				<attribute name="Main-Class" value="Markov.tools.DotTool" />
 			</manifest>
 		</jar>
 	</target>
