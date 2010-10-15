@@ -19,10 +19,15 @@ public class DotTool {
 			System.out.println(node.getWord() + "[label=\"" + node.getWord() + "\"];");
 		}
 		
+		System.out.println();
+		
+		
 		for (MarkovLink link : links) {
 			System.out.println(link.from + "->" + link.to + ";");
 		}
 			
 		System.out.println("}");
+		
+		md.shutdown();
 	}
 }
