@@ -2,6 +2,7 @@
 
 	<property name="module.name" value="Markov" />
 
+	
 	<target name="build" depends="setup">
 		<javac srcdir="src" destdir="build">
 			<classpath>
@@ -21,9 +22,11 @@
 	</target>
 
 	<target name="jar" depends="build">
+		
 		<jar destfile="jar/${module.name}.jar" basedir="build">
 			<manifest>
 				<attribute name="Main-Class" value="Markov.tools.DotTool" />
+				<attribute name="Class-Path" value="../lib/db4o-6.4.54.11278-java5.jar" />
 			</manifest>
 		</jar>
 	</target>
