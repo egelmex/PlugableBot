@@ -16,14 +16,14 @@ public class DotTool {
 		System.out.println("graph brain {");
 		
 		for (MarkovNode node : nodes) {
-			System.out.println("_" + node.getWord() + "[label=\"" + node.getWord() + "\"];");
+			System.out.println("\"_" + node.getWord() + "\" [label=\"" + node.getWord() + "\"];");
 		}
 		
 		System.out.println();
 		
 		
 		for (MarkovLink link : links) {
-			System.out.println("_" + link.from.getWord() + "->" + "_" + link.to.getWord() + ";");
+			System.out.println("\"_" + link.from.getWord() + "\" -> \"" + "_" + link.to.getWord() + "\";");
 		}
 			
 		System.out.println("}");
