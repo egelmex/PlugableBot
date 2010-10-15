@@ -1,17 +1,17 @@
 package Markov.tools;
 
-import com.db4o.ObjectSet;
-
 import Markov.MarkovDatabase;
 import Markov.MarkovLink;
 import Markov.MarkovNode;
 
+import com.db4o.ObjectSet;
+
 public class DotTool {
 	public static void main(String[] args) {
-		MarkovDatabase md = new MarkovDatabase();
+		MarkovDatabase md = new MarkovDatabase(args[0]);
 		ObjectSet<MarkovNode> nodes = md.getWords();
 		ObjectSet<MarkovLink> links = md.getLinks();
-		
+				
 		
 		System.out.println("graph brain {");
 		

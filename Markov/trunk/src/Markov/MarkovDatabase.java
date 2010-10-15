@@ -24,6 +24,10 @@ public class MarkovDatabase implements Runnable {
 	private static final int MAX_SENTANCE_LENGTH = 30;
 
 	public MarkovDatabase() {
+		this("Markov2.db4o");
+	}
+	
+	public MarkovDatabase (String dbname) {
 
 		Db4o.configure().automaticShutDown(false);
 		// set up indexing
@@ -37,7 +41,7 @@ public class MarkovDatabase implements Runnable {
 		// Db4o.configure().objectClass(MarkovNode.class).updateDepth(2);
 		// and activate the lists far enough
 		// Db4o.configure().objectClass(MarkovNode.class).minimumActivationDepth(2);
-		database = Db4o.openFile("Markov2.db4o");
+		database = Db4o.openFile(dbname);
 		populate();
 		// ex = new MarkovExplorer(cache);
 	}
@@ -48,7 +52,7 @@ public class MarkovDatabase implements Runnable {
 		Logger.getLogger(MarkovDatabase.class.getName()).log(Level.INFO,
 				"Loading data");
 		// get a list of all nodes
-		
+
 		List<MarkovNode> set = database.query(new Predicate<MarkovNode>() {
 			@Override
 			public boolean match(MarkovNode node) {
@@ -172,5 +176,13 @@ public class MarkovDatabase implements Runnable {
 		} else {
 			return links;
 		}
+	}
+
+	public ObjectSet<MarkovNode> getWords() {
+		return database.get(new MarkovNode(null));
+	}
+
+	public ObjectSet<MarkovLink> getLinks() {
+		return database.get(new MarkovLink(null, null));
 	}
 }
