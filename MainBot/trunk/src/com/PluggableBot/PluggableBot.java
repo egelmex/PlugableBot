@@ -406,6 +406,11 @@ public class PluggableBot extends PircBot {
 			
 			
 		}
+		String failinfo = "command " + messageParts[0] + "did not match any of " ;
+		for (String cm : commands.keySet()) {
+			failinfo += cm + " ";
+		}
+		log.info(failinfo);
 	}
 
 	public void cleanUpCommands(Plugin plugin) {
