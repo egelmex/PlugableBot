@@ -216,6 +216,7 @@ public class PluggableBot extends PircBot {
 	@Override
 	protected void onMessage(String channel, String sender, String login, String hostname,
 			String message) {
+		passCommand(channel, sender, login, hostname, message);
 		if (message.startsWith("!help")) {
 			if (message.trim().split(" ").length == 1) {
 				// loaded plugins
