@@ -66,7 +66,7 @@ public class News extends DefaultPlugin {
 
 						nouns.add(new Noun(words[1], p, s));
 					} else if (words[0].equals("phrase")) {
-						if (words.length > 5) {
+						if (words.length >= 5) {
 						phrases.add(new Phrase(words[1], words[2], words[3],
 								words[4]));
 						} else {
