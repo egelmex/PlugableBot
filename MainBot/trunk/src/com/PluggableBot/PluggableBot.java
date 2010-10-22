@@ -378,6 +378,7 @@ public class PluggableBot extends PircBot {
 	public void passCommand(String channel, String sender, String login, String hostname,
 			String message) {
 		String[] messageParts = message.split(" ");
+		log.info("trying to parse command " + messageParts);
 		for (String command : commands.keySet()) {
 			if (messageParts[0].toLowerCase().equals(command)) {
 				PluginCommand c = commands.get(command);
