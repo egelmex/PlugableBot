@@ -166,6 +166,7 @@ public class PluggableBot extends PircBot {
 
 	public void unloadPlugin(String name) {
 		Plugin plugin = loadedPlugins.get(name);
+		if (plugin instanceof PluginInternal)
 		cleanUpCommands(plugin);
 		plugin.unload();
 		loadedPlugins.remove(name);
