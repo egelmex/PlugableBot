@@ -418,7 +418,8 @@ public class PluggableBot extends PircBot {
 	public void cleanUpCommands(Plugin plugin) {
 		for (String command : commands.keySet()) {
 			Plugin p = commands.get(command).getPlugin();
-			if (p == plugin) {
+			if (p.equals(plugin)) {
+				
 				commands.remove(command);
 			}
 		}
