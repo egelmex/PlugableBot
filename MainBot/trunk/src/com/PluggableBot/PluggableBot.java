@@ -36,6 +36,8 @@ import java.util.logging.Logger;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
+import sun.reflect.Reflection;
+
 import com.PluggableBot.plugin.Plugin;
 import com.PluggableBot.plugin.PluginInternal;
 
@@ -416,9 +418,14 @@ public class PluggableBot extends PircBot {
 	}
 
 	public void cleanUpCommands(Plugin plugin) {
+		if (plugin == null) log.warning("plugin was null, thats not a good sign.");
+		
 		for (String command : commands.keySet()) {
 			Plugin p = commands.get(command).getPlugin();
-			if (p.equals(plugin)) {
+			
+			log.info("checking command " + command + "\ncommmand plugin is " + p.getClass().getName() +
+					"\nand plugin is " + plugin.getClass().getName());
+			if (p == plugin) {
 				
 				commands.remove(command);
 			}
