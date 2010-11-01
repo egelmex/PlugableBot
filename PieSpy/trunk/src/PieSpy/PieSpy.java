@@ -92,12 +92,9 @@ public class PieSpy extends DefaultPlugin {
 	private void initGraphsForChans() {
 		String[] chans = bot.getChans();
 		for (String chan : chans) {
-			Graph g = getGraph(chan);
-
 			User[] users = bot.users(chan);
 			for (User u : users) {
-				Node n = new Node(u.getNick());
-				g.addNode(n);
+				add(chan, u.getNick());
 			}
 		}
 	}
