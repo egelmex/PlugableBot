@@ -1,4 +1,5 @@
 package PieSpy;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,9 +19,6 @@ import org.jibble.socnet.Graph;
 import org.jibble.socnet.Node;
 
 import com.PluggableBot.plugin.DefaultPlugin;
-
-
-
 
 public class PieSpy extends DefaultPlugin {
 
@@ -58,16 +56,10 @@ public class PieSpy extends DefaultPlugin {
 		defaults.setProperty("NodeRadius", "5");
 		defaults.setProperty("EdgeThreshold", "0");
 		defaults.setProperty("ShowEdges", "true");
-		defaults.setProperty(
-				"org.jibble.socnet.DirectAddressingInferenceHeuristic", "1");
-		defaults
-				.setProperty(
-						"org.jibble.socnet.IndirectAddressingInferenceHeuristic",
-						"0.3");
-		defaults.setProperty(
-				"org.jibble.socnet.BinarySequenceInferenceHeuristic", "1");
-		defaults.setProperty("org.jibble.socnet.AdjacencyInferenceHeuristic",
-				"0");
+		defaults.setProperty("org.jibble.socnet.DirectAddressingInferenceHeuristic", "1");
+		defaults.setProperty("org.jibble.socnet.IndirectAddressingInferenceHeuristic", "0.3");
+		defaults.setProperty("org.jibble.socnet.BinarySequenceInferenceHeuristic", "1");
+		defaults.setProperty("org.jibble.socnet.AdjacencyInferenceHeuristic", "0");
 		defaults.setProperty("org.jibble.socnet.KarmaInferenceHeuristic", "1");
 
 	}
@@ -93,6 +85,11 @@ public class PieSpy extends DefaultPlugin {
 			throw new IllegalStateException("Balls");
 		}
 
+		initGraphsForChans();
+
+	}
+
+	private void initGraphsForChans() {
 		String[] chans = bot.getChans();
 		for (String chan : chans) {
 			Graph g = getGraph(chan);
@@ -103,7 +100,6 @@ public class PieSpy extends DefaultPlugin {
 				g.addNode(n);
 			}
 		}
-
 	}
 
 	@Override
@@ -112,16 +108,14 @@ public class PieSpy extends DefaultPlugin {
 	}
 
 	@Override
-	public void onAction(String sender, String login, String hostname,
-			String target, String action) {
+	public void onAction(String sender, String login, String hostname, String target, String action) {
 		if ("#&!+".indexOf(target.charAt(0)) >= 0) {
 			onMessage(target, sender, login, hostname, action);
 		}
 	}
 
 	@Override
-	public void onAdminMessage(String sender, String login, String hostname,
-			String message) {
+	public void onAdminMessage(String sender, String login, String hostname, String message) {
 		try {
 			// message = message.substring(config.password.length()).trim();
 			String messageLc = message.toLowerCase();
@@ -135,8 +129,7 @@ public class PieSpy extends DefaultPlugin {
 					Graph graph = (Graph) _graphs.get(key);
 					bot.Message(sender, key + ": " + graph.toString());
 				}
-			} else if (messageLc.startsWith("ignore ")
-					|| messageLc.startsWith("remove ")) {
+			} else if (messageLc.startsWith("ignore ") || messageLc.startsWith("remove ")) {
 				// Add a user to the IgnoreSet and remove them from all Graphs.
 				String nick = message.substring(7);
 				config.ignoreSet.add(nick.toLowerCase());
@@ -150,8 +143,7 @@ public class PieSpy extends DefaultPlugin {
 				}
 			} else if (messageLc.startsWith("draw ")) {
 				// DCC SEND the latest file for a channel.
-				StringTokenizer tokenizer = new StringTokenizer(message
-						.substring(5));
+				StringTokenizer tokenizer = new StringTokenizer(message.substring(5));
 				if (tokenizer.countTokens() >= 1) {
 					String channel = tokenizer.nextToken();
 
@@ -162,27 +154,23 @@ public class PieSpy extends DefaultPlugin {
 							if (file != null) {
 								bot
 										.Message(
-												sender,
-												"Trying to send \""
-														+ file.getName()
-														+ "\"... If you have difficultly in recieving this file via DCC, there may be a firewall between us.");
+													sender,
+													"Trying to send \""
+															+ file.getName()
+															+ "\"... If you have difficultly in recieving this file via DCC, there may be a firewall between us.");
 								bot.sendFileDcc(file, sender, 120000);
 							} else {
-								bot.Message(sender,
-										"I have not generated any images for "
-												+ channel + " yet.");
+								bot.Message(sender, "I have not generated any images for "
+										+ channel + " yet.");
 							}
 						} catch (Exception e) {
 							bot.Message(sender, "Sorry, mate: " + e.toString());
 						}
 					} else {
-						bot
-								.Message(sender,
-										"Sorry, I don't know much about that channel yet.");
+						bot.Message(sender, "Sorry, I don't know much about that channel yet.");
 					}
 				} else {
-					bot.Message(sender,
-							"Example of correct use is \"draw <#channel>\"");
+					bot.Message(sender, "Example of correct use is \"draw <#channel>\"");
 				}
 			}
 		} catch (Exception e) {
@@ -198,8 +186,8 @@ public class PieSpy extends DefaultPlugin {
 	}
 
 	@Override
-	public void onMessage(String channel, String sender, String login,
-			String hostname, String message) {
+	public void onMessage(String channel, String sender, String login, String hostname,
+			String message) {
 		if (config.ignoreSet.contains(sender.toLowerCase())) {
 			return;
 		}
@@ -254,8 +242,7 @@ public class PieSpy extends DefaultPlugin {
 
 			File dir = new File(config.outputDirectory, strippedChannel);
 			File file = new File(dir, strippedChannel + "-restore.dat");
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 			String version = (String) ois.readObject();
 			if (version.equals(Configuration.VERSION)) {
 				// Only read the object if the file is for the correct version.
@@ -277,8 +264,7 @@ public class PieSpy extends DefaultPlugin {
 	}
 
 	@Override
-	public void onNickChange(String oldNick, String login, String hostname,
-			String newNick) {
+	public void onNickChange(String oldNick, String login, String hostname, String newNick) {
 		changeNick(oldNick, newNick);
 	}
 
