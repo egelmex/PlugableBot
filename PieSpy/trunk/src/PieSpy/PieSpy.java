@@ -85,10 +85,15 @@ public class PieSpy extends DefaultPlugin {
 			throw new IllegalStateException("Balls");
 		}
 
-		initGraphsForChans();
+		
 
 	}
 
+	@Override
+	public void load() {
+		initGraphsForChans();
+	}
+	
 	private void initGraphsForChans() {
 		String[] chans = bot.getChans();
 		for (String chan : chans) {
