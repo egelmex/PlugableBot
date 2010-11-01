@@ -3,7 +3,7 @@
 <property name="module.name" value="PluggableBot"/>
 
 <target name="build" depends="setup">
-	<javac srcdir="src" destdir="build">
+	<javac srcdir="src" destdir="build" debug="true" debuglevel="lines,vars,source">
 		<classpath>
 			<pathelement location="../../lib/pircbot.jar" /> 
 		</classpath>
