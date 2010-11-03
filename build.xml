@@ -77,6 +77,15 @@
 		<ant dir="PieSpy/trunk" target="jar" />
 		<copy file="PieSpy/trunk/jar/PieSpy.jar" todir="output/plugins" />
 
+		<ant dir="Say" target="jar" />
+		<copy file="Say/jar/Say.jar" todir="output/plugins" />
+
+		<ant dir="Defcon" target="jar" />
+		<copy file="Defcon/jar/Defcon.jar" todir="output/plugins" />
+
+		<ant dir="Comic" target="jar" />
+		<copy file="Comic/jar/Comic.jar" todir="output/plugins" />
+		
 		<ant dir="Google" target="jar" />
 		<copy file="Google/jar/Google.jar" todir="output/plugins" />
 
@@ -132,6 +141,9 @@
 		<ant dir="EmailReader/trunk" target="clean" />
 		<ant dir="PieSpy/trunk" target="clean" />
 		<ant dir="Google" target="clean" />
+		<ant dir="Say" target="clean" />
+		<ant dir="Defcon" target="clean" />
+		<ant dir="Comic" target="clean" />
 
 		<delete>
 			<fileset dir="output" includes="**/*.jar" />
