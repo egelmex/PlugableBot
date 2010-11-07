@@ -1,4 +1,4 @@
-package Defcon;
+ package Defcon;
 
 import java.util.ArrayList;
 import java.util.Arrays;  
@@ -62,6 +62,7 @@ public class NukeMain
         }
         
         players = new HashMap<String, NukePerson>();
+		//delete all xml files so that old matches arent included
     }
     
     public ArrayList<String> simpleprint()
@@ -71,27 +72,80 @@ public class NukeMain
     }
 
     public ArrayList<String> playerPrint(String player) {
-	Printer p = new Printer();
-	if (isNewPlayer(player)) {
-	    return null;
-	}
-	return p.playerPrint(players, player);
+    	Printer p = new Printer();
+    	if (isNewPlayer(player)) {
+    	    return null;
+    	}
+    	return p.playerPrint(players, player);
     }
     
     public String nuke(String from, String to) {
         NukePerson pfrom = getPlayer(from);
         NukePerson pto = getPlayer(to);
-        return nuker.nuke(pfrom, pto);
+		String s = nuker.nuke(pfrom, pto, null);
+		Printer p = new Printer();
+		p.writePerson(pfrom);
+		p.writePerson(pto);
+        return s;
+    }
+    
+    public String nukeTarget(String from, String to) {
+        NukePerson pfrom = getPlayer(from);
+        NukePerson pto = targetsPlayer(to);
+        Target t = getTarget(to);
+		
+		Defcon.logger.log("nT", from + " " + to + " " + pto.getDisplayName() + " b" + (pfrom==pto) + " " + t.getName());
+		
+        String s = nuker.nuke(pfrom, pto, t);
+        Printer p = new Printer();
+		p.writePerson(pfrom);
+		p.writePerson(pto);
+        return s;
+    }
+    
+    public NukePerson targetsPlayer(String target) {
+        for (NukePerson np : players.values()) {
+            for (Target t : np.getCountry().getValidTargets()) {
+                if (t.getName().equals(target)) {
+                    return np;
+                }
+            }
+        }
+		return null;
+    }
+    
+    public Target getTarget(String target)
+    {
+        for (NukePerson np : players.values()) {
+            for (Target t : np.getCountry().getValidTargets()) {
+                if (t.getName().equals(target)) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public boolean isValidTarget(String target)
+    {
+        for (NukePerson np : players.values()) {
+            for (Target t : np.getCountry().getValidTargets()) {
+                if (t.getName().equals(target)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     public boolean isNewPlayer(String player)
     {
-        return !players.containsKey(player);
+        return !players.containsKey(player.toLowerCase());
     }
     
     public NukePerson getPlayer(String player)
     {
-        return players.get(player);
+        return players.get(player.toLowerCase());
     }
     
     public boolean newPlayer(String player)
@@ -100,7 +154,10 @@ public class NukeMain
         Country c = allocateCountry();
         if (c != null) {
             np.reset(c);
-            players.put(player, np);
+            players.put(player.toLowerCase(), np);
+			Printer p = new Printer();
+			p.writeIndex(this.players);
+			//p.writePerson(np);
             return true;
         }
         else {
@@ -120,7 +177,7 @@ public class NukeMain
         for (int i = 0; i < names.length; i++) {
             int cityPop = makePop(i);
            // System.out.println(names[i] + " " + cityPop);
-            cities.add(new City(names[i], cityPop));
+            cities.add(new City(names[i], cityPop, 5));
         }
         return cities;
     }

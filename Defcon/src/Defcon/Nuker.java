@@ -2,15 +2,11 @@ package Defcon;
 
 import java.util.Random;
 
-import java.util.logging.Logger;
-
 public class Nuker
 {
     private static Random randomer = new Random();
     private static int MIN_DAMAGE = 10;
     private static int MAX_DAMAGE = 75;
-
-    private static final Logger LOG = Logger.getLogger(Defcon.class.getCanonicalName());
 
     public Nuker()
     {
@@ -22,68 +18,131 @@ public class Nuker
     }
 
     public static String padRight(String s, int n) {
-       	return String.format("%1$-" + n + "s", s);  
+        return String.format("%1$-" + n + "s", s);  
+    }
+    
+    public void updateThreshold(NukePerson from)
+    {
+        int oldT = from.getThreshold();
+        from.updateThreshold();
+        int newT = from.getThreshold();
+        
+        Defcon.logger.log("--Thre", "Old: " + oldT + "%, Now: " + newT);
+    }
+    
+    public boolean performSDtest(NukePerson from)
+    {
+        int perc = randomer.nextInt(100) + 1;
+		Defcon.logger.log("--Test", ""+perc+"%");
+        return (perc <= from.getThreshold());
+    }
+    
+    public Target chooseTarget(NukePerson p)
+    {
+        return p.getCountry().getValidTarget(randomer.nextInt(10000));
+    }
+	
+	public Nuking chooseNuker(NukePerson p)
+	{
+		/*Target t = null;
+		while (!(t instanceof Nuking)) {
+			t = p.getCountry().getValidTarget(randomer.nextInt(10000));
+		}
+		return (Nuking) t;*/
+		return p.getCountry().getValidNuker(randomer.nextInt(10000));
+	}
+    
+    public int genDamage(City target) {
+        int currentpop = target.getPop();
+		int perkill = (randomer.nextInt(MAX_DAMAGE-MIN_DAMAGE)+MIN_DAMAGE);
+		Defcon.logger.log("--Dmg", ""+perkill+"% Pop killed: " + (currentpop * perkill) / 100);
+        int damage = target.decrPop((currentpop * perkill) / 100);
+		Defcon.logger.log("--Act", ""+damage);
+		return damage;
+    }
+    
+    public void nukeEvent(NukePerson pfrom, NukePerson pto, Target tfrom, Target tto, int killed)
+    {
+        //TODO: MAKE A PROPER FROM VALID TARGET
+        EventNuke e = new EventNuke(pfrom.getDisplayName(), pto.getDisplayName(), tfrom.getName(), tto.getName(), ""+(killed / 10.0)+"M");
+        pfrom.addHistory(e);
+        pto.addHistory(e);
+    }
+    
+    public void nukeSelfEvent(NukePerson p, Target t, int killed)
+    {
+        //TODO: MAKE A PROPER FROM VALID TARGET
+        EventSelfDestruct e = new EventSelfDestruct(p.getDisplayName(), t.getName(), ""+(killed / 10.0)+"M");
+        p.addHistory(e);
+    }
+    
+    public void hitSelfScore(NukePerson p, int d) {
+        p.removeFromScore(d);
+    }
+    
+    public void hitScore(NukePerson from, NukePerson to, int d) {
+        from.addToScore(d*2);
+        to.removeFromScore(d);
     }
 
-    public String nuke(NukePerson from, NukePerson to) {
-        if (from.fireNuke()) {
-
-	    int oldT = from.getThreshold();
-	    from.updateThreshold();
-	    int newT = from.getThreshold();
-	    int perc = randomer.nextInt(100);
-
-	    LOG.info("OT: " + oldT + "%, NT: " + newT + "%, PER: " + perc);
-
-	    boolean hitSelf = false;
-	    City target;
-
-	    if (perc <= from.getThreshold()) {
-		target = from.getCountry().getValidTarget(randomer.nextInt(100));
-		hitSelf = true;
-	    }
-	    else {
-		target = to.getCountry().getValidTarget(randomer.nextInt(100));
-	    }
-
-            //A nuke will hit between MIN% and MAX% of a city's population
-            int currentpop = target.getPop();
-            int damage = target.decrPop((currentpop * (randomer.nextInt(MAX_DAMAGE-MIN_DAMAGE)+MIN_DAMAGE)) / 100);
-            double killed = damage / 10.0;
-	    LOG.info("D: " + damage + ", K: " + killed);
-
-	    if (hitSelf) {
-		from.addHistory(padRight(from.getName(), 10) + " nuke's self destructed in " + padRight(target.getName(), 15) + " killing " + killed + "M");
+    public String nuke(NukePerson from, NukePerson to, Target t) {
+		Defcon.logger.log("Nuke", "from=" + from.getDisplayName() + " to=" + to.getDisplayName() + " self=" + (from==to));
+	
 		if (from == to) {
-		    from.removeFromScore(damage);
-		    to.removeFromScore(damage);
+			return to.getDisplayName() + " tried to nuke himself... the twat!";
 		}
-		else {
-		    from.removeFromScore(damage);
-		    to.addToScore(damage);
-		}
-
-		return "Self Destruct! " + target.getName() + " ("+from.getName()+") hit! " + killed + "M dead.";
-	    }
-	    else {
-		from.addHistory(padRight(from.getName(), 10) + " nuked " + padRight(target.getName() + " (" + to.getName() + ")", 25) + " killing " + killed + "M");
-		to.addHistory(padRight(from.getName(), 10) + " nuked " + padRight(target.getName() + " (" + to.getName() + ")", 25) + " killing " + killed + "M");
-
-		//Update scores
-		if (from == to) {
-		    from.removeFromScore(damage);
-		    to.removeFromScore(damage);
-		}
-		else {
-		    from.addToScore(damage);
-		    to.removeFromScore(damage);
-		}
+	
+        if (from.hasANuke()) {
+            updateThreshold(from);
+            boolean hitSelf = performSDtest(from);
+            Target target = t;
+            Nuking tfrom = chooseNuker(from);
+			
+			/*while(!tfrom.hasNuke())
+			{
+				tfrom = chooseNuker(from);
+			}*/
             
-		return from.getName() + " -> " + to.getName() + ": " + target.getName() + " hit! " + killed + "M dead.";
-	    }
+            tfrom.fireNuke();
+			
+            
+            if (hitSelf) {
+                target = tfrom;
+            }
+            else {
+                if (t == null) {
+                    target = chooseTarget(to);
+                }
+            }
+			
+			Defcon.logger.log("NukeNull", "isTargetNull="+(target==null));
+            
+			if (target instanceof City) {
+				City c = (City) target;
+			
+				int damage = genDamage(c);
+				
+				double killed = damage / 10.0;
+				
+				if (hitSelf) {
+					hitSelfScore(from, damage);
+					nukeSelfEvent(from, tfrom, damage);
+					return "Self Destruct! " + tfrom.getName() + " hit! " + killed + "M dead.";
+				}
+				else {
+					hitScore(from, to, damage);
+					nukeEvent(from, to, tfrom, c, damage);
+					return tfrom.getName() + " -> " + c.getName() + " hit! " + killed + "M dead.";
+				}
+			}
+			else {
+				Defcon.logger.log("nuke", "ERROR: NO INSTANCEOF MATCHES");
+			}
         }
         else {
-            return from.getName() + "'s silo is empty!";
+            return from.getDisplayName() + "'s silos are empty!";
         }
+		
+		return "Wow. This went wrong.";
     }
 }
