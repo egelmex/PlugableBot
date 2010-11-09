@@ -1,0 +1,30 @@
+<project name="Comic" basedir="." default="build">
+
+<property name="module.name" value="Comic"/>
+
+<target name="build" depends="setup">
+	<javac srcdir="src" destdir="build">
+		<classpath>
+			<pathelement location="../lib/pircbot.jar" /> 
+			<pathelement location="../lib/db4o-6.4.54.11278-java5.jar" /> 
+
+			<pathelement location="../MainBot/trunk/jar/PluggableBot.jar" />
+		</classpath>
+	</javac>
+</target>
+
+<target name="setup">
+	<mkdir dir="build" />
+	<mkdir dir="jar" />
+</target>
+
+<target name="jar" depends="build">
+	<jar destfile="jar/${module.name}.jar" basedir="build" />
+</target>
+
+<target name="clean">
+	<deltree dir="build" />
+	<deltree dir="jar" />
+</target>
+
+</project>
